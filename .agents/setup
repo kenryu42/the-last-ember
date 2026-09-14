@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd -- "$repo_root"
+
+required_bun="1.3.10"
+if ! command -v bun >/dev/null || [[ "$(bun --version)" != "$required_bun" ]]; then
+  echo "Installing Bun $required_bun using the orb's preinstalled npm."
+  command -v npm >/dev/null || { echo "Setup requires npm to install Bun." >&2; exit 1; }
+  # The base orb may have a standalone Bun binary that npm must replace.
+  time npm install --global --force "bun@$required_bun"
+fi
+
+[[ "$(bun --version)" == "$required_bun" ]] || { echo "Wrong Bun version on PATH." >&2; exit 1; }
+echo "Installing locked dependencies with Bun $(bun --version)."
+time bun install --frozen-lockfile
+echo "Setup complete. Run amp orb services ensure to open the development portal."

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd -- "$repo_root"
+
+# No authentication or background repair is needed for this local-only app.
+# Amp supervises declared services. Never install dependencies or restart them here.
+if ! command -v bun >/dev/null || [[ ! -d node_modules ]]; then
+  echo "Development dependencies are missing. Run .agents/setup before building." >&2
+  exit 1
+fi
+
+echo "The Last Ember is ready. Use amp orb services ensure when a portal is needed."
