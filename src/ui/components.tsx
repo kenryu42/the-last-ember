@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { cardDef, effectText } from "../game/content";
 import type { Card } from "../game/model";
+import { loadVideoSound, saveVideoSound } from "../game/storage";
 
 export function Icon({ name, size = 22 }: { name: string; size?: number }) {
   const paths: Record<string, ReactNode> = {
@@ -126,6 +127,15 @@ export function CardView({
   const artwork = useRef<HTMLDivElement>(null);
   const closing = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showArt, setShowArt] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const showVideo =
+    showArt &&
+    allowArtPreview &&
+    def.id === "flame" &&
+    !card.upgraded &&
+    !videoFailed &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const artStyle = {
     backgroundImage: `url(/assets/card-pairs-${String(Math.floor(def.art / 2) + 1).padStart(2, "0")}.webp)`,
     backgroundSize: "200% 200%",
@@ -133,7 +143,10 @@ export function CardView({
   };
   function keepArt() {
     if (closing.current) clearTimeout(closing.current);
-    if (allowArtPreview) setShowArt(true);
+    if (allowArtPreview) {
+      if (!showArt) setVideoMuted(!loadVideoSound());
+      setShowArt(true);
+    }
   }
   function leaveArt() {
     if (closing.current) clearTimeout(closing.current);
@@ -174,7 +187,19 @@ export function CardView({
     panel.style.left = `${left}px`;
     panel.style.top = `${Math.max(12, Math.min(window.innerHeight - height - 12, top))}px`;
     panel.showPopover();
+    const video = panel.querySelector("video");
+    if (video) {
+      void video.play().catch(() => {
+        if (!video.isConnected) return;
+        video.muted = true;
+        setVideoMuted(true);
+        void video.play().catch(() => {});
+      });
+    }
     const close = () => setShowArt(false);
+    const visibilityChanged = () => {
+      if (document.hidden) close();
+    };
     const escape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -185,11 +210,16 @@ export function CardView({
     window.addEventListener("keydown", escape, true);
     window.addEventListener("scroll", close, true);
     window.addEventListener("resize", close);
+    window.addEventListener("blur", close);
+    document.addEventListener("visibilitychange", visibilityChanged);
     return () => {
+      video?.pause();
       panel.hidePopover();
       window.removeEventListener("keydown", escape, true);
       window.removeEventListener("scroll", close, true);
       window.removeEventListener("resize", close);
+      window.removeEventListener("blur", close);
+      document.removeEventListener("visibilitychange", visibilityChanged);
     };
   }, [showArt, allowArtPreview]);
   return (
@@ -204,7 +234,10 @@ export function CardView({
         onFocus={(event) => {
           if (event.currentTarget.matches(":focus-visible")) keepArt();
         }}
-        onBlur={() => setShowArt(false)}
+        onBlur={(event) => {
+          if (!artwork.current?.contains(event.relatedTarget))
+            setShowArt(false);
+        }}
         onClick={() => {
           setShowArt(false);
           onClick?.();
@@ -256,17 +289,74 @@ export function CardView({
         className="card-art-popover"
         onPointerEnter={keepArt}
         onPointerLeave={leaveArt}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget))
+            setShowArt(false);
+        }}
       >
         <span
           className="full-card-art"
           role="img"
           aria-label={`${def.name}${card.upgraded ? " upgraded" : ""} artwork`}
           style={artStyle}
-        />
+        >
+          {showVideo && (
+            <video
+              className="card-art-video"
+              src="/assets/ancient-flame.mp4"
+              autoPlay
+              muted={videoMuted}
+              playsInline
+              aria-hidden="true"
+              onError={() => setVideoFailed(true)}
+            />
+          )}
+        </span>
         <span className="art-caption">
           {def.name}
           {card.upgraded ? " · Improved" : ""}
         </span>
+        {showVideo && (
+          <button
+            type="button"
+            className="card-video-sound"
+            aria-label="Video sound"
+            aria-pressed={!videoMuted}
+            title={videoMuted ? "Unmute video" : "Mute video"}
+            onClick={() => {
+              const video = artwork.current?.querySelector("video");
+              if (!video) return;
+              video.muted = !videoMuted;
+              setVideoMuted(!videoMuted);
+              saveVideoSound(videoMuted);
+              if (videoMuted && video.ended) {
+                video.currentTime = 0;
+                void video.play().catch(() => setVideoMuted(true));
+              }
+            }}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              {videoMuted ? (
+                <>
+                  <path d="M16 9V3l-4 3M8 8H6v8h4l6 5v-6" />
+                  <path d="m3 3 18 18" />
+                </>
+              ) : (
+                <path d="m16 3-6 5H6v8h4l6 5V3Z" />
+              )}
+            </svg>
+          </button>
+        )}
       </div>
     </>
   );
