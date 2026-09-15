@@ -6,6 +6,7 @@ const allowedHosts = publicUrl ? [new URL(publicUrl).hostname] : []
 
 export default defineConfig({
   plugins: [react()],
+  experimental: { bundledDev: true },
   server: { allowedHosts, strictPort: true },
   preview: { allowedHosts, strictPort: true },
 })
