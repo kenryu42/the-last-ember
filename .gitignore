@@ -8,3 +8,4 @@ coverage/
 .DS_Store
 .amp/portals/
 .amp/in/
+.amp/qa-build.tar.gz

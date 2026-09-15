@@ -4,4 +4,4 @@ services:
     health: /
     portal:
       title: The Last Ember
-      description: Development starter. The adventure is not implemented yet.
+      description: A complete three-act solo deckbuilding adventure. Progress saves in this browser; export a journey from Settings to move it elsewhere.
