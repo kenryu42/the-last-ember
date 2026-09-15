@@ -2,6 +2,8 @@
 
 This art-only pass supplies 32 matched base/upgraded pairs, 64 original illustrations, in 16 locally bundled WebP sheets. Amp Painter generated one image per call. No third-party artwork was downloaded. The existing companion portraits and card art were references for the same project's character identities and romantic wilderness style. This records generation sources, not a legal claim of copyright exclusivity.
 
+The original production history below is preserved. The **Upgrade-strength revision** section at the end records the current replacements and supersedes the original upgraded cells for those cards.
+
 Source thread: https://ampcode.com/threads/T-01a0a0c3-3692-7658-8a4a-87cbbc7c07fa
 
 The authoritative content input was the uploaded `card-content.ts`, SHA-256 `c9e3f1cdab2694c5d8078a5599752ec1e0c775fcacd9d96b4f11a6739e654a48`. Its 32 card IDs, names, owners, base effects, and single upgrades informed the paintings. No game code, existing assets, or existing provenance was changed by this pass.
@@ -108,3 +110,53 @@ Every final optimized sheet was inspected with `view_media`, including all adopt
 Remaining visual limitations are deliberate cinematic foreground occlusion in some base combat scenes, dense dark foliage in stealth paintings, and small secondary hand/tool details that soften at thumbnail size. Iron answer, Twin arrows, Cinder lance, and Old knowledge have closer base/upgrade silhouettes at 192 × 128, though their action or mastery details differ and the integration thread approved their readability. Companion faces vary slightly with angle and scene scale. Some arrow trajectories and ruined architecture are illustrative rather than physical simulations. No readable generated text, card rules, or UI is baked into the assets. Old knowledge uses pictorial diagrams only. Adding companions or depicting a wider action in an upgrade illustrates mastery, not an additional gameplay effect.
 
 The integration thread has already downloaded all 16 sheets. Only `CARD_ART_PROVENANCE.md` remains to transfer. The archive request was withdrawn, so no archive is needed. No push, deployment, or UI implementation was performed by this art task.
+
+## Upgrade-strength revision
+
+The user approved the new True shot direction and requested a review of every pair. This pass replaces 17 upgraded illustrations and retains 15. All 32 base illustrations remain unchanged. The goal is a visible increase in equipment, protection, mastery, or effects, rather than the next frame of the base scene. These are illustrations, not changes to card mechanics.
+
+Source thread: https://ampcode.com/threads/T-01a0a448-8f31-72b6-8985-43bd1fdd4ca5
+
+Each replacement was generated as an individual 1536 × 1024 PNG using its base illustration as a reference. The approved True shot also supplied equipment/style guidance for selected ranger paintings and Steady blade. Download sources with `amp files get`. Resize to 768 × 512 for the existing cell geometry; do not crop these standalone sources into four cells.
+
+| ID | Replacement filename | Upgrade decision | Standalone PNG source |
+| --- | --- | --- | --- |
+| strike | steady-blade-upgraded.png | Reinforced plate accents, gauntlet, shield and etched longsword; clearer equipment tier. | https://ampcode.com/user-content/attachments/56e57f23635648724f1f30e284cfca7cd007eacfa9fec30ebb9071590e1b1611-file.png |
+| arrow | true-shot-upgraded.png | User-approved reinforced ranger gear, ornate bow and charged arrow. | https://ampcode.com/user-content/attachments/f1bf89033324f6bcfe26ce9de9918eed0a2fd5109277415fbe39606eb4e8586a-file.png |
+| unseen | walk-unseen-upgraded.png | Leaf-like concealment veil visibly covers the fellowship. | https://ampcode.com/user-content/attachments/9af3b0a9910c783c76852b0dd0bc71d5abcd89939e1d1b13a9ad468a504d1b3d-file.png |
+| defiance | defiance-upgraded.png | Reinforced armor, empowered shield and resolute stance amid recoiling foes. | https://ampcode.com/user-content/attachments/42c1b72a9d3186db5fb9f728b7c59bb4400b2090b4fe674af65ee683d2831e6c-file.png |
+| challenge | challenge-upgraded.png | Strong shield emblem and broad challenge effect against surrounding enemies. | https://ampcode.com/user-content/attachments/68713007ebbf27af8b4847994352f663287fd8d57e397cf4319a7fb2c34e002f-file.png |
+| oath | an-unbroken-oath-upgraded.png | Luminous oath ribbon links and protects the three companions. | https://ampcode.com/user-content/attachments/450e2ed4350e627a12e80acba65c3747bec1f0e143eeb733c5ccb27849ef5eb1-file.png |
+| rally | rally-together-upgraded.png | Armored coordinated advance with shared light linking the fellowship. | https://ampcode.com/user-content/attachments/5f03fa9102b3e16d76399ee54e721e06b3daa70675b2c965a50f7fdc74e55f9a-file.png |
+| needle | through-the-leaves-upgraded.png | Upgraded bow and bracers; wind parts foliage around a precise shot. | https://ampcode.com/user-content/attachments/23785d2bdbf3a6d5b27b1e3fbe26fcafd55148da05e77aee4799970e160f1a32-file.png |
+| scout | higher-ground-upgraded.png | Spyglass, improved equipment and a detailed illuminated tactical terrain model. | https://ampcode.com/user-content/attachments/ad1b24b6c8648af39c9ebc3a6c9c7747570975a474a65fc8f13a53db87341d45-file.png |
+| feint | a-small-opening-upgraded.png | Reinforced bracers, paired close-combat blades and highlighted armor weakness. | https://ampcode.com/user-content/attachments/50338ac8fb03603132dd35797c24a0d0bd6722e5c4b2a60b9c15cbfc26b9fc83-file.png |
+| silence | quiet-as-snowfall-upgraded.png | Winter camouflage equipment and a visible silence veil through snow. | https://ampcode.com/user-content/attachments/d5ed8100e08ee426579b2b40a9827234d365bcace9335f4c968709dc11baf93d-file.png |
+| trail | hidden-trail-upgraded.png | Improved ranger gear and a luminous sheltered root path across a ravine. | https://ampcode.com/user-content/attachments/6dbb0e595db6feab2977ed73836ecad51c9bd0274c713a520428531ac208047a-file.png |
+| resolve | face-the-darkness-upgraded.png | Stronger lantern rays visibly part the surrounding shades. | https://ampcode.com/user-content/attachments/0c79caa7d8215178e5798199077a1cb6da7c159d009dfffe858adafc25c0fba1-file.png |
+| remember | old-knowledge-upgraded.png | A luminous beacon reconstruction rises from the ancient tome. | https://ampcode.com/user-content/attachments/688366ab3e963e7a0465438b4c277ea8b916514def6b208f5c92320a13c3a8cc-file.png |
+| sunrise | one-more-dawn-upgraded.png | Restorative light reaches all companions, with fresh growth among the stones. | https://ampcode.com/user-content/attachments/3a9c87765aa4e435f36356bd6f6b83049db3c02e9f6d0385e3c548c10704c791-file.png |
+| courage | small-courage-upgraded.png | A small charm expresses shared courage through three protective silhouettes. | https://ampcode.com/user-content/attachments/f2d1c458f8420d34c60385dfb64e8429f9130319544a6780d0a1c490825b79ec-file.png |
+| lantern | keep-the-lantern-upgraded.png | Reinforced lantern cage and a storm-deflecting lattice of light. | https://ampcode.com/user-content/attachments/2067e6907abc75da298c453516af5aa5129c9565233564595f8e866e40ef1cc4-file.png |
+
+Retained upgrades, reviewed individually:
+
+- Ancient flame: the small flame already becomes a large fire vortex.
+- Shelter: the raised shield withstands a broader arrow barrage while protecting companions.
+- Hold the pass: the fighter visibly drives back a massed spear line at a bottleneck.
+- Shield-bearer: the shield bash visibly throws an armored opponent off balance.
+- Iron answer: the impact splinters the enemy's buckler, showing stronger force.
+- Last stand: the low rubble shelter becomes a commanding defensive position above the fallen gate.
+- Rain of arrows: the upgraded volley visibly covers a broader area with more arrows.
+- Twin arrows: two simultaneous arrows make the increased attack readable.
+- Borrowed fire: a single coal becomes energy distributed between companions.
+- Light the dark: a small ring becomes broad radiating flame waves.
+- Cinder lance: the narrow beam becomes a thicker braided impact blast.
+- Ember ward: the partial arc becomes a full protective dome over the fellowship.
+- Shared bread: a small piece of bread becomes a full hot communal meal.
+- Shoulder the burden: individual struggling packs become a shared carrying pole.
+- A promise of home: the imagined cottage becomes active restoration of a real shelter.
+
+Integration replaces only the selected right-column cells in 12 sheets. Modified sheets use lossless WebP to preserve all other decoded cells exactly; the four untouched sheets retain their original bytes. The current 16 sheets total 27,492,214 bytes, about 26.22 MiB. This increases download size relative to the initial lossy set, but avoids another compression pass on retained artwork. The 17 standalone full-resolution PNG sources are also exported separately for video generation, alongside a refreshed 64-image export at 768 × 512.
+
+Verification: 17 replacement cells match their resized sources, and the remaining 47 cells match the prior runtime images pixel-for-pixel. All 16 sheets decode at 1536 × 1024 in Chromium. The production build and 95 tests pass. The existing card-layout check covers all 32 base/upgrade pairs in camp and inspection views at 390 and 1280 CSS pixels. New True shot, Old knowledge, and Quiet as snowfall comparisons were inspected in the running game; narrow-view scrolling was also checked. Three labelled base/old/new contact sheets cover every replacement. The PNG ZIPs contain 64 current card crops and 17 new full-resolution upgrades respectively, with archive integrity checks passing.
