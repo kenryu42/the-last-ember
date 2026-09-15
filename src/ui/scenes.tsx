@@ -163,6 +163,7 @@ function Hand({
             onClick={() => select(card)}
             disabled={busy || cardDef(card.def).cost > energy}
             selected={selected === card.uid}
+            allowArtPreview={selected === null && !busy}
           />
         ))}
         {!cards.length && (
@@ -479,7 +480,11 @@ export function CombatBoard({
               })
             }
           >
-            <Icon name="deck" />
+            <span
+              className="card-back"
+              aria-hidden="true"
+              data-empty={combat.draw.length === 0}
+            />
             <span>
               Draw <b>{combat.draw.length}</b>
             </span>

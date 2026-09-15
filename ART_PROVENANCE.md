@@ -71,3 +71,34 @@ In the art-production thread, the reference-only concept is saved at `.amp/in/ar
 - UI symbols are original simple inline SVG paths in `src/ui/components.tsx`; no icon-font service or franchise symbols are used.
 - All audio is synthesized locally by `src/ui/audio.ts`: oscillators, filtered transients, envelopes, and a slow ambient chord. No sampled commercial music or third-party sound recording is included. Audio variations do not consume game randomness.
 - All game writing and rules presentation were created for this implementation. Generated paintings are not screenshots of the implemented UI.
+
+## Wayfarer card materials
+
+The owner selected concept C, Wayfarer, from the [front/back comparison](https://ampcode.com/user-content/attachments/1f85a001d1e59b7fba3ad6157fc9f20ccee66a2cb71fad1d9ae6b4229f6d0038-file.png).
+Two original Painter assets were then generated in the implementation thread using
+that concept as reference. They contain no baked card text, costs, rules or card
+illustrations. The existing 64 card paintings are unchanged.
+
+| Runtime asset | Purpose | Bytes | Generated source |
+| --- | --- | --- | --- |
+| `public/assets/wayfarer-face.webp` | Blank parchment with stitched leather binding, behind live card content | 344,088 | [PNG](https://ampcode.com/user-content/attachments/c92db592dc90ac5e6e17f56778558442a826c2b9718be51e70af7b84a52601ff-file.png) |
+| `public/assets/wayfarer-back.webp` | Common bookcloth draw-pile back, with lantern and three region motifs | 136,580 | [PNG](https://ampcode.com/user-content/attachments/9c5bf54206200d6303dc85f38c02748c9e844eaa808a908397931a9373657a5b-file.png) |
+
+Both opaque RGB sources were resized from 1024×1536 to 512×768 with ImageMagick
+and initially encoded as WebP at quality 85. Total runtime size after the binding
+correction below is 480,668 bytes. Both final
+assets were inspected with `view_media`; dimensions were checked with ImageMagick.
+The face has a quiet empty field for live text. The back is intentionally identical
+for every card and reveals no draw order or identity. Its upright lantern and
+regions are directional, matching the approved concept; this game has no reversed
+cards or physical orientation mechanic. CSS supplies the wax energy seal,
+clipped-corner art mount, card-stack edges, state borders and accessible live text.
+
+The owner spotted an incomplete dark upper-left binding. A localized
+[Painter correction](https://ampcode.com/user-content/attachments/93d7464b675b75721280e26f3da8d88b53413ae9a219ad1da97c02bc77fe6703-file.png)
+replaces it with tan cord matching the other ties. Only a 32×32 patch at x62,y0
+from the resized correction was composited onto the original decoded face.
+The face was then encoded as lossless WebP so all pixels outside that patch remain
+identical; ImageMagick's masked absolute-error comparison returned zero. The back
+is unchanged. The corrected binding was inspected on the rendered Steady blade
+card, including its material match and lack of a visible patch seam.

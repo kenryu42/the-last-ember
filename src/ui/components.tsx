@@ -111,6 +111,7 @@ export function CardView({
   selected = false,
   label,
   preview = false,
+  allowArtPreview = true,
 }: {
   card: Card;
   onClick?: () => void;
@@ -118,6 +119,7 @@ export function CardView({
   selected?: boolean;
   label?: string;
   preview?: boolean;
+  allowArtPreview?: boolean;
 }) {
   const def = cardDef(card.def);
   const button = useRef<HTMLButtonElement>(null);
@@ -131,7 +133,7 @@ export function CardView({
   };
   function keepArt() {
     if (closing.current) clearTimeout(closing.current);
-    setShowArt(true);
+    if (allowArtPreview) setShowArt(true);
   }
   function leaveArt() {
     if (closing.current) clearTimeout(closing.current);
@@ -144,6 +146,10 @@ export function CardView({
     [],
   );
   useEffect(() => {
+    if (!allowArtPreview) {
+      setShowArt(false);
+      return;
+    }
     const panel = artwork.current;
     const anchor = button.current;
     if (!showArt || !panel || !anchor) return;
@@ -185,7 +191,7 @@ export function CardView({
       window.removeEventListener("scroll", close, true);
       window.removeEventListener("resize", close);
     };
-  }, [showArt]);
+  }, [showArt, allowArtPreview]);
   return (
     <>
       <button
@@ -195,10 +201,6 @@ export function CardView({
         data-card={card.uid}
         data-def={card.def}
         data-upgraded={card.upgraded}
-        onPointerEnter={(event) => {
-          if (event.pointerType === "mouse") keepArt();
-        }}
-        onPointerLeave={leaveArt}
         onFocus={(event) => {
           if (event.currentTarget.matches(":focus-visible")) keepArt();
         }}
@@ -221,7 +223,14 @@ export function CardView({
             {card.upgraded && <b className="upgrade-mark"> +</b>}
           </span>
         </span>
-        <span aria-hidden="true" className="art card-art">
+        <span
+          aria-hidden="true"
+          className="art card-art"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") keepArt();
+          }}
+          onPointerLeave={leaveArt}
+        >
           <span className="art-image card-pair" style={artStyle} />
         </span>
         <span className="card-owner">
@@ -234,8 +243,11 @@ export function CardView({
           ))}
         </span>
         <span className="card-keywords">
-          {def.exhaust ? "Exhaust" : def.retain ? "Retain" : " "}
-          {preview ? " · Improved" : ""}
+          <Icon name="flame" size={12} />
+          <span>
+            {def.exhaust ? "Exhaust" : def.retain ? "Retain" : ""}
+            {preview ? " · Improved" : ""}
+          </span>
         </span>
       </button>
       <div

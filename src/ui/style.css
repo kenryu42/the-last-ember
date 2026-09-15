@@ -870,19 +870,22 @@ button.primary:hover:not(:disabled) {
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
-  padding: 5px;
+  padding: 9px 10px 10px;
   width: 166px;
   min-width: 130px;
   max-width: 190px;
   flex-shrink: 1;
-  height: 232px;
+  height: 260px;
   position: relative;
   overflow: visible;
-  background: #ddd9c5;
-  color: #202e2c;
-  border: 1px solid #c5bf9e;
+  background: #eee0bf url(/assets/wayfarer-face.webp) center / 100% 100%;
+  color: #30281d;
+  border: 1px solid #786043;
   border-radius: 7px;
-  box-shadow: 0 5px 14px #07131085;
+  box-shadow:
+    0 2px 0 #30271e,
+    0 4px 0 -1px #a18b66,
+    0 7px 14px #07131085;
   text-align: left;
   transition:
     transform 0.16s ease-out,
@@ -892,7 +895,7 @@ button.primary:hover:not(:disabled) {
 }
 .game-card:hover:not(:disabled),
 .game-card:focus-visible {
-  background: #e5dfcb;
+  background: #eee0bf url(/assets/wayfarer-face.webp) center / 100% 100%;
   transform: translateY(-14px);
   z-index: 3;
   box-shadow: 0 10px 23px #051014b0;
@@ -904,19 +907,19 @@ button.primary:hover:not(:disabled) {
 }
 .game-card.selected {
   transform: translateY(-18px);
-  border: 2px solid #f3d187;
+  border-color: #f3d187;
   box-shadow:
     0 0 0 3px #edc4786b,
     0 5px 25px #080e0c;
 }
 .card-heading {
-  height: 34px;
+  height: 40px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   line-height: 1.08;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   flex-shrink: 0;
 }
@@ -926,21 +929,15 @@ button.primary:hover:not(:disabled) {
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  background: #334b48;
-  border: 1px solid #819489;
-  color: #f3e6bc;
+  background: radial-gradient(circle at 35% 25%, #ac674b, #743928 65%, #492a21);
+  border: 1px solid #5e3528;
+  box-shadow:
+    inset 0 0 0 2px #d2996860,
+    0 1px 2px #3b241b90;
+  color: #fff0cf;
   border-radius: 50%;
   font-family: Georgia, serif;
   font-size: 17px;
-}
-.aldren .cost {
-  background: #674634;
-}
-.eryn .cost {
-  background: #435740;
-}
-.fellowship .cost {
-  background: #665e47;
 }
 .card-art-popover {
   position: fixed;
@@ -972,16 +969,27 @@ button.primary:hover:not(:disabled) {
   width: 100%;
   height: 78px;
   flex-shrink: 0;
-  border-radius: 2px;
-  border: 1px solid #9ca28c;
+  border-radius: 1px;
+  border: 1px solid #756043;
+  clip-path: polygon(
+    5px 0,
+    calc(100% - 5px) 0,
+    100% 5px,
+    100% calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    5px 100%,
+    0 calc(100% - 5px),
+    0 5px
+  );
 }
 .card-owner {
   font-size: 8px;
   letter-spacing: 0.7px;
   text-transform: uppercase;
-  border-bottom: 1px solid #79856f60;
+  border-bottom: 1px solid #927a4c70;
   line-height: 22px;
-  color: #4e645a;
+  color: #53432d;
+  text-align: center;
 }
 .card-owner > span {
   opacity: 0.8;
@@ -990,24 +998,32 @@ button.primary:hover:not(:disabled) {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  padding: 7px 5px 0;
+  padding: 5px 2px 0;
   font-size: 11px;
   line-height: 1.45;
   letter-spacing: -0.15px;
 }
 .card-keywords {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 1.1px;
-  color: #74603d;
+  color: #644623;
   margin-top: auto;
-  padding: 4px;
+  padding: 5px 0 0;
+}
+.card-keywords svg {
+  flex-shrink: 0;
+  color: #925332;
 }
 .upgrade-mark {
   color: #49784a;
 }
 .upgrade-preview {
-  border: 2px solid #8aac65;
+  border-color: #8aac65;
 }
 .energy-pile,
 .end-pile {
@@ -1061,6 +1077,22 @@ button.primary:hover:not(:disabled) {
 .pile svg {
   width: 27px;
   height: 27px;
+}
+.card-back {
+  display: block;
+  width: 52px;
+  aspect-ratio: 2 / 3;
+  border: 1px solid #aa9366;
+  border-radius: 4px;
+  background: #26312c url(/assets/wayfarer-back.webp) center / 100% 100%;
+  box-shadow:
+    2px 2px 0 #62513c,
+    4px 4px 0 #292c24,
+    0 5px 9px #0006;
+}
+.card-back[data-empty="true"] {
+  opacity: 0.45;
+  box-shadow: none;
 }
 .end-turn {
   padding: 13px 10px;
@@ -1120,7 +1152,7 @@ button.primary:hover:not(:disabled) {
 .upgrade-compare .game-card {
   width: 190px;
   max-width: 190px;
-  height: 274px;
+  height: 288px;
 }
 .card-choices .card-art,
 .deck-grid .card-art,
@@ -1138,18 +1170,23 @@ button.primary:hover:not(:disabled) {
   font-size: 18px;
   height: 40px;
 }
-@media (min-width: 701px) {
-  .upgrade-compare .game-card {
-    width: 230px;
-    max-width: 230px;
-    height: 326px;
-  }
-  .upgrade-compare .card-art {
-    height: 140px;
-  }
-  .upgrade-compare .card-rules {
-    font-size: 13px;
-  }
+.upgrade-compare .game-card {
+  width: 230px;
+  min-width: 230px;
+  max-width: 230px;
+  height: 326px;
+  flex-shrink: 0;
+}
+.upgrade-compare .card-heading {
+  height: 48px;
+  padding-inline: 6px;
+}
+.upgrade-compare .card-art {
+  height: auto;
+  aspect-ratio: 3 / 2;
+}
+.upgrade-compare .card-rules {
+  font-size: 13px;
 }
 .reward-summary {
   display: flex;
@@ -1691,7 +1728,7 @@ input[type="range"] {
     padding-top: 10px;
   }
   .game-card {
-    height: 254px;
+    height: 276px;
   }
   .card-art {
     height: 93px;
@@ -2059,6 +2096,9 @@ input[type="range"] {
   .pile svg {
     width: 22px;
   }
+  .card-back {
+    width: 32px;
+  }
   .end-pile .text-button {
     font-size: 8px;
   }
@@ -2137,17 +2177,11 @@ input[type="range"] {
     font-size: 27px;
   }
   .upgrade-compare {
-    gap: 10px;
+    flex-direction: column;
+    gap: 16px;
   }
-  .upgrade-compare .game-card {
-    width: 150px;
-    min-width: 125px;
-  }
-  .upgrade-compare .card-heading {
-    font-size: 15px;
-  }
-  .upgrade-compare .card-rules {
-    font-size: 10px;
+  .upgrade-compare > svg {
+    transform: rotate(90deg);
   }
   .deck-grid {
     grid-template-columns: repeat(2, minmax(125px, 1fr));
@@ -2274,18 +2308,18 @@ input[type="range"] {
   .in-combat .hand-area {
     padding: 0 0 6px;
   }
-  .in-combat .game-card {
-    height: 200px;
+  .in-combat .hand .game-card {
+    height: 226px;
   }
   .in-combat .hand {
     padding-top: 12px;
     padding-bottom: 4px;
   }
-  .in-combat .card-art {
-    height: 65px;
+  .in-combat .hand .card-art {
+    height: 60px;
   }
-  .in-combat .card-heading {
-    height: 31px;
+  .in-combat .hand .card-heading {
+    height: 40px;
   }
 }
 .app:has(.tutorial) {
@@ -2386,7 +2420,6 @@ input[type="range"] {
 }
 .game-card[data-upgraded="true"] {
   border-color: #a77529;
-  background-image: linear-gradient(125deg, #f6e9c540, transparent 60%);
 }
 .game-card[data-upgraded="true"] .card-art {
   border-color: #a77529;

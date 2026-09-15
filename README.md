@@ -13,10 +13,19 @@ Enter/Space work throughout. Larger hands scroll and have explicit
 previous/more controls. Inspection is available for every pile, the permanent deck,
 enemies, relics, and upgrades.
 
-Hover a card or focus it with the keyboard to see its full base or upgraded
+Hover a card's artwork or focus the card with the keyboard to see its full base or upgraded
 painting. You can move onto the preview to inspect it; Escape dismisses it without
 closing the underlying dialog. Clicking the card still performs its normal action.
 The preview fits the viewport and uses the native browser Popover API.
+
+Cards use the selected **Wayfarer** design: stitched leather, quiet parchment,
+wax energy seals and mounted paintings. All names, costs, rules and keywords remain
+live text. The common bookcloth back marks the face-down draw pile, with a subdued
+empty state; clicking it still inspects the pile with order hidden. Upgraded art
+and the title's `+` remain distinct. Hand previews are suspended during target
+selection and action resolution so they cannot cover combat targets. The two
+locally bundled material images total 480,668 bytes; sources are in
+`ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
 
 Dread is checked **at turn end**, not when you cast. Lowering it first can prevent
 an untriggered threshold. Each consequence fires once per encounter. Reinforcements
@@ -196,6 +205,42 @@ valid defeat at zero health. The animated run's browser error log was empty;
 the reduced-motion session was unavailable for a later error-log check. Rendered reward
 choices and Burden's upgrade comparison were inspected. These selected runs test
 the changed cards and transitions, not human balance or archetype win rates.
+
+### Wayfarer verification
+
+After the card-frame/back implementation, **95 tests and 10,679 assertions** pass,
+along with typecheck and production build. Chromium layout checks cover all 64
+variants in the deck and a compact-hand CSS probe at desktop/narrow widths, plus
+the real ten-card combat hand and 390px upgrade comparison. Screenshots of the
+deck, combat and upgrade comparison were inspected. Names, rules and keywords do
+not overlap in those checked states, but the initial checks missed long titles
+in narrow comparisons; see QA-003 below. Art-only hover, hover
+texture retention, draw-pile inspection and suppression of previews during target
+selection were checked live. A first full-run attempt exposed a reopened preview
+covering an enemy target; that interaction was fixed before replay.
+
+The animated 1280×720 run `ember-mu28ok3h` matched 189 UI actions across all 18
+stops and ended in a valid final-boss defeat. The muted/reduced-motion 390×844 run
+`lantern` matched 217 actions across all 18 stops and won at 40 health. Both browser
+error logs were empty. These are correctness and layout checks, not balance or
+performance certification. No macOS/Safari testing was performed.
+
+QA-003 subsequently exposed long-title overflow in the real narrow camp
+comparison. Follow-up responsive polish keeps comparison cards at 230×326 with
+a 48px header and an inset energy seal. Below 701px, the pair stacks vertically
+instead of squeezing into tall, thin cards. Artwork follows its natural 3:2 ratio,
+without letterbox gaps. Compact combat sizing applies only to the hand, not to
+inspection dialogs. Names and upgrade marks remain complete at every tested width.
+`bun scripts/card-layout.ts` runs an isolated Chromium regression against the
+production preview at port 4173, or a URL supplied as its first argument. It opens
+every real camp and read-only comparison at 390×844 and 1280×900, measuring both
+title-span and individual text-line bounds, including the nested upgrade mark.
+It also checks card proportions, seal inset, art coverage, rule/footer separation
+and reachable controls, then confirms that
+only Shoulder the burden improves and the camp is consumed. It prints 256 checked
+card faces and focused title bounds, and writes four screenshots under `/tmp`.
+This regression reproduced overflow before the shared CSS fix. The narrow camp
+and read-only screenshots, plus desktop equivalents, were inspected after it.
 
 ### Initial verification record
 
