@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CARDS } from "../src/game/content";
-import { makeCard, newRun } from "../src/game/engine";
+import { makeCard, newRun, startCombat } from "../src/game/engine";
 import { parseSave } from "../src/game/storage";
 
 // Isolated rendered regression: actual camp and read-only comparisons, not CSS probes.
@@ -63,14 +63,53 @@ async function compareAll(mode: "camp" | "inspection") {
       const art = face.querySelector(".card-art");
       const rules = face.querySelector(".card-rules");
       const footer = face.querySelector(".card-keywords");
+      const owner = face.querySelector(".card-owner");
       const seal = face.querySelector(".cost");
       const painting = face.querySelector(".card-art .art-image");
-      if (!heading || !title || !art || !rules || !footer || !seal || !painting)
+      if (
+        !heading ||
+        !title ||
+        !art ||
+        !rules ||
+        !footer ||
+        !owner ||
+        !seal ||
+        !painting
+      )
         throw new Error("Incomplete card");
       const h = heading.getBoundingClientRect(),
         a = art.getBoundingClientRect();
       const f = footer.getBoundingClientRect(),
         b = face.getBoundingClientRect();
+      const ruleArea = rules.getBoundingClientRect();
+      const firstRule = rules.firstElementChild?.getBoundingClientRect();
+      const lastRule = rules.lastElementChild?.getBoundingClientRect();
+      if (
+        !firstRule ||
+        !lastRule ||
+        Math.abs(
+          (firstRule.top +
+            lastRule.bottom -
+            owner.getBoundingClientRect().bottom -
+            f.top) /
+            2,
+        ) > 1
+      ) {
+        throw new Error(`Rules not vertically centered: ${id}`);
+      }
+      for (const rule of rules.children) {
+        const range = document.createRange();
+        range.selectNodeContents(rule);
+        for (const line of range.getClientRects()) {
+          if (
+            Math.abs(
+              (line.left + line.right - ruleArea.left - ruleArea.right) / 2,
+            ) > 2
+          ) {
+            throw new Error(`Rules not horizontally centered: ${id}`);
+          }
+        }
+      }
       const image = painting.getBoundingClientRect();
       if (
         Math.abs(b.width / b.height - 230 / 326) > 0.005 ||
@@ -156,6 +195,43 @@ async function compareAll(mode: "camp" | "inspection") {
   return { mode, width: innerWidth, checked, focusedEvidence };
 }
 
+async function checkFaces() {
+  await document.fonts.ready;
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  const faces = document.querySelectorAll<HTMLElement>(".game-card");
+  if (!faces.length) throw new Error("No card faces rendered");
+  for (const face of faces) {
+    const bounds = face.getBoundingClientRect();
+    if (Math.abs(bounds.width / bounds.height - 230 / 326) > 0.001)
+      throw new Error(`Distorted card: ${face.dataset.def}`);
+    for (const selector of [".card-heading", ".card-rules"]) {
+      const part = face.querySelector(selector);
+      if (!part) throw new Error(`Missing ${selector}`);
+      const area = part.getBoundingClientRect();
+      const walker = document.createTreeWalker(part, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const range = document.createRange();
+        range.selectNodeContents(walker.currentNode);
+        for (const line of range.getClientRects()) {
+          if (
+            line.top < area.top - 1 ||
+            line.bottom > area.bottom + 1 ||
+            line.left < area.left - 1 ||
+            line.right > area.right + 1
+          )
+            throw new Error(`Text overflow: ${face.dataset.def}/${selector}`);
+        }
+      }
+    }
+    const footer = face
+      .querySelector(".card-keywords")
+      ?.getBoundingClientRect();
+    if (!footer || footer.bottom > bounds.bottom - 4)
+      throw new Error(`Footer overflow: ${face.dataset.def}`);
+  }
+  return { width: innerWidth, checked: faces.length, ratio: "230:326" };
+}
+
 const run = newRun("card-layout-study");
 run.deck = CARDS.map((card) => makeCard(run, card.id));
 const camp = run.route.find((node) => node.kind === "camp");
@@ -223,6 +299,78 @@ try {
         })()`,
           ),
         );
+      }
+    }
+  }
+  const gallery = newRun("ratio-study");
+  gallery.deck = CARDS.flatMap((card) => [
+    makeCard(gallery, card.id),
+    { ...makeCard(gallery, card.id), upgraded: true },
+  ]);
+  const combat = newRun("ratio-combat-study");
+  combat.location = combat.route[0]?.id ?? null;
+  combat.row = 0;
+  combat.visited = combat.location ? [combat.location] : [];
+  startCombat(combat, "battle");
+  if (combat.scene.kind !== "combat") throw new Error("Missing combat");
+  combat.scene.hand = combat.deck.slice(0, 10);
+  combat.scene.draw = combat.deck.slice(10);
+  combat.scene.discard = [];
+  combat.scene.exhaust = [];
+  for (const width of [390, 1280]) {
+    await browser(
+      "set",
+      "viewport",
+      String(width),
+      width === 390 ? "844" : "720",
+      "2",
+    );
+    for (const fixture of [gallery, combat]) {
+      const serialized = JSON.stringify(fixture);
+      if (parseSave(serialized).kind !== "valid")
+        throw new Error("Invalid ratio fixture");
+      await browser(
+        "eval",
+        `localStorage.setItem('last-ember.run.v1',${JSON.stringify(serialized)});location.reload()`,
+      );
+      await browser(
+        "wait",
+        "--fn",
+        `Array.from(document.querySelectorAll('button')).some(b=>b.textContent.includes('Continue journey'))`,
+      );
+      await browser(
+        "eval",
+        `Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('Continue journey')).click()`,
+      );
+      if (fixture === gallery) {
+        await browser(
+          "wait",
+          "--fn",
+          `Array.from(document.querySelectorAll('button')).some(b=>b.textContent.includes('64 cards'))`,
+        );
+        await browser(
+          "eval",
+          `Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('64 cards')).click()`,
+        );
+      }
+      await browser("wait", ".game-card");
+      await browser("mouse", "move", "0", "0");
+      console.log(
+        JSON.stringify(await browser("eval", `(${checkFaces.toString()})()`)),
+      );
+      if (fixture === combat) {
+        for (const edge of ["first", "last"]) {
+          await browser(
+            "eval",
+            `(()=>{const hand=document.querySelector('.hand');hand.style.scrollBehavior='auto';hand.scrollLeft=${edge === "first" ? "0" : "hand.scrollWidth"};})()`,
+          );
+          console.log(
+            await browser(
+              "eval",
+              `(()=>{const hand=document.querySelector('.hand'),cards=hand.querySelectorAll('.game-card'),card=cards[${edge === "first" ? "0" : "cards.length-1"}],b=card.getBoundingClientRect(),h=hand.getBoundingClientRect();if(b.left<h.left-1||b.right>h.right+1)throw Error('Hand edge unreachable');return '${edge} card reachable at ${width}px';})()`,
+            ),
+          );
+        }
       }
     }
   }

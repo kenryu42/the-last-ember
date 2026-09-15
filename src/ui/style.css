@@ -846,7 +846,7 @@ button.primary:hover:not(:disabled) {
   color: #e7d6a9;
 }
 .compact-hand-controls {
-  display: none;
+  display: flex;
 }
 @media (max-width: 1000px) {
   .compact-hand-controls {
@@ -858,24 +858,28 @@ button.primary:hover:not(:disabled) {
 }
 .hand {
   display: flex;
-  justify-content: center;
+  justify-content: safe center;
+  overflow-x: auto;
   gap: 9px;
   min-width: 0;
   align-items: center;
-  padding: 12px 4px 8px;
+  /* Keep the 18px selected lift and its outline inside the scroll viewport. */
+  padding: 24px 4px 8px;
 }
 .game-card {
+  --card-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
-  padding: 9px 10px 10px;
-  width: 166px;
-  min-width: 130px;
-  max-width: 190px;
-  flex-shrink: 1;
-  height: 260px;
+  padding: calc(var(--card-width) * 9 / 230) calc(var(--card-width) * 10 / 230);
+  width: var(--card-width);
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+  flex-shrink: 0;
+  height: auto;
+  aspect-ratio: 230 / 326;
   position: relative;
   overflow: visible;
   background: #eee0bf url(/assets/wayfarer-face.webp) center / 100% 100%;
@@ -913,19 +917,20 @@ button.primary:hover:not(:disabled) {
     0 5px 25px #080e0c;
 }
 .card-heading {
-  height: 40px;
+  height: calc(var(--card-width) * 48 / 230);
+  padding-inline: calc(var(--card-width) * 6 / 230);
   display: flex;
   align-items: center;
   gap: 5px;
   line-height: 1.08;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 17px;
+  font-size: calc(var(--card-width) * 18 / 230);
   font-weight: 600;
   flex-shrink: 0;
 }
 .cost {
-  width: 26px;
-  height: 26px;
+  width: calc(var(--card-width) * 26 / 230);
+  height: calc(var(--card-width) * 26 / 230);
   flex-shrink: 0;
   display: grid;
   place-items: center;
@@ -937,7 +942,7 @@ button.primary:hover:not(:disabled) {
   color: #fff0cf;
   border-radius: 50%;
   font-family: Georgia, serif;
-  font-size: 17px;
+  font-size: calc(var(--card-width) * 17 / 230);
 }
 .card-art-popover {
   position: fixed;
@@ -967,7 +972,8 @@ button.primary:hover:not(:disabled) {
 }
 .card-art {
   width: 100%;
-  height: 78px;
+  height: auto;
+  aspect-ratio: 3 / 2;
   flex-shrink: 0;
   border-radius: 1px;
   border: 1px solid #756043;
@@ -987,7 +993,7 @@ button.primary:hover:not(:disabled) {
   letter-spacing: 0.7px;
   text-transform: uppercase;
   border-bottom: 1px solid #927a4c70;
-  line-height: 22px;
+  line-height: calc(var(--card-width) * 22 / 230);
   color: #53432d;
   text-align: center;
 }
@@ -996,10 +1002,13 @@ button.primary:hover:not(:disabled) {
 }
 .card-rules {
   display: flex;
+  flex: 1;
   flex-direction: column;
+  justify-content: center;
+  text-align: center;
   gap: 3px;
-  padding: 5px 2px 0;
-  font-size: 11px;
+  padding: 5px 2px;
+  font-size: calc(var(--card-width) * 13 / 230);
   line-height: 1.45;
   letter-spacing: -0.15px;
 }
@@ -1081,7 +1090,7 @@ button.primary:hover:not(:disabled) {
 .card-back {
   display: block;
   width: 52px;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 230 / 326;
   border: 1px solid #aa9366;
   border-radius: 4px;
   background: #26312c url(/assets/wayfarer-back.webp) center / 100% 100%;
@@ -1112,10 +1121,7 @@ button.primary:hover:not(:disabled) {
 .large-hand {
   justify-content: flex-start;
   overflow-x: auto;
-  padding: 20px 5px;
-}
-.large-hand .game-card {
-  min-width: 145px;
+  padding: 24px 5px 20px;
 }
 .stop-scene {
   text-align: center;
@@ -1147,46 +1153,8 @@ button.primary:hover:not(:disabled) {
   gap: 22px;
   margin: 28px 0;
 }
-.card-choices .game-card,
-.deck-grid .game-card,
 .upgrade-compare .game-card {
-  width: 190px;
-  max-width: 190px;
-  height: 288px;
-}
-.card-choices .card-art,
-.deck-grid .card-art,
-.upgrade-compare .card-art {
-  height: 100px;
-}
-.card-choices .card-rules,
-.deck-grid .card-rules,
-.upgrade-compare .card-rules {
-  font-size: 12px;
-}
-.card-choices .card-heading,
-.deck-grid .card-heading,
-.upgrade-compare .card-heading {
-  font-size: 18px;
-  height: 40px;
-}
-.upgrade-compare .game-card {
-  width: 230px;
-  min-width: 230px;
-  max-width: 230px;
-  height: 326px;
-  flex-shrink: 0;
-}
-.upgrade-compare .card-heading {
-  height: 48px;
-  padding-inline: 6px;
-}
-.upgrade-compare .card-art {
-  height: auto;
-  aspect-ratio: 3 / 2;
-}
-.upgrade-compare .card-rules {
-  font-size: 13px;
+  --card-width: 230px;
 }
 .reward-summary {
   display: flex;
@@ -1458,7 +1426,7 @@ input[type="range"] {
 }
 .deck-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   justify-items: center;
   gap: 25px 14px;
   padding: 15px 0;
@@ -1727,12 +1695,6 @@ input[type="range"] {
   .hand-area {
     padding-top: 10px;
   }
-  .game-card {
-    height: 276px;
-  }
-  .card-art {
-    height: 93px;
-  }
   .fellowship-strip {
     padding: 13px 22px;
   }
@@ -1770,15 +1732,6 @@ input[type="range"] {
   }
   .hand {
     gap: 7px;
-  }
-  .game-card {
-    min-width: 123px;
-  }
-  .card-heading {
-    font-size: 15px;
-  }
-  .card-rules {
-    font-size: 10px;
   }
   .journey-layout {
     gap: 30px;
@@ -1841,10 +1794,6 @@ input[type="range"] {
   .hand {
     justify-content: flex-start;
     overflow-x: auto;
-    padding-top: 23px;
-  }
-  .hand .game-card {
-    min-width: 146px;
   }
   .journey-layout {
     display: block;
@@ -2068,9 +2017,6 @@ input[type="range"] {
     grid-template-columns: 48px minmax(0, 1fr) 69px;
     gap: 6px;
   }
-  .hand .game-card {
-    min-width: 143px;
-  }
   .energy-orb {
     width: 42px;
     height: 42px;
@@ -2141,9 +2087,6 @@ input[type="range"] {
     overflow-x: auto;
     padding: 15px 8px;
   }
-  .card-choices .game-card {
-    min-width: 170px;
-  }
   .shop-layout {
     align-items: stretch;
   }
@@ -2184,18 +2127,8 @@ input[type="range"] {
     transform: rotate(90deg);
   }
   .deck-grid {
-    grid-template-columns: repeat(2, minmax(125px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px 8px;
-  }
-  .deck-grid .game-card {
-    width: 100%;
-    min-width: 125px;
-  }
-  .deck-grid .card-heading {
-    font-size: 16px;
-  }
-  .deck-grid .card-rules {
-    font-size: 11px;
   }
   .tutorial {
     top: auto;
@@ -2308,18 +2241,8 @@ input[type="range"] {
   .in-combat .hand-area {
     padding: 0 0 6px;
   }
-  .in-combat .hand .game-card {
-    height: 226px;
-  }
   .in-combat .hand {
-    padding-top: 12px;
     padding-bottom: 4px;
-  }
-  .in-combat .hand .card-art {
-    height: 60px;
-  }
-  .in-combat .hand .card-heading {
-    height: 40px;
   }
 }
 .app:has(.tutorial) {

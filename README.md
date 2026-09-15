@@ -229,8 +229,11 @@ QA-003 subsequently exposed long-title overflow in the real narrow camp
 comparison. Follow-up responsive polish keeps comparison cards at 230×326 with
 a 48px header and an inset energy seal. Below 701px, the pair stacks vertically
 instead of squeezing into tall, thin cards. Artwork follows its natural 3:2 ratio,
-without letterbox gaps. Compact combat sizing applies only to the hand, not to
-inspection dialogs. Names and upgrade marks remain complete at every tested width.
+without letterbox gaps. All card faces and backs now use the same 230:326 ratio.
+Ordinary faces are 200px wide and comparisons are 230px wide; headings, seals and
+rules scale with the face width. Hands scroll instead of shrinking card widths,
+and narrow deck grids use fewer columns. Names and upgrade marks remain complete
+at every tested width. Rules are centered horizontally and vertically.
 `bun scripts/card-layout.ts` runs an isolated Chromium regression against the
 production preview at port 4173, or a URL supplied as its first argument. It opens
 every real camp and read-only comparison at 390×844 and 1280×900, measuring both
@@ -238,7 +241,9 @@ title-span and individual text-line bounds, including the nested upgrade mark.
 It also checks card proportions, seal inset, art coverage, rule/footer separation
 and reachable controls, then confirms that
 only Shoulder the burden improves and the camp is consumed. It prints 256 checked
-card faces and focused title bounds, and writes four screenshots under `/tmp`.
+comparison faces and focused title bounds, and writes four screenshots under `/tmp`.
+It also checks all 64 deck variants and a real ten-card hand at both widths for
+proportions and text overflow, including access to the first and last hand cards.
 This regression reproduced overflow before the shared CSS fix. The narrow camp
 and read-only screenshots, plus desktop equivalents, were inspected after it.
 
