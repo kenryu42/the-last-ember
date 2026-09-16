@@ -1,0 +1,75 @@
+.playtest *,
+.playtest *::before,
+.playtest *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+.playtest .benchmark-banner,
+.playtest .benchmark-setup,
+.playtest .benchmark-results,
+.playtest .phase-projection {
+  margin: 20px auto;
+  padding: 20px 24px;
+  width: min(1100px, calc(100% - 32px));
+  background: rgba(18, 24, 24, 0.94);
+  border: 1px solid var(--line, #4e554a);
+  border-radius: 8px;
+}
+.playtest .benchmark-banner strong {
+  color: #e6c47e;
+}
+.playtest .benchmark-banner p,
+.playtest .phase-projection p {
+  font-size: 13px;
+  margin: 8px 0;
+}
+.playtest .phase-projection ol {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+.playtest .benchmark-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.playtest .benchmark-fields label {
+  display: grid;
+  gap: 6px;
+}
+.playtest select,
+.playtest textarea {
+  width: 100%;
+  padding: 10px;
+  color: #efe9d9;
+  background: #182120;
+  border: 1px solid #687163;
+  border-radius: 4px;
+  font: inherit;
+}
+.playtest pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.playtest .combat-board {
+  margin: 20px auto;
+}
+.playtest .topbar {
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .playtest .benchmark-fields {
+    grid-template-columns: 1fr;
+  }
+  .playtest .topbar {
+    flex-wrap: wrap;
+  }
+  .playtest .benchmark-banner,
+  .playtest .benchmark-setup,
+  .playtest .benchmark-results,
+  .playtest .phase-projection {
+    padding: 16px;
+  }
+}

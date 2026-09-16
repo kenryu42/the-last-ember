@@ -87,7 +87,7 @@ export function generateRoute(run: Run): RouteNode[] {
           row === 4
             ? [`${run.act}-5-1`]
             : [0, 1, 2]
-                .filter((next) => Math.abs(next - lane) <= 1)
+                .filter((next) => next !== 2 - lane)
                 .map((next) => `${run.act}-${row + 1}-${next}`),
       }),
     ),
@@ -249,7 +249,16 @@ export function startCombat(run: Run, type: Combat["type"]) {
     5 + (has(run, "map") ? 1 : 0) + (has(run, "feather") ? 1 : 0),
   );
 }
-export function intention(enemy: Enemy, combat: Combat): Intent {
+export type RulesMode = "adventure" | "control" | "candidate";
+
+export function thresholdStrength(run: Run, combat: Combat): number {
+  return thresholds(run, combat).reduce(
+    (sum, t) => sum + (t.fired && combat.dread >= t.at ? t.strength : 0),
+    0,
+  );
+}
+
+export function intention(enemy: Enemy, combat: Combat, bonus = 0): Intent {
   const def = enemyDef(enemy.def),
     intent = def.pattern[enemy.step % def.pattern.length] ?? {
       kind: "attack",
@@ -260,6 +269,7 @@ export function intention(enemy: Enemy, combat: Combat): Intent {
   let amount =
     intent.amount +
     enemy.strength +
+    bonus +
     (boss && enemy.hp <= enemy.maxHp / 2 ? 3 : 0) +
     (enemy.def === "hollow" && combat.dread >= 6 ? 4 : 0);
   if (enemy.weak > 0) amount = Math.floor(amount * 0.75);
@@ -269,6 +279,14 @@ export function thresholds(run: Run, combat: Combat) {
   const shift = has(run, "charm") ? 1 : 0;
   return [4 + shift, 8 + shift].map((at, index) => ({
     at,
+    strength:
+      index === 0
+        ? combat.reaction === "fury"
+          ? 2
+          : 0
+        : combat.reaction === "ward"
+          ? 4
+          : 3,
     fired: combat.fired.includes(at),
     pending: combat.dread >= at && !combat.fired.includes(at),
     text:
@@ -295,13 +313,19 @@ export function hitDamage(
     (has(run, "coal") && combat.dread >= 6 ? 3 : 0);
   return Math.floor(amount * (enemy.vulnerable > 0 ? 1.5 : 1));
 }
-export function resolve(input: Run, action: Action): Resolution {
+export function resolve(
+  input: Run,
+  action: Action,
+  mode: RulesMode = "adventure",
+): Resolution {
   const run = structuredClone(input),
     frames: Frame[] = [];
+  const accounting = { drawn: 0, suppressedAttackDamage: 0 };
   const fail = (error: string): Resolution => ({
     run: input,
     frames: [],
     error,
+    accounting: { drawn: 0, suppressedAttackDamage: 0 },
   });
   const emit = (cue: Cue, target: Frame["target"], text: string) => {
     if (run.scene.kind === "combat") {
@@ -310,7 +334,7 @@ export function resolve(input: Run, action: Action): Resolution {
     }
     frames.push({ run: structuredClone(run), cue, target, text });
   };
-  const finish = (): Resolution => ({ run, frames, error: null });
+  const finish = (): Resolution => ({ run, frames, error: null, accounting });
   const endIfDead = () => {
     if (run.hp > 0) return false;
     run.scene = { kind: "ending", won: false };
@@ -320,6 +344,11 @@ export function resolve(input: Run, action: Action): Resolution {
   const win = (combat: Combat) => {
     if (combat.enemies.some((e) => e.hp > 0)) return;
     run.stats.battles++;
+    if (mode !== "adventure") {
+      run.scene = { kind: "ending", won: true };
+      emit("victory", null, "Benchmark fight won.");
+      return;
+    }
     if (has(run, "kettle")) heal(run, 3);
     if (combat.type === "boss" && run.act === 2) {
       run.scene = { kind: "ending", won: true };
@@ -346,6 +375,8 @@ export function resolve(input: Run, action: Action): Resolution {
     emit("reward", null, "The road is yours again.");
   };
   if (run.scene.kind === "ending") return fail("This journey has ended.");
+  if (mode !== "adventure" && action.type !== "play" && action.type !== "end")
+    return fail("Benchmark mode only permits combat actions.");
   switch (action.type) {
     case "travel": {
       const node = run.route.find((n) => n.id === action.node);
@@ -447,6 +478,7 @@ export function resolve(input: Run, action: Action): Resolution {
           case "draw": {
             const before = c.hand.length;
             draw(run, c, n);
+            accounting.drawn += c.hand.length - before;
             emit(
               "draw",
               null,
@@ -511,7 +543,7 @@ export function resolve(input: Run, action: Action): Resolution {
           );
         else if (first && c.reaction === "ward")
           c.enemies.filter((e) => e.hp > 0).forEach((e) => (e.block += 10));
-        else
+        else if (mode !== "candidate")
           c.enemies
             .filter((e) => e.hp > 0)
             .forEach(
@@ -521,7 +553,11 @@ export function resolve(input: Run, action: Action): Resolution {
       }
       for (const enemy of c.enemies) {
         if (enemy.hp <= 0 || enemy.joinsOn > c.turn) continue;
-        const intent = intention(enemy, c);
+        const intent = intention(
+          enemy,
+          c,
+          mode === "candidate" ? thresholdStrength(run, c) : 0,
+        );
         if (intent.kind === "guard") {
           enemy.block += intent.amount;
           emit(
@@ -537,6 +573,11 @@ export function resolve(input: Run, action: Action): Resolution {
             `${enemyDef(enemy.def).name}: +${intent.amount} Dread`,
           );
         } else {
+          if (mode === "candidate") {
+            const alwaysActive = thresholdStrength(run, { ...c, dread: 10 });
+            accounting.suppressedAttackDamage +=
+              intention(enemy, c, alwaysActive).amount - intent.amount;
+          }
           const absorbed = Math.min(c.block, intent.amount),
             lost = Math.min(run.hp, intent.amount - absorbed);
           c.block -= absorbed;
@@ -558,7 +599,9 @@ export function resolve(input: Run, action: Action): Resolution {
       run.stats.turns++;
       c.block = 0;
       c.energy = 3;
+      const retained = c.hand.length;
       draw(run, c, 5 + (has(run, "map") ? 1 : 0));
+      accounting.drawn += c.hand.length - retained;
       emit("draw", null, `Turn ${c.turn}. The fellowship stands together.`);
       return finish();
     }

@@ -13,6 +13,8 @@ test("title renders a playable identity and accessible entry points", () => {
   expect(html).toContain("Begin a new journey");
   expect(html).toContain("Settings");
   expect(html).not.toContain("not implemented");
+  expect(html).not.toContain("isolated test mode");
+  expect(html).not.toContain("benchmark");
 });
 
 test("all 32 cards have distinct base and improved illustrations", async () => {

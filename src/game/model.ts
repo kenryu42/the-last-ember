@@ -151,4 +151,5 @@ export interface Resolution {
   run: Run;
   frames: Frame[];
   error: string | null;
+  accounting: { drawn: number; suppressedAttackDamage: number };
 }

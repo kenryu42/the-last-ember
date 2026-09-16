@@ -39,6 +39,13 @@ formations, and three bosses with telegraphed phase changes. Victory lights the
 beacon; defeat remembers the fellowship's attempt. Results and custom seeds support
 replay without permanent stat grinding or unlock gates.
 
+New routes give each road two distinct next-stop choices: upper → upper/middle,
+middle → upper/lower, lower → middle/lower. No road has another road's choices
+plus a free third option. The final column still leads directly to the guardian.
+Saved routes retain their stored connections; newly generated acts use this topology.
+Node contents and route RNG consumption are unchanged. Earlier journey and recovery
+measurements below describe their historical topology, not current seeded outcomes.
+
 **Progress saves after every committed action.** Continue restores the exact draw
 order, rewards, stock, and RNG state. Settings → Export journey makes a portable
 JSON backup; Restore validates it and requires explicit replacement confirmation.

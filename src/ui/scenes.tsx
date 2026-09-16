@@ -1,6 +1,14 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { ACTS, EVENTS, RELICS, cardDef, enemyDef } from "../game/content";
-import { has, intention, reachable, thresholds } from "../game/engine";
+import {
+  has,
+  intention,
+  reachable,
+  thresholds,
+  thresholdStrength,
+} from "../game/engine";
+import type { RulesMode } from "../game/engine";
+import { thresholdState } from "../game/playtest";
 import type { Action, Card, Combat, Frame, Run } from "../game/model";
 import { Art, CardView, Icon, Modal } from "./components";
 
@@ -217,6 +225,7 @@ export function CombatBoard({
   stage,
   inspect,
   reduced,
+  mode = "adventure",
 }: {
   run: Run;
   combat: Combat;
@@ -228,10 +237,12 @@ export function CombatBoard({
   stage: "anticipate" | "impact";
   inspect: (value: Inspect) => void;
   reduced: boolean;
+  mode?: RulesMode;
 }) {
   const [enemyInfo, setEnemyInfo] = useState<number | null>(null),
     [log, setLog] = useState(false);
   const enemy = combat.enemies.find((e) => e.uid === enemyInfo);
+  const bonus = mode === "candidate" ? thresholdStrength(run, combat) : 0;
   return (
     <section className="combat-board" aria-label="Combat" aria-busy={busy}>
       <div className="combat-heading">
@@ -279,13 +290,17 @@ export function CombatBoard({
               <b>{t.at}</b>
               <p>
                 <strong>
-                  {t.fired
-                    ? "Already awakened"
-                    : t.pending
-                      ? "Activates at turn end"
-                      : "At turn end, if reached"}
+                  {mode !== "adventure"
+                    ? `${thresholdState(run, combat, mode).find((s) => s.at === t.at)?.state}${t.pending ? " · unlocks at end" : ""}`
+                    : t.fired
+                      ? "Already awakened"
+                      : t.pending
+                        ? "Activates at turn end"
+                        : "At turn end, if reached"}
                 </strong>
-                {t.text}
+                {mode === "candidate" && t.strength
+                  ? `After unlock: +${t.strength} attack while Dread is ${t.at} or higher.`
+                  : t.text}
               </p>
             </div>
           ))}
@@ -299,7 +314,7 @@ export function CombatBoard({
         <div className="enemies">
           {combat.enemies.map((enemy, index) => {
             const def = enemyDef(enemy.def),
-              intent = intention(enemy, combat),
+              intent = intention(enemy, combat, bonus),
               active = feedback?.target === enemy.uid,
               waiting = enemy.joinsOn > combat.turn,
               dead = enemy.hp <= 0;
@@ -331,7 +346,11 @@ export function CombatBoard({
                   </b>
                   {!dead && (
                     <small>
-                      {waiting ? "Waits this phase" : `Acts ${index + 1}`}
+                      {waiting
+                        ? "Waits this phase"
+                        : mode !== "adventure"
+                          ? `Now · see ordered projection`
+                          : `Acts ${index + 1}`}
                     </small>
                   )}
                 </div>
@@ -388,7 +407,9 @@ export function CombatBoard({
                   {enemy.vulnerable > 0 && (
                     <span>Vulnerable {enemy.vulnerable}</span>
                   )}
-                  {enemy.strength > 0 && <span>Attack +{enemy.strength}</span>}
+                  {enemy.strength + bonus > 0 && (
+                    <span>Attack +{enemy.strength + bonus}</span>
+                  )}
                 </div>
               </div>
             );
@@ -540,7 +561,8 @@ export function CombatBoard({
           <p>
             Intention now:{" "}
             <b>
-              {intention(enemy, combat).kind} {intention(enemy, combat).amount}
+              {intention(enemy, combat, bonus).kind}{" "}
+              {intention(enemy, combat, bonus).amount}
             </b>
             .
           </p>

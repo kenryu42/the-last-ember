@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ACTS, RELICS, cardDef, needsTarget } from "./game/content";
 import { newRun, resolve } from "./game/engine";
 import type { Action, Card, Frame, Run } from "./game/model";
@@ -19,6 +19,12 @@ import { Art, CardView, Icon, Modal, Rules } from "./ui/components";
 import { CombatBoard, JourneyMap, StopScene } from "./ui/scenes";
 import type { Inspect } from "./ui/scenes";
 import "./ui/style.css";
+
+const Playtest = import.meta.env?.DEV
+  ? lazy(() =>
+      import("./ui/playtest").then(({ Playtest }) => ({ default: Playtest })),
+    )
+  : null;
 
 type Panel = "rules" | "settings" | "new" | "history" | "relics" | null;
 const delay = (ms: number) =>
@@ -49,6 +55,7 @@ export function App() {
   const [tutorial, setTutorial] = useState<number | null>(null);
   const [imported, setImported] = useState<Run | null>(null);
   const [actingCard, setActingCard] = useState<Card | null>(null);
+  const [benchmark, setBenchmark] = useState(false);
   const shown = visual ?? run;
   useEffect(() => {
     setSoundscape(shown, title);
@@ -217,6 +224,12 @@ export function App() {
     setTutorial(null);
     updateSettings({ ...settings, tutorial: false });
   };
+  if (benchmark && Playtest)
+    return (
+      <Suspense fallback={<p role="status">Loading benchmark…</p>}>
+        <Playtest close={() => setBenchmark(false)} />
+      </Suspense>
+    );
   return (
     <main
       className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !title ? "in-combat" : ""}`}
@@ -327,6 +340,17 @@ export function App() {
             <button className="text-button" onClick={() => setPanel("history")}>
               Journeys remembered
             </button>
+            {Playtest &&
+              typeof window !== "undefined" &&
+              new URLSearchParams(window.location.search).get("benchmark") ===
+                "1" && (
+                <button
+                  className="text-button"
+                  onClick={() => setBenchmark(true)}
+                >
+                  v0.2 benchmark · isolated test mode
+                </button>
+              )}
           </div>
           <p className="title-footnote">
             Turn-based · Saved locally · Made for a quiet evening
