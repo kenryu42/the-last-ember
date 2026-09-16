@@ -263,7 +263,9 @@ export function chooseAction(
       for (const action of legalActions(observe(node.run, o.rules))) {
         if (used >= budget) break;
         used++;
-        const result = resolve(node.run, action, o.rules);
+        const result = resolve(node.run, action, o.rules, {
+          captureFrames: false,
+        });
         if (result.error) throw new Error(result.error);
         const first = node.first ?? action;
         const value = score(result.run, o, policy) - d * 0.01;
@@ -282,9 +284,21 @@ export function chooseAction(
 
 // Score the actual projected enemy phase, including thresholds, Howl order,
 // drains and defeat. No copied combat arithmetic or actual hidden state.
-function phaseScore(run: Run, start: Extract<Observation, { kind: "combat" }>) {
-  if (run.scene.kind === "ending")
-    return run.scene.won ? 100000 + run.hp * 3 : -100000;
+function phaseScore(
+  run: Run,
+  start: Extract<Observation, { kind: "combat" }>,
+  healthWeight: number,
+  winUtility: "terminal" | "material" = "terminal",
+) {
+  if (run.scene.kind === "ending") {
+    if (!run.scene.won) return -100000;
+    // In the material experiment, winning removes the remaining enemy HP and
+    // threats on the same scale as nonterminal states. Death remains prohibitive.
+    return winUtility === "material"
+      ? start.enemies.reduce((n, e) => n + e.hp + (e.hp > 0 ? 18 : 0), 0) +
+          healthWeight * (run.hp - start.hp)
+      : 100000 + run.hp * healthWeight;
+  }
   if (run.scene.kind !== "combat") throw new Error("Unexpected planning scene");
   return (
     start.enemies.reduce((n, e) => n + e.hp, 0) -
@@ -292,11 +306,16 @@ function phaseScore(run: Run, start: Extract<Observation, { kind: "combat" }>) {
     18 *
       (start.enemies.filter((e) => e.hp > 0).length -
         run.scene.enemies.filter((e) => e.hp > 0).length) +
-    3 * (run.hp - start.hp)
+    healthWeight * (run.hp - start.hp)
   );
 }
 
-export function planV2(o: Observation, planningSeed: string, budget: number) {
+export function planV2(
+  o: Observation,
+  planningSeed: string,
+  budget: number,
+  healthWeight = 3,
+) {
   if (o.kind !== "combat") throw new Error("No combat decision available");
   const samples = 3;
   const roots = Array.from({ length: samples }, (_, i) =>
@@ -328,18 +347,22 @@ export function planV2(o: Observation, planningSeed: string, budget: number) {
         const runs: Run[] = [];
         let value = 0;
         for (const run of node.runs) {
-          const played = resolve(run, action, o.rules);
+          const played = resolve(run, action, o.rules, {
+            captureFrames: false,
+          });
           used++;
           if (played.error) throw new Error(played.error);
           runs.push(played.run);
           let phase = played.run;
           if (action.type !== "end" && phase.scene.kind === "combat") {
-            const ended = resolve(phase, { type: "end" }, o.rules);
+            const ended = resolve(phase, { type: "end" }, o.rules, {
+              captureFrames: false,
+            });
             used++;
             if (ended.error) throw new Error(ended.error);
             phase = ended.run;
           }
-          value += phaseScore(phase, o) / samples;
+          value += phaseScore(phase, o, healthWeight) / samples;
         }
         value -= depth * 0.01;
         const first = node.first ?? action;
@@ -357,6 +380,93 @@ export function planV2(o: Observation, planningSeed: string, budget: number) {
     frontier = next.sort((a, b) => b.value - a.value).slice(0, 3);
   }
   return { action: best, engineCalls: used, samples, value: bestScore };
+}
+
+// Experimental root-action rollouts. Continuations receive a fresh public
+// observation after each simulated draw, never the real deck order.
+export function planHorizon(
+  o: Observation,
+  planningSeed: string,
+  budget: number,
+  phases: 1 | 2,
+  continuation: "offense" | "sequence" = "offense",
+  winUtility: "terminal" | "material" = "terminal",
+) {
+  if (o.kind !== "combat") throw new Error("No combat decision available");
+  const fallback = planV2(o, planningSeed, Math.min(256, budget));
+  const actions = legalActions(o);
+  const samples = 3;
+  const quota = Math.floor(
+    (budget - fallback.engineCalls) / (actions.length * samples),
+  );
+  const roots = Array.from({ length: samples }, (_, i) =>
+    belief(o, `${planningSeed}:sample:${i}`),
+  );
+  let engineCalls = fallback.engineCalls;
+  let completedCandidates = 0;
+  let best = fallback.action;
+  let bestValue = -Infinity;
+  const evaluations: {
+    action: CombatAction;
+    value: number | null;
+    completedSamples: number;
+  }[] = [];
+  for (const action of actions) {
+    let total = 0,
+      completedSamples = 0;
+    for (const [sample, root] of roots.entries()) {
+      if (quota < 1) continue;
+      const initial = resolve(root, action, o.rules, { captureFrames: false });
+      if (initial.error) throw new Error(initial.error);
+      let run = initial.run;
+      let used = 1,
+        steps = 0;
+      while (run.scene.kind === "combat" && run.scene.turn < o.turn + phases) {
+        const observation = observe(run, o.rules);
+        const width = legalActions(observation).length;
+        const continuationBudget = continuation === "sequence" ? 96 : width;
+        // Reserve the full continuation allowance plus its chosen transition.
+        // Count actual calls; equal quotas prevent action-order starvation.
+        if (used + continuationBudget + 1 > quota) break;
+        const seed = `${planningSeed}:roll:${sample}:${steps}`;
+        const plan =
+          continuation === "sequence"
+            ? planV2(observation, seed, continuationBudget)
+            : null;
+        const next =
+          plan?.action ?? chooseAction(observation, "offense", seed, width);
+        const result = resolve(run, next, o.rules, { captureFrames: false });
+        if (result.error) throw new Error(result.error);
+        run = result.run;
+        used += (plan?.engineCalls ?? width) + 1;
+        steps++;
+      }
+      engineCalls += used;
+      if (run.scene.kind !== "combat" || run.scene.turn >= o.turn + phases) {
+        completedSamples++;
+        total += phaseScore(run, o, 3, winUtility);
+      }
+    }
+    const value = completedSamples === samples ? total / samples : null;
+    evaluations.push({ action, value, completedSamples });
+    // Never compare partial and complete horizons. Keep the original planner if
+    // the budget cannot fully evaluate any root action across all beliefs.
+    if (value !== null) {
+      completedCandidates++;
+      if (value > bestValue) {
+        bestValue = value;
+        best = action;
+      }
+    }
+  }
+  return {
+    action: best,
+    engineCalls,
+    completedCandidates,
+    candidates: actions.length,
+    evaluations,
+    phases,
+  };
 }
 
 export class HeadlessFight {

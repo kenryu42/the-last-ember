@@ -4,6 +4,15 @@ A complete, local-first solo deckbuilding adventure. Mara, Eryn, and Aldren carr
 the last living ember through a forest frontier, a fallen kingdom, and a mountain
 pass. One shared deck, one health pool, and magic that attracts the dark.
 
+## Autonomous playtesting
+
+Run complete AI journeys, benchmark campaigns, stress/exploit suites, paired
+experiments, and replay analysis without a human player. See [LABORATORY.md](LABORATORY.md)
+for exact commands, policy boundaries, metric definitions, and measured findings.
+Start with `bun scripts/lab.ts journey --games 1 --bot strategic --seed demo` or
+`bun scripts/lab.ts suite --suite smoke --games 1`. The laboratory preserves the
+solo game's rules; it does not invent PvP matchups or first-player statistics.
+
 ## Play
 
 Start a journey, choose a reachable road, and read enemy intentions before playing

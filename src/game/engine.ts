@@ -317,6 +317,7 @@ export function resolve(
   input: Run,
   action: Action,
   mode: RulesMode = "adventure",
+  options: { captureFrames?: boolean } = {},
 ): Resolution {
   const run = structuredClone(input),
     frames: Frame[] = [];
@@ -332,7 +333,8 @@ export function resolve(
       run.scene.log.push(text);
       run.scene.log = run.scene.log.slice(-50);
     }
-    frames.push({ run: structuredClone(run), cue, target, text });
+    if (options.captureFrames !== false)
+      frames.push({ run: structuredClone(run), cue, target, text });
   };
   const finish = (): Resolution => ({ run, frames, error: null, accounting });
   const endIfDead = () => {
