@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { cardDef, enemyDef, needsTarget } from "./content";
 import {
+  cardCost,
+  configureEscape,
+  dreadResponse,
+  empowerTargets,
   intention,
   newRun,
   resolve,
@@ -15,7 +19,10 @@ import {
   thresholdState,
 } from "./playtest";
 import type { TestRules } from "./playtest";
-import type { Card, Run } from "./model";
+import type { Card, CombatAction, Run } from "./model";
+import { combatActionSchema, heroSchema, startingRelicSchema } from "./model";
+export { combatActionSchema } from "./model";
+export type { CombatAction } from "./model";
 
 const seedSchema = z
   .string()
@@ -43,9 +50,12 @@ const fixtureSchema = z.discriminatedUnion("variant", [
   }),
 ]);
 export const configSchema = z.strictObject({
-  rules: z.enum(["control", "candidate"]),
+  rules: z.enum(["control", "candidate", "recurring"]),
   fixture: fixtureSchema,
-  encounterId: z.enum(["fury", "reinforce", "ward"]),
+  encounterId: z.enum(["fury", "reinforce", "ward", "escape"]),
+  objectiveTarget: z.number().int().min(1).max(12).optional(),
+  ember: z.boolean().optional(),
+  startingRelic: startingRelicSchema.optional(),
   seed: seedSchema,
   policy: allPolicySchema.default("offense"),
   planningSeed: seedSchema.default("belief-v1"),
@@ -54,18 +64,15 @@ export const configSchema = z.strictObject({
   searchBudget: z.number().int().min(1).max(256).default(96),
 });
 export type HeadlessConfig = z.infer<typeof configSchema>;
-export const combatActionSchema = z.discriminatedUnion("type", [
-  z.strictObject({ type: z.literal("end") }),
-  z.strictObject({
-    type: z.literal("play"),
-    uid: z.number().int().nonnegative(),
-    target: z.number().int().nonnegative().nullable(),
-  }),
-]);
-export type CombatAction = z.infer<typeof combatActionSchema>;
 
 export function createHeadlessRun(
-  config: Pick<HeadlessConfig, "fixture" | "seed" | "encounterId">,
+  config: Pick<HeadlessConfig, "fixture" | "seed" | "encounterId"> &
+    Partial<
+      Pick<
+        HeadlessConfig,
+        "rules" | "objectiveTarget" | "ember" | "startingRelic"
+      >
+    >,
 ): Run {
   const fixture =
     config.fixture.variant === "diagnostic-mixed"
@@ -74,8 +81,21 @@ export function createHeadlessRun(
   const run = createPlaytestRun({
     ...fixture,
     seed: config.seed,
-    encounterId: config.encounterId,
+    encounterId: config.encounterId === "escape" ? "fury" : config.encounterId,
   });
+  if (config.encounterId === "escape" && run.scene.kind === "combat")
+    configureEscape(run, run.scene, config.objectiveTarget);
+  if (config.ember && run.scene.kind === "combat")
+    run.scene.ember = { window: "choose", bearer: null, used: false };
+  if (config.startingRelic && run.scene.kind === "combat") {
+    run.relics.push(config.startingRelic);
+    run.scene.relicTurn = { coalUsed: false, lanternUsed: false };
+  }
+  if (config.rules === "recurring" && run.scene.kind === "combat") {
+    run.dreadRules = "recurring";
+    run.scene.dreadResponse = "fury";
+    delete run.scene.fired;
+  }
   if (
     config.fixture.variant === "diagnostic-mixed" &&
     run.scene.kind === "combat"
@@ -99,10 +119,12 @@ export function observe(run: Run, rules: TestRules) {
     hp: run.hp,
     maxHp: run.maxHp,
     act: run.act,
+    actBearer: run.actBearer,
     relics: [...run.relics],
   };
   const c = run.scene;
   if (c.kind !== "combat") return { ...common, kind: "terminal" as const };
+  const response = rules === "recurring" ? dreadResponse(c) : null;
   return {
     ...common,
     kind: "combat" as const,
@@ -110,9 +132,18 @@ export function observe(run: Run, rules: TestRules) {
     energy: c.energy,
     block: c.block,
     dread: c.dread,
+    response,
+    ember: c.ember ? { ...c.ember } : undefined,
+    relicTurn: c.relicTurn ? { ...c.relicTurn } : undefined,
+    objective: c.objective ? { ...c.objective } : null,
+    victoryCondition: c.objective?.kind ?? "kill-all",
     reaction: c.reaction,
-    fired: [...c.fired],
+    fired: [...(c.fired ?? [])],
     hand: sorted(c.hand),
+    costs: sorted(c.hand).map((card) => ({
+      uid: card.uid,
+      energy: cardCost(run, c, cardDef(card.def)),
+    })),
     drawComposition: sorted(c.draw),
     discard: sorted(c.discard),
     exhaust: sorted(c.exhaust),
@@ -120,11 +151,12 @@ export function observe(run: Run, rules: TestRules) {
       ...enemy,
       pattern: structuredClone(enemyDef(enemy.def).pattern),
       intent: {
-        ...intention(
-          enemy,
-          c,
-          rules === "candidate" ? thresholdStrength(run, c) : 0,
-        ),
+        ...(response?.modifiers.find((m) => m.uid === enemy.uid)?.intent ??
+          intention(
+            enemy,
+            c,
+            rules === "candidate" ? thresholdStrength(run, c) : 0,
+          )),
       },
     })),
     thresholds: thresholdState(run, c, rules),
@@ -138,14 +170,28 @@ export type Observation = ReturnType<typeof observe>;
 export function legalActions(o: Observation): CombatAction[] {
   if (o.kind !== "combat") return [];
   const actions: CombatAction[] = [];
+  if (o.ember?.window === "choose") {
+    for (const hero of heroSchema.options)
+      actions.push({ type: "bearer", hero });
+    return actions;
+  }
   for (const card of o.hand) {
+    if (o.objective && o.objective.worked < 2 && o.energy >= 1)
+      actions.push({ type: "work", uid: card.uid });
     const def = cardDef(card.def);
-    if (def.cost > o.energy) continue;
+    if (cardCost(o, o, def) > o.energy) continue;
     if (needsTarget(def)) {
       for (const enemy of o.enemies)
         if (enemy.hp > 0)
           actions.push({ type: "play", uid: card.uid, target: enemy.uid });
     } else actions.push({ type: "play", uid: card.uid, target: null });
+  }
+  for (const action of [...actions]) {
+    if (action.type !== "play") continue;
+    const card = o.hand.find((c) => c.uid === action.uid);
+    if (!card) continue;
+    for (const empower of empowerTargets(o, cardDef(card.def), action.target))
+      actions.push({ ...action, empower });
   }
   actions.push({ type: "end" });
   return actions;
@@ -161,6 +207,7 @@ function belief(
   run.hp = o.hp;
   run.maxHp = o.maxHp;
   run.act = o.act;
+  run.actBearer = o.actBearer;
   run.relics = [...o.relics];
   run.deck = [...o.hand, ...o.drawComposition, ...o.discard, ...o.exhaust].map(
     (c) => ({ ...c }),
@@ -177,7 +224,12 @@ function belief(
     block: o.block,
     dread: o.dread,
     reaction: o.reaction,
-    fired: [...o.fired],
+    ...(o.ember ? { ember: { ...o.ember } } : {}),
+    ...(o.relicTurn ? { relicTurn: { ...o.relicTurn } } : {}),
+    ...(o.objective ? { objective: { ...o.objective } } : {}),
+    ...(o.rules === "recurring"
+      ? { dreadResponse: "fury" as const }
+      : { fired: [...o.fired] }),
     hand: sorted(o.hand),
     draw: shuffle(run, sorted(o.drawComposition)),
     discard: sorted(o.discard),
@@ -234,6 +286,7 @@ function score(
       : 0;
   return (
     damage +
+    10 * ((o.objective?.progress ?? 0) - (start.objective?.progress ?? 0)) +
     kills * 15 +
     (o.hp - start.hp) * healthWeight +
     (sameTurn ? blockValue + o.energy * 3 + o.hand.length * 0.8 : -8) -
@@ -256,7 +309,8 @@ export function chooseAction(
   let frontier: { run: Run; first: CombatAction | null }[] = [
     { run: root, first: null },
   ];
-  const depth = policy === "planner" ? 3 : 1;
+  const depth =
+    policy === "planner" || (o.ember && o.ember.window !== "closed") ? 3 : 1;
   for (let d = 0; d < depth && used < budget; d++) {
     const next: { run: Run; first: CombatAction; score: number }[] = [];
     for (const node of frontier) {
@@ -301,6 +355,9 @@ function phaseScore(
   }
   if (run.scene.kind !== "combat") throw new Error("Unexpected planning scene");
   return (
+    10 *
+      ((run.scene.objective?.progress ?? 0) -
+        (start.objective?.progress ?? 0)) +
     start.enemies.reduce((n, e) => n + e.hp, 0) -
     run.scene.enemies.reduce((n, e) => n + e.hp, 0) +
     18 *
@@ -315,8 +372,43 @@ export function planV2(
   planningSeed: string,
   budget: number,
   healthWeight = 3,
-) {
+): {
+  action: CombatAction;
+  engineCalls: number;
+  samples: number;
+  value: number;
+} {
   if (o.kind !== "combat") throw new Error("No combat decision available");
+  if (o.ember?.window === "choose") {
+    // Give each starting bearer the same continuation allowance. A shared beam
+    // budget otherwise preferentially explores the first hero's card plays.
+    const choices = legalActions(o);
+    const first = choices[0];
+    if (!first) throw new Error("Missing bearer choices");
+    const allowance = Math.floor((budget - choices.length) / choices.length);
+    if (allowance < 6)
+      return { action: first, engineCalls: 0, samples: 0, value: 0 };
+    const root = belief(o, planningSeed);
+    let action = first,
+      value = -Infinity,
+      engineCalls = 0;
+    for (const choice of choices) {
+      const chosen = resolve(root, choice, o.rules, { captureFrames: false });
+      if (chosen.error) throw new Error(chosen.error);
+      const plan = planV2(
+        observe(chosen.run, o.rules),
+        planningSeed,
+        allowance,
+        healthWeight,
+      );
+      engineCalls += 1 + plan.engineCalls;
+      if (plan.value > value) {
+        value = plan.value;
+        action = choice;
+      }
+    }
+    return { action, value, engineCalls, samples: 3 };
+  }
   const samples = 3;
   const roots = Array.from({ length: samples }, (_, i) =>
     belief(o, `${planningSeed}:sample:${i}`),

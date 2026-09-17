@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { CARDS, RELICS } from "./content";
+import {
+  BREAK_FORMATION,
+  CARDS,
+  FADING_STRIKE,
+  FLAME_UPGRADES,
+  RELICS,
+} from "./content";
 import { reachable } from "./engine";
 import { runSchema } from "./model";
 import type { Run } from "./model";
@@ -89,7 +95,11 @@ export function parseSave(text: string | null): Loaded {
       };
     const run = result.data,
       s = run.scene;
-    const cardIds = new Set(CARDS.map((c) => c.id)),
+    const cardIds = new Set(
+        [...CARDS, ...FLAME_UPGRADES, BREAK_FORMATION, FADING_STRIKE].map(
+          (c) => c.id,
+        ),
+      ),
       relicIds = new Set(RELICS.map((r) => r.id));
     const zones =
       s.kind === "combat"
@@ -101,10 +111,32 @@ export function parseSave(text: string | null): Loaded {
         : [];
     const bad =
       !validProgression(run) ||
+      (run.prototype?.ember === true &&
+        ((run.row === -1 && run.actBearer !== null) ||
+          (run.row >= 0 &&
+            run.actBearer === null &&
+            !(
+              s.kind === "combat" &&
+              run.row === 0 &&
+              s.turn === 1 &&
+              s.ember?.window === "choose"
+            )))) ||
       run.hp > run.maxHp ||
       run.deck.some((c) => !cardIds.has(c.def)) ||
+      run.deck.some(
+        (c) =>
+          FLAME_UPGRADES.some((branch) => branch.id === c.def) && !c.upgraded,
+      ) ||
       new Set(run.deck.map((c) => c.uid)).size !== run.deck.length ||
       run.relics.some((id) => !relicIds.has(id)) ||
+      (s.kind === "event" &&
+        s.pendingUpgrade !== undefined &&
+        (!run.prototype?.branchUpgrades ||
+          s.resolved === null ||
+          !run.deck.some(
+            (c) =>
+              c.uid === s.pendingUpgrade && c.def === "flame" && !c.upgraded,
+          ))) ||
       offers.some((id) => id !== null && !cardIds.has(id)) ||
       ((s.kind === "reward" || s.kind === "shop") &&
         s.relic !== null &&
@@ -112,6 +144,18 @@ export function parseSave(text: string | null): Loaded {
       (s.kind === "combat" &&
         (run.hp === 0 ||
           !s.enemies.some((e) => e.hp > 0) ||
+          (run.dreadRules === "recurring"
+            ? s.dreadResponse !== "fury" || s.fired !== undefined
+            : s.dreadResponse !== undefined || s.fired === undefined) ||
+          (s.objective !== undefined &&
+            s.objective.progress >= s.objective.target) ||
+          (s.ember?.window === "choose" && s.turn !== 1) ||
+          (s.ember !== undefined && s.ember.bearer !== run.actBearer) ||
+          (run.prototype?.ember === true && s.ember === undefined) ||
+          (run.relics.some(
+            (id) => id === "hushed-coal" || id === "black-lantern",
+          ) &&
+            !s.relicTurn) ||
           new Set(s.enemies.map((e) => e.uid)).size !== s.enemies.length ||
           s.enemies.some(
             (e) =>

@@ -20,6 +20,18 @@ test("settings accept only the current format", () => {
   expect(settingsSchema.parse(preferences)).toEqual(preferences);
 });
 
+test("saves require explicit rules and reject obsolete fields without conversion", () => {
+  for (const rules of ["original", "recurring"] as const) {
+    const run = newRun("current-format", rules);
+    expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
+    const { dreadRules, ...missingRules } = run;
+    expect(parseSave(JSON.stringify(missingRules)).kind).toBe("error");
+    expect(parseSave(JSON.stringify({ ...run, obsolete: true })).kind).toBe(
+      "error",
+    );
+  }
+});
+
 function atBoss(): Run {
   const run = newRun("qa-progression");
   const node = run.route.find((node) => node.row === 5);

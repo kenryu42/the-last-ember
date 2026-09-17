@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { cardDef, value } from "./content";
-import { resolve } from "./engine";
+import { cardCost, resolve } from "./engine";
 import { runSchema } from "./model";
 import type { Run } from "./model";
 import {
@@ -17,6 +17,7 @@ import type { CombatAction, Observation } from "./playtest-headless";
 export const botSchema = z.enum([
   "random",
   "greedy",
+  "conservative",
   "strategic",
   "search",
   "search-tempo",
@@ -55,6 +56,8 @@ export function selectAction(
 ): CombatAction {
   const first = actions[0];
   if (!first) throw new Error("No legal decision");
+  if (bot === "stall" && o.kind === "combat" && o.ember?.window === "choose")
+    return first;
   if (bot === "random")
     return actions[randomIndex(seed, actions.length)] ?? first;
   if (bot === "search-tempo") return planV2(o, seed, budget, 1.5).action;
@@ -99,6 +102,7 @@ export function selectAction(
                     "hit",
                     "all",
                     "shieldStrike",
+                    "spendBlock",
                     "precision",
                     "defiance",
                   ].includes(e.kind),
@@ -108,11 +112,13 @@ export function selectAction(
     );
   }
   const policy =
-    bot === "search"
-      ? "planner-v2"
-      : bot === "strategic"
-        ? "planner"
-        : "offense";
+    bot === "conservative"
+      ? "dread"
+      : bot === "search"
+        ? "planner-v2"
+        : bot === "strategic"
+          ? "planner"
+          : "offense";
   return chooseAction(o, policy, seed, budget);
 }
 
@@ -143,8 +149,9 @@ export function assertInvariants(run: Run) {
   if (new Set(ids).size !== ids.length || ids.some((id) => id >= run.nextId))
     throw new Error("Invalid entity allocation");
   if (
-    new Set(c.fired).size !== c.fired.length ||
-    c.fired.some((t) => ![4, 8, 5, 9].includes(t))
+    new Set(c.fired).size !== (c.fired?.length ?? 0) ||
+    c.fired?.some((t) => ![4, 8, 5, 9].includes(t)) ||
+    (c.dreadResponse !== undefined && c.fired !== undefined)
   )
     throw new Error("Invalid threshold history");
   if (c.enemies.some((e) => e.hp > e.maxHp))
@@ -245,9 +252,10 @@ export function simulate(config: LabConfig, detailed = false) {
       action.type === "play"
         ? c.hand.find((x) => x.uid === action.uid)
         : undefined;
+    if (action.type === "work") spent++;
     if (played) {
       const def = cardDef(played.def);
-      spent += def.cost;
+      spent += cardCost(run, c, def);
       generated += def.effects.reduce(
         (n, e) => n + (e.kind === "energy" ? value(e, played.upgraded) : 0),
         0,
@@ -283,6 +291,11 @@ export function simulate(config: LabConfig, detailed = false) {
         frame.run.scene.kind === "combat" &&
         previous.scene.kind === "combat"
       ) {
+        if (
+          frame.run.scene.relicTurn?.coalUsed &&
+          !previous.scene.relicTurn?.coalUsed
+        )
+          generated++;
         const old = new Set(previous.scene.hand.map((x) => x.uid));
         for (const card of frame.run.scene.hand)
           if (!old.has(card.uid)) {
@@ -311,7 +324,13 @@ export function simulate(config: LabConfig, detailed = false) {
       hpAfter: result.run.hp,
     });
     if (detailed)
-      replay.push({ before: run, legal, selected: action, after: result.run });
+      replay.push({
+        before: run,
+        legal,
+        selected: action,
+        after: result.run,
+        accounting: result.accounting,
+      });
     trace.push(action);
     run = result.run;
     // Exclude counters, logs and RNG from repetition signal. This is a warning, not proof of a loop.

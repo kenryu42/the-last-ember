@@ -160,3 +160,10 @@ Retained upgrades, reviewed individually:
 Integration replaces only the selected right-column cells in 12 sheets. Modified sheets use lossless WebP to preserve all other decoded cells exactly; the four untouched sheets retain their original bytes. The current 16 sheets total 27,492,214 bytes, about 26.22 MiB. This increases download size relative to the initial lossy set, but avoids another compression pass on retained artwork. The 17 standalone full-resolution PNG sources are also exported separately for video generation, alongside a refreshed 64-image export at 768 × 512.
 
 Verification: 17 replacement cells match their resized sources, and the remaining 47 cells match the prior runtime images pixel-for-pixel. All 16 sheets decode at 1536 × 1024 in Chromium. The production build and 95 tests pass. The existing card-layout check covers all 32 base/upgrade pairs in camp and inspection views at 390 and 1280 CSS pixels. New True shot, Old knowledge, and Quiet as snowfall comparisons were inspected in the running game; narrow-view scrolling was also checked. Three labelled base/old/new contact sheets cover every replacement. The PNG ZIPs contain 64 current card crops and 17 new full-resolution upgrades respectively, with archive integrity checks passing.
+
+## Gameplay prototype reuse
+
+Break formation temporarily reuses Iron answer's base/upgrade pair, art index 8.
+Fading strike temporarily reuses Through the leaves' base/upgrade pair, art index 13.
+Veiled Flame and Wildfire reuse Ancient flame's pair, art index 1. These prototypes
+add no image files and make no changes to the original paintings or their sources.

@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { EVENTS, cardDef, value } from "./content";
-import { newRun, resolve } from "./engine";
-import type { Action, Run } from "./model";
+import { newRun, random, resolve, startCombat } from "./engine";
+import type { Action, Run, StartingRelic } from "./model";
+import { flameBranchSchema } from "./model";
 import {
   legalActions,
   observe,
@@ -11,7 +12,14 @@ import {
 import { assertInvariants, selectAction } from "./laboratory";
 import type { LabConfig } from "./laboratory";
 
-export const progressionSchema = z.enum(["static", "shield-aware"]);
+export const progressionSchema = z.enum([
+  "static",
+  "shield-aware",
+  "build-aware",
+  "continuation",
+  "exploratory",
+  "sampled",
+]);
 
 // Candidate enumeration is exhaustive; resolve remains the authority on legality.
 export function journeyLegalActions(run: Run): Action[] {
@@ -21,7 +29,9 @@ export function journeyLegalActions(run: Run): Action[] {
     case "ending":
       return [];
     case "combat":
-      return legalActions(observe(run, "control"));
+      return legalActions(
+        observe(run, run.dreadRules === "recurring" ? "recurring" : "control"),
+      );
     case "map":
       candidates = run.route.map((n) => ({ type: "travel", node: n.id }));
       break;
@@ -32,18 +42,35 @@ export function journeyLegalActions(run: Run): Action[] {
       candidates = [
         { type: "leave" },
         { type: "rest" },
-        ...run.deck.map((c) => ({ type: "upgrade" as const, uid: c.uid })),
+        ...run.deck.flatMap((c): Action[] =>
+          c.def === "flame" && run.prototype?.branchUpgrades
+            ? flameBranchSchema.options.map((branch) => ({
+                type: "upgrade",
+                uid: c.uid,
+                branch,
+              }))
+            : [{ type: "upgrade", uid: c.uid }],
+        ),
       ];
       break;
-    case "event":
-      candidates = [
-        { type: "leave" },
-        ...(EVENTS[s.event]?.choices.map((_, index) => ({
-          type: "choice" as const,
-          index,
-        })) ?? []),
-      ];
+    case "event": {
+      const uid = s.pendingUpgrade;
+      candidates =
+        uid !== undefined
+          ? flameBranchSchema.options.map((branch) => ({
+              type: "upgrade",
+              uid,
+              branch,
+            }))
+          : [
+              { type: "leave" },
+              ...(EVENTS[s.event]?.choices.map((_, index) => ({
+                type: "choice" as const,
+                index,
+              })) ?? []),
+            ];
       break;
+    }
     case "shop":
       candidates = [
         { type: "leave" },
@@ -67,13 +94,20 @@ export function journeyLegalActions(run: Run): Action[] {
 
 export function journeyObservation(run: Run) {
   if (run.scene.kind === "combat")
-    return { kind: "combat" as const, combat: observe(run, "control") };
+    return {
+      kind: "combat" as const,
+      combat: observe(
+        run,
+        run.dreadRules === "recurring" ? "recurring" : "control",
+      ),
+    };
   return {
     kind: "journey" as const,
     hp: run.hp,
     maxHp: run.maxHp,
     gold: run.gold,
     act: run.act,
+    actBearer: run.actBearer,
     scene: structuredClone(run.scene),
     deck: structuredClone(run.deck),
     relics: [...run.relics],
@@ -89,7 +123,35 @@ function progressionScore(
 ) {
   const rating = (id: string) => {
     const def = cardDef(id);
+    // Experimental acquisition policy, not reward weighting or a gameplay rule.
+    // Value one missing conversion tool; further copies keep the normal rating.
+    const conversion =
+      (progression === "build-aware" || progression === "continuation") &&
+      ((o.relics.includes("hushed-coal") &&
+        def.effects.some((e) => e.kind === "dread" && e.amount <= -3) &&
+        !o.deck.some((c) =>
+          cardDef(c.def).effects.some(
+            (e) => e.kind === "dread" && e.amount <= -3,
+          ),
+        )) ||
+        (o.relics.includes("shieldfire") &&
+          def.effects.some(
+            (e) => e.kind === "shieldStrike" || e.kind === "spendBlock",
+          ) &&
+          !o.deck.some((c) =>
+            cardDef(c.def).effects.some(
+              (e) => e.kind === "shieldStrike" || e.kind === "spendBlock",
+            ),
+          )));
+    const cost =
+      Math.max(1, def.cost) -
+      ((progression === "build-aware" || progression === "continuation") &&
+      o.relics.includes("black-lantern") &&
+      def.tags?.includes("Spell")
+        ? 0.5
+        : 0);
     return (
+      (conversion ? 8 : 0) +
       def.effects.reduce(
         (n, e) =>
           n +
@@ -101,7 +163,8 @@ function progressionScore(
                 ? -e.amount
                 : e.amount),
         0,
-      ) / Math.max(1, def.cost)
+      ) /
+        cost
     );
   };
   switch (a.type) {
@@ -133,7 +196,11 @@ function progressionScore(
       return Math.min(o.maxHp - o.hp, Math.ceil(o.maxHp * 0.25));
     case "upgrade": {
       const c = o.deck.find((c) => c.uid === a.uid);
-      return c ? rating(c.def) * 0.6 : 0;
+      return c
+        ? (progression === "continuation" && a.branch
+            ? Math.max(...flameBranchSchema.options.map(rating))
+            : rating(a.branch ?? c.def)) * 0.6
+        : 0;
     }
     case "choice": {
       if (o.scene.kind !== "event") return -Infinity;
@@ -159,9 +226,120 @@ function progressionScore(
     case "leave":
       return 0;
     case "play":
+    case "work":
+    case "bearer":
     case "end":
       return -Infinity;
   }
+}
+
+// Sample future formations and draw orders, never the live run's hidden RNG.
+// This isolates branch evaluation from reward/route rankings and combat policy.
+function evaluateDeck(
+  context: Pick<Run, "deck" | "relics" | "hp" | "maxHp" | "act" | "actBearer">,
+  budget = 96,
+) {
+  return (["battle", "battle", "elite", "boss"] as const).map((kind, index) => {
+    let run = newRun(`branch-evaluation:${index}`, "recurring", {
+      kind: "escape",
+      target: 4,
+      ember: true,
+    });
+    run.deck = context.deck.map((card) => ({ ...card }));
+    run.relics = [...context.relics];
+    run.hp = context.hp;
+    run.maxHp = context.maxHp;
+    run.act = context.act;
+    run.actBearer = context.actBearer;
+    run.row = 1;
+    run.nextId = Math.max(...run.deck.map((card) => card.uid)) + 1;
+    startCombat(run, kind);
+    const formation =
+      run.scene.kind === "combat" ? run.scene.enemies.map((e) => e.def) : [];
+    for (
+      let step = 0;
+      step < 160 && run.scene.kind === "combat" && run.scene.turn <= 20;
+      step++
+    ) {
+      const plan = planV2(
+        observe(run, "recurring"),
+        `branch-evaluation:${index}:${step}`,
+        budget,
+      );
+      const result = resolve(run, plan.action, "recurring", {
+        captureFrames: false,
+      });
+      if (result.error) throw new Error(result.error);
+      run = result.run;
+    }
+    const won = run.scene.kind === "ending" && run.scene.won;
+    return {
+      formation,
+      actBearer: run.actBearer,
+      won,
+      timeout: run.scene.kind === "combat",
+      hp: run.hp,
+      turns: run.stats.turns,
+      utility: (won ? 10000 : -10000) + 3 * run.hp - run.stats.turns,
+    };
+  });
+}
+
+export function evaluateFlameBranches(
+  context: Pick<Run, "deck" | "relics" | "hp" | "maxHp" | "act" | "actBearer">,
+  uid: number,
+  budget = 96,
+) {
+  return flameBranchSchema.options.map((branch) => {
+    const trials = evaluateDeck(
+      {
+        ...context,
+        deck: context.deck.map((card) =>
+          card.uid === uid
+            ? { ...card, def: branch, upgraded: true }
+            : { ...card },
+        ),
+      },
+      budget,
+    );
+    return {
+      branch,
+      trials,
+      utility: trials.reduce((sum, trial) => sum + trial.utility, 0),
+    };
+  });
+}
+
+export function evaluateRewards(
+  context: Pick<Run, "deck" | "relics" | "hp" | "maxHp" | "act" | "actBearer">,
+  offers: string[],
+  budget = 96,
+) {
+  // Skip goes first and wins ties. No reward is forced into the deck.
+  return [null, ...offers].map((card) => {
+    const trials = evaluateDeck(
+      {
+        ...context,
+        deck:
+          card === null
+            ? context.deck
+            : [
+                ...context.deck,
+                {
+                  uid: Math.max(...context.deck.map((c) => c.uid)) + 1,
+                  def: card,
+                  upgraded: false,
+                },
+              ],
+      },
+      budget,
+    );
+    return {
+      card,
+      trials,
+      utility: trials.reduce((sum, trial) => sum + trial.utility, 0),
+    };
+  });
 }
 
 export function simulateJourney(
@@ -169,10 +347,29 @@ export function simulateJourney(
   bot: LabConfig["bot"],
   budget = 256,
   progression: z.infer<typeof progressionSchema> = "static",
+  dreadRules: "original" | "recurring" = "original",
+  prototype?: Run["prototype"],
+  startingRelic?: StartingRelic,
 ) {
-  let run = newRun(seed);
+  if (
+    progression === "sampled" &&
+    (dreadRules !== "recurring" || !prototype?.ember)
+  )
+    throw new Error(
+      "Sampled acquisition requires recurring Dread and Ember bearers",
+    );
+  let run = newRun(seed, dreadRules, prototype, startingRelic);
   const trace: Action[] = [];
   const decisions = [];
+  const rewardEvaluations: {
+    index: number;
+    alternatives: ReturnType<typeof evaluateRewards>;
+  }[] = [];
+  const branchEvaluations: {
+    index: number;
+    uid: number;
+    alternatives: ReturnType<typeof evaluateFlameBranches>;
+  }[] = [];
   let engineCalls = 0,
     incompleteDecisions = 0,
     energyGeneratedThisTurn = 0;
@@ -207,7 +404,7 @@ export function simulateJourney(
       plan.completedCandidates < plan.candidates
     )
       incompleteDecisions++;
-    const action =
+    let action =
       plan?.action ??
       (o.kind === "combat"
         ? selectAction(
@@ -219,9 +416,58 @@ export function simulateJourney(
           )
         : actions.sort(
             (a, b) =>
-              progressionScore(o, b, progression) -
-              progressionScore(o, a, progression),
+              progressionScore(
+                o,
+                b,
+                progression === "exploratory" || progression === "sampled"
+                  ? "build-aware"
+                  : progression,
+              ) -
+              progressionScore(
+                o,
+                a,
+                progression === "exploratory" || progression === "sampled"
+                  ? "build-aware"
+                  : progression,
+              ),
           )[0]);
+    if (progression === "exploratory" && run.scene.kind === "reward") {
+      // Sample normal offers, including skip, without consuming gameplay RNG.
+      // This diagnoses acquisition blind spots; it is not an optimized policy.
+      const choices = [null, ...run.scene.cards];
+      const sampled =
+        choices[
+          Math.floor(
+            random(newRun(`reward:${seed}:${trace.length}`)) * choices.length,
+          )
+        ];
+      if (sampled === undefined) throw new Error("Missing sampled reward");
+      action = { type: "reward", card: sampled };
+    }
+    if (progression === "sampled" && run.scene.kind === "reward") {
+      const alternatives = evaluateRewards(run, run.scene.cards);
+      rewardEvaluations.push({ index: trace.length, alternatives });
+      const best = alternatives.reduce((a, b) =>
+        b.utility > a.utility ? b : a,
+      );
+      action = { type: "reward", card: best.card };
+    }
+    if (
+      progression === "continuation" &&
+      action?.type === "upgrade" &&
+      action.branch
+    ) {
+      const alternatives = evaluateFlameBranches(run, action.uid);
+      branchEvaluations.push({
+        index: trace.length,
+        uid: action.uid,
+        alternatives,
+      });
+      const best = alternatives.reduce((a, b) =>
+        b.utility > a.utility ? b : a,
+      );
+      action = { ...action, branch: best.branch };
+    }
     if (
       !action ||
       !actions.some((a) => JSON.stringify(a) === JSON.stringify(action))
@@ -274,7 +520,12 @@ export function simulateJourney(
     seed,
     bot,
     budget,
+    dreadRules,
+    ...(prototype ? { prototype } : {}),
+    ...(startingRelic ? { startingRelic } : {}),
     ...(progression === "static" ? {} : { progression }),
+    ...(progression === "continuation" ? { branchEvaluations } : {}),
+    ...(progression === "sampled" ? { rewardEvaluations } : {}),
     outcome:
       run.scene.kind === "ending"
         ? run.scene.won

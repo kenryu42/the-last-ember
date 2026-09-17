@@ -42,6 +42,9 @@ try {
       variant: { type: "string", default: "base" },
       budget: { type: "string", default: "256" },
       progression: { type: "string", default: "static" },
+      prototype: { type: "string" },
+      ember: { type: "boolean", default: false },
+      relic: { type: "string" },
       suite: { type: "string", default: "smoke" },
       quiet: { type: "boolean", default: false },
     },
@@ -49,6 +52,19 @@ try {
   const command = positionals[0];
   if (command !== "journey" && values.progression !== "static")
     throw new Error("--progression applies only to journey simulations");
+  const prototype = z
+    .enum([
+      "escape",
+      "bearer",
+      "branches",
+      "conversion",
+      "concealment",
+      "late-escape",
+    ])
+    .optional()
+    .parse(values.prototype);
+  if (prototype && (command !== "journey" || values.rules !== "recurring"))
+    throw new Error("--prototype requires journey --rules recurring");
   const count = z.coerce.number().int().min(1).max(1000000).parse(values.games);
   const config = (i: number, extra = {}) =>
     labConfigSchema.parse({
@@ -59,10 +75,12 @@ try {
       seed: `${values.seed}:${i}`,
       planningSeed: `policy:${values.seed}:${i}`,
       searchBudget: Number(values.budget),
+      ...(values.ember ? { ember: true } : {}),
+      ...(values.relic ? { startingRelic: values.relic } : {}),
       ...extra,
     });
   if (command === "journey") {
-    if (values.rules !== "control")
+    if (values.rules !== "control" && values.rules !== "recurring")
       throw new Error(
         "Journey simulations use adventure rules; --rules candidate is benchmark-only",
       );
@@ -70,7 +88,38 @@ try {
     for (let i = 0; i < count; i++) {
       const c = config(i);
       try {
-        write(simulateJourney(c.seed, c.bot, c.searchBudget, progression));
+        write(
+          simulateJourney(
+            c.seed,
+            c.bot,
+            c.searchBudget,
+            progression,
+            values.rules === "recurring" ? "recurring" : "original",
+            prototype
+              ? {
+                  kind: "escape",
+                  target: 4,
+                  ...(prototype !== "escape" ? { ember: true } : {}),
+                  ...(prototype === "branches" ||
+                  prototype === "conversion" ||
+                  prototype === "concealment" ||
+                  prototype === "late-escape"
+                    ? { branchUpgrades: true }
+                    : {}),
+                  ...(prototype === "conversion" ||
+                  prototype === "concealment" ||
+                  prototype === "late-escape"
+                    ? { blockConversion: true }
+                    : {}),
+                  ...(prototype === "concealment" || prototype === "late-escape"
+                    ? { concealment: true }
+                    : {}),
+                  ...(prototype === "late-escape" ? { escapeAct: 1 } : {}),
+                }
+              : undefined,
+            c.startingRelic,
+          ),
+        );
       } catch (error) {
         write({
           seed: c.seed,

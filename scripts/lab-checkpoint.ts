@@ -11,6 +11,7 @@ import {
   journeyObservation,
 } from "../src/game/laboratory-journey";
 import { legalActions, observe } from "../src/game/playtest-headless";
+import { runSchema, startingRelicSchema } from "../src/game/model";
 
 // Offline diagnosis only. Policies still receive public observations, never the
 // true saved state. Stop at this fight's end to eliminate progression confounding.
@@ -24,7 +25,13 @@ try {
       labConfigSchema.shape.searchBudget,
     ])
     .parse(process.argv.slice(2).map((v, i) => (i === 4 ? Number(v) : v)));
-  const schema = z.object({ seed: z.string(), trace: z.array(z.unknown()) });
+  const schema = z.object({
+    seed: runSchema.shape.seed,
+    dreadRules: runSchema.shape.dreadRules,
+    prototype: runSchema.shape.prototype,
+    startingRelic: startingRelicSchema.optional(),
+    trace: z.array(z.unknown()),
+  });
   const records = (await Bun.file(path).text())
     .trim()
     .split("\n")
@@ -35,7 +42,12 @@ try {
   const record = matches[0];
   if (!record || index >= record.trace.length)
     throw new Error("Checkpoint not found");
-  let run = newRun(seed);
+  let run = newRun(
+    seed,
+    record.dreadRules,
+    record.prototype,
+    record.startingRelic,
+  );
   for (const raw of record.trace.slice(0, index)) {
     const action = journeyLegalActions(run).find(
       (a) => JSON.stringify(a) === JSON.stringify(raw),
@@ -51,7 +63,10 @@ try {
   const checkpoint = structuredClone(run);
   const steps = [];
   while (run.scene.kind === "combat" && steps.length < 500) {
-    const observation = observe(run, "control");
+    const observation = observe(
+      run,
+      run.dreadRules === "recurring" ? "recurring" : "control",
+    );
     const legal = legalActions(observation);
     const action = selectAction(
       observation,

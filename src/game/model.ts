@@ -1,5 +1,43 @@
 import { z } from "zod";
 
+export const heroSchema = z.enum(["Mara", "Eryn", "Aldren"]);
+export type Hero = z.infer<typeof heroSchema>;
+export const startingRelicSchema = z.enum([
+  "shieldfire",
+  "hushed-coal",
+  "black-lantern",
+]);
+export type StartingRelic = z.infer<typeof startingRelicSchema>;
+export const flameBranchSchema = z.enum(["veiled-flame", "wildfire"]);
+export type FlameBranch = z.infer<typeof flameBranchSchema>;
+export const combatActionSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("end") }),
+  z.strictObject({ type: z.literal("bearer"), hero: heroSchema }),
+  z.strictObject({
+    type: z.literal("work"),
+    uid: z.number().int().nonnegative(),
+  }),
+  z.strictObject({
+    type: z.literal("play"),
+    uid: z.number().int().nonnegative(),
+    target: z.number().int().nonnegative().nullable(),
+    empower: z.number().int().nonnegative().optional(),
+  }),
+]);
+export type CombatAction = z.infer<typeof combatActionSchema>;
+const emberSchema = z.discriminatedUnion("window", [
+  z.object({
+    window: z.literal("choose"),
+    bearer: z.null(),
+    used: z.literal(false),
+  }),
+  z.object({
+    window: z.literal("closed"),
+    bearer: heroSchema,
+    used: z.boolean(),
+  }),
+]);
+
 export const cardSchema = z.object({
   uid: z.number().int().nonnegative(),
   def: z.string(),
@@ -56,7 +94,21 @@ const combatSchema = z.object({
   energy: z.number().nonnegative(),
   block: z.number().nonnegative(),
   dread: z.number().min(0).max(10),
-  fired: z.array(z.number()),
+  // Only explicit original-rule experiments have trigger history.
+  fired: z.array(z.number()).optional(),
+  dreadResponse: z.literal("fury").optional(),
+  ember: emberSchema.optional(),
+  relicTurn: z
+    .object({ coalUsed: z.boolean(), lanternUsed: z.boolean() })
+    .optional(),
+  objective: z
+    .object({
+      kind: z.literal("escape"),
+      progress: z.number().int().nonnegative(),
+      target: z.number().int().positive(),
+      worked: z.number().int().min(0).max(2),
+    })
+    .optional(),
   draw: z.array(cardSchema),
   hand: z.array(cardSchema),
   discard: z.array(cardSchema),
@@ -81,6 +133,7 @@ const sceneSchema = z.discriminatedUnion("kind", [
     kind: z.literal("event"),
     event: z.number().int().min(0).max(7),
     resolved: z.string().nullable(),
+    pendingUpgrade: z.number().int().nonnegative().optional(),
   }),
   z.object({
     kind: z.literal("shop"),
@@ -93,6 +146,19 @@ const sceneSchema = z.discriminatedUnion("kind", [
 ]);
 export const runSchema = z.strictObject({
   version: z.literal(1),
+  dreadRules: z.enum(["original", "recurring"]),
+  actBearer: heroSchema.nullable(),
+  prototype: z
+    .object({
+      kind: z.literal("escape"),
+      target: z.number().int().min(1).max(12),
+      ember: z.literal(true).optional(),
+      branchUpgrades: z.literal(true).optional(),
+      blockConversion: z.literal(true).optional(),
+      concealment: z.literal(true).optional(),
+      escapeAct: z.literal(1).optional(),
+    })
+    .optional(),
   seed: z.string().min(1).max(80),
   rng: z.number().int().nonnegative(),
   nextId: z.number().int().nonnegative(),
@@ -119,13 +185,12 @@ export const runSchema = z.strictObject({
 export type Run = z.infer<typeof runSchema>;
 export type Scene = Run["scene"];
 export type Action =
+  | CombatAction
   | { type: "travel"; node: string }
-  | { type: "play"; uid: number; target: number | null }
-  | { type: "end" }
   | { type: "reward"; card: string | null }
   | { type: "leave" }
   | { type: "rest" }
-  | { type: "upgrade"; uid: number }
+  | { type: "upgrade"; uid: number; branch?: FlameBranch }
   | { type: "choice"; index: number }
   | { type: "buy"; item: "card" | "relic" | "heal" | "remove"; index: number };
 export type Cue =
@@ -151,5 +216,9 @@ export interface Resolution {
   run: Run;
   frames: Frame[];
   error: string | null;
-  accounting: { drawn: number; suppressedAttackDamage: number };
+  accounting: {
+    drawn: number;
+    suppressedAttackDamage: number;
+    ember?: { hero: Hero; damage: number; block: number; dreadReduced: number };
+  };
 }

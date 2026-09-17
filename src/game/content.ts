@@ -15,7 +15,8 @@ export type Effect =
       upgrade: number;
     }
   | {
-      kind: "defiance" | "precision" | "shieldStrike" | "resolve";
+      kind:
+        "defiance" | "precision" | "shieldStrike" | "spendBlock" | "resolve";
       amount: number;
       upgrade: number;
     };
@@ -27,6 +28,7 @@ export interface CardDef {
   // Paired artwork: two cards per sheet, base/upgrade in adjacent columns.
   art: number;
   effects: Effect[];
+  tags?: "Spell"[];
   exhaust?: boolean;
   retain?: boolean;
 }
@@ -71,6 +73,7 @@ export const CARDS: CardDef[] = [
   {
     id: "flame",
     name: "Ancient flame",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
     art: 1,
@@ -203,6 +206,7 @@ export const CARDS: CardDef[] = [
   {
     id: "spark",
     name: "Borrowed fire",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 0,
     art: 20,
@@ -212,6 +216,7 @@ export const CARDS: CardDef[] = [
   {
     id: "inferno",
     name: "Light the dark",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
     art: 21,
@@ -220,6 +225,7 @@ export const CARDS: CardDef[] = [
   {
     id: "cinder",
     name: "Cinder lance",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 1,
     art: 22,
@@ -236,6 +242,7 @@ export const CARDS: CardDef[] = [
   {
     id: "ward",
     name: "Ember ward",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 1,
     art: 24,
@@ -252,6 +259,7 @@ export const CARDS: CardDef[] = [
   {
     id: "sunrise",
     name: "One more dawn",
+    tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
     art: 26,
@@ -303,8 +311,51 @@ export const CARDS: CardDef[] = [
     retain: true,
   },
 ];
+// One provisional Block-conversion design, opt-in for acquisition comparisons.
+export const BREAK_FORMATION: CardDef = {
+  id: "break-formation",
+  name: "Break formation",
+  owner: "Mara",
+  cost: 0,
+  art: 8,
+  effects: [e("spendBlock", 4, 3)],
+};
+// Recovery followed by precision creates an offensive concealment alternative.
+export const FADING_STRIKE: CardDef = {
+  id: "fading-strike",
+  name: "Fading strike",
+  owner: "Eryn",
+  cost: 1,
+  art: 13,
+  effects: [e("dread", -2), e("precision", 4, 3)],
+};
+// Upgrade variants are not additional reward designs or shop offers.
+export const FLAME_UPGRADES: CardDef[] = [
+  {
+    id: "veiled-flame",
+    name: "Veiled Flame",
+    owner: "Aldren",
+    cost: 2,
+    art: 1,
+    tags: ["Spell"],
+    effects: [e("hit", 18), e("dread", 1)],
+  },
+  {
+    id: "wildfire",
+    name: "Wildfire",
+    owner: "Aldren",
+    cost: 2,
+    art: 1,
+    tags: ["Spell"],
+    effects: [e("all", 14), e("dread", 4)],
+  },
+];
 export function cardDef(id: string): CardDef {
-  const card = CARDS.find((c) => c.id === id);
+  const card =
+    CARDS.find((c) => c.id === id) ??
+    FLAME_UPGRADES.find((c) => c.id === id) ??
+    (id === FADING_STRIKE.id ? FADING_STRIKE : undefined) ??
+    (id === BREAK_FORMATION.id ? BREAK_FORMATION : undefined);
   if (!card) throw new Error(`Unknown card ${id}`);
   return card;
 }
@@ -338,6 +389,8 @@ export function effectText(effect: Effect, upgraded: boolean): string {
       return `Deal ${n} damage; ${n + 6} at Dread 3 or less.`;
     case "shieldStrike":
       return `Deal ${n} + your block as damage.`;
+    case "spendBlock":
+      return `Lose all Block. Deal ${n} + the Block lost as damage.`;
     case "resolve":
       return `Gain ${n} + your Dread as block.`;
   }
@@ -351,10 +404,29 @@ export function needsTarget(card: CardDef) {
       "defiance",
       "precision",
       "shieldStrike",
+      "spendBlock",
     ].includes(e.kind),
   );
 }
 export const RELICS = [
+  {
+    id: "shieldfire",
+    name: "Shieldfire",
+    text: "At turn start, retain up to 6 remaining Block.",
+    art: 6,
+  },
+  {
+    id: "hushed-coal",
+    name: "Hushed Coal",
+    text: "Once per turn, when a card lowers Dread from 6+ to 3 or less, draw 1 and gain 1 energy.",
+    art: 11,
+  },
+  {
+    id: "black-lantern",
+    name: "Black Lantern",
+    text: "The first Spell each turn costs 1 less energy and generates 1 additional Dread.",
+    art: 8,
+  },
   {
     id: "kettle",
     name: "Copper kettle",

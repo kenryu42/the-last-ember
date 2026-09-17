@@ -1,14 +1,18 @@
 import {
   ACTS,
+  BREAK_FORMATION,
   CARDS,
   EVENTS,
+  FADING_STRIKE,
   RELICS,
   cardDef,
   enemyDef,
   needsTarget,
   value,
 } from "./content";
-import type { EnemyKind, Intent } from "./content";
+import type { CardDef, EnemyKind, Intent } from "./content";
+import { startingRelicSchema } from "./model";
+import type { StartingRelic } from "./model";
 import type {
   Action,
   Card,
@@ -47,6 +51,13 @@ function pick<T>(run: Run, choices: T[]): T {
 export function makeCard(run: Run, def: string): Card {
   return { uid: run.nextId++, def, upgraded: false };
 }
+export function rewardPool(run: Pick<Run, "prototype">) {
+  return [
+    ...CARDS,
+    ...(run.prototype?.blockConversion ? [BREAK_FORMATION] : []),
+    ...(run.prototype?.concealment ? [FADING_STRIKE] : []),
+  ].filter((card) => !["strike", "guard"].includes(card.id));
+}
 export function has(run: Run, id: string) {
   return run.relics.includes(id);
 }
@@ -64,7 +75,12 @@ export function grantRelic(run: Run, id: string) {
   }
 }
 function relicOffer(run: Run) {
-  const pool = RELICS.filter((r) => !has(run, r.id));
+  const pool = RELICS.filter(
+    (r) =>
+      !has(run, r.id) &&
+      !startingRelicSchema.options.some((id) => id === r.id) &&
+      !(run.dreadRules === "recurring" && r.id === "charm"),
+  );
   return pool.length ? pick(run, pool).id : null;
 }
 export function generateRoute(run: Run): RouteNode[] {
@@ -101,13 +117,21 @@ export function generateRoute(run: Run): RouteNode[] {
   });
   return nodes;
 }
-export function newRun(seed: string): Run {
+export function newRun(
+  seed: string,
+  dreadRules: "original" | "recurring" = "original",
+  prototype?: Run["prototype"],
+  startingRelic?: StartingRelic,
+): Run {
   const safeSeed = seed.trim().slice(0, 80) || "last-ember";
   let rng = 2166136261;
   for (const char of safeSeed)
     rng = Math.imul(rng ^ char.charCodeAt(0), 16777619) >>> 0;
   const run: Run = {
     version: 1,
+    dreadRules,
+    actBearer: null,
+    ...(prototype ? { prototype } : {}),
     seed: safeSeed,
     rng,
     nextId: 1,
@@ -146,6 +170,7 @@ export function newRun(seed: string): Run {
     "bread",
   ].map((id) => makeCard(run, id));
   run.route = generateRoute(run);
+  if (startingRelic) grantRelic(run, startingRelic);
   return run;
 }
 export function reachable(run: Run, node: RouteNode) {
@@ -233,7 +258,9 @@ export function startCombat(run: Run, type: Combat["type"]) {
     energy: 3 + (has(run, "flint") ? 1 : 0),
     block: has(run, "buckler") ? 8 : 0,
     dread: 0,
-    fired: [],
+    ...(run.dreadRules === "recurring"
+      ? { dreadResponse: "fury" as const }
+      : { fired: [] }),
     draw: shuffle(run, run.deck),
     hand: [],
     discard: [],
@@ -242,6 +269,20 @@ export function startCombat(run: Run, type: Combat["type"]) {
     reaction,
     log: ["The fellowship takes its stand."],
   };
+  if (
+    run.prototype?.kind === "escape" &&
+    run.act === (run.prototype.escapeAct ?? 0) &&
+    run.row === 0 &&
+    type === "battle"
+  )
+    configureEscape(run, combat, run.prototype.target);
+  if (run.prototype?.ember)
+    combat.ember =
+      run.actBearer === null
+        ? { window: "choose", bearer: null, used: false }
+        : { window: "closed", bearer: run.actBearer, used: false };
+  if (has(run, "hushed-coal") || has(run, "black-lantern"))
+    combat.relicTurn = { coalUsed: false, lanternUsed: false };
   run.scene = combat;
   draw(
     run,
@@ -249,7 +290,71 @@ export function startCombat(run: Run, type: Combat["type"]) {
     5 + (has(run, "map") ? 1 : 0) + (has(run, "feather") ? 1 : 0),
   );
 }
-export type RulesMode = "adventure" | "control" | "candidate";
+export type RulesMode = "adventure" | "control" | "candidate" | "recurring";
+
+export function cardCost(
+  run: Pick<Run, "relics">,
+  combat: Pick<Combat, "relicTurn">,
+  def: CardDef,
+) {
+  return Math.max(
+    0,
+    def.cost -
+      (run.relics.includes("black-lantern") &&
+      !combat.relicTurn?.lanternUsed &&
+      def.tags?.includes("Spell")
+        ? 1
+        : 0),
+  );
+}
+
+export function empowerTargets(
+  combat: Pick<Combat, "ember" | "enemies">,
+  def: CardDef,
+  target: number | null,
+) {
+  if (
+    combat.ember?.bearer !== "Aldren" ||
+    combat.ember.used ||
+    !def.tags?.includes("Spell")
+  )
+    return [];
+  if (def.effects.some((e) => e.kind === "all"))
+    return combat.enemies.filter((e) => e.hp > 0).map((e) => e.uid);
+  return def.effects.some((e) => e.kind === "hit") && target !== null
+    ? combat.enemies
+        .filter((e) => e.hp > 0 && e.uid === target)
+        .map((e) => e.uid)
+    : [];
+}
+
+export function configureEscape(run: Run, combat: Combat, target = 4) {
+  combat.encounter = "Escape the briar road";
+  combat.objective = { kind: "escape", progress: 0, target, worked: 0 };
+  // Reuse a small formation so combat leaves resources for the mission.
+  combat.enemies = [makeEnemy(run, "wolf"), makeEnemy(run, "crow")];
+}
+
+export function dreadResponse(combat: Combat) {
+  const band =
+    combat.dread >= 8 ? "major" : combat.dread >= 4 ? "minor" : "none";
+  const living = combat.enemies.filter((e) => e.hp > 0);
+  const dreadAfter = combat.dread - (band === "major" ? 4 : 0);
+  let phaseDread = dreadAfter;
+  return {
+    kind: combat.dreadResponse ?? "fury",
+    band,
+    dreadAfter,
+    modifiers: living.map((enemy, index) => {
+      const attack =
+        band === "major" ? 3 : band === "minor" && index === 0 ? 2 : 0;
+      const intent = intention(enemy, { ...combat, dread: phaseDread }, attack);
+      if (enemy.joinsOn <= combat.turn && intent.kind === "howl")
+        phaseDread = Math.min(10, phaseDread + intent.amount);
+      return { uid: enemy.uid, attack, intent };
+    }),
+  };
+}
 
 export function thresholdStrength(run: Run, combat: Combat): number {
   return thresholds(run, combat).reduce(
@@ -287,8 +392,8 @@ export function thresholds(run: Run, combat: Combat) {
         : combat.reaction === "ward"
           ? 4
           : 3,
-    fired: combat.fired.includes(at),
-    pending: combat.dread >= at && !combat.fired.includes(at),
+    fired: combat.fired?.includes(at) ?? false,
+    pending: combat.dread >= at && !combat.fired?.includes(at),
     text:
       index === 0
         ? combat.reaction === "reinforce"
@@ -321,7 +426,10 @@ export function resolve(
 ): Resolution {
   const run = structuredClone(input),
     frames: Frame[] = [];
-  const accounting = { drawn: 0, suppressedAttackDamage: 0 };
+  const accounting: Resolution["accounting"] = {
+    drawn: 0,
+    suppressedAttackDamage: 0,
+  };
   const fail = (error: string): Resolution => ({
     run: input,
     frames: [],
@@ -344,7 +452,17 @@ export function resolve(
     return true;
   };
   const win = (combat: Combat) => {
-    if (combat.enemies.some((e) => e.hp > 0)) return;
+    const danger = combat.enemies.some((e) => e.hp > 0);
+    if (combat.objective) {
+      // With no enemies, renewable energy and a nonempty reshuffling deck make
+      // remaining Work guaranteed. Do not force empty turns or extra rewards.
+      if (
+        !danger &&
+        combat.hand.length + combat.draw.length + combat.discard.length > 0
+      )
+        combat.objective.progress = combat.objective.target;
+      if (combat.objective.progress < combat.objective.target) return;
+    } else if (danger) return;
     run.stats.battles++;
     if (mode !== "adventure") {
       run.scene = { kind: "ending", won: true };
@@ -364,10 +482,7 @@ export function resolve(
     run.gold += gold;
     run.scene = {
       kind: "reward",
-      cards: shuffle(
-        run,
-        CARDS.filter((c) => !["strike", "guard"].includes(c.id)),
-      )
+      cards: shuffle(run, rewardPool(run))
         .slice(0, 3)
         .map((c) => c.id),
       relic: combat.type !== "battle" ? relicOffer(run) : null,
@@ -377,7 +492,19 @@ export function resolve(
     emit("reward", null, "The road is yours again.");
   };
   if (run.scene.kind === "ending") return fail("This journey has ended.");
-  if (mode !== "adventure" && action.type !== "play" && action.type !== "end")
+  if (
+    run.scene.kind === "combat" &&
+    run.scene.ember?.window === "choose" &&
+    action.type !== "bearer"
+  )
+    return fail("Choose this Act's starting Ember bearer first.");
+  if (
+    mode !== "adventure" &&
+    action.type !== "play" &&
+    action.type !== "end" &&
+    action.type !== "work" &&
+    action.type !== "bearer"
+  )
     return fail("Benchmark mode only permits combat actions.");
   switch (action.type) {
     case "travel": {
@@ -403,16 +530,53 @@ export function resolve(
       else
         run.scene = {
           kind: "shop",
-          cards: shuffle(
-            run,
-            CARDS.filter((c) => !["strike", "guard"].includes(c.id)),
-          )
+          cards: shuffle(run, rewardPool(run))
             .slice(0, 3)
             .map((c) => c.id),
           relic: relicOffer(run),
           healed: false,
           removed: false,
         };
+      return finish();
+    }
+    case "bearer": {
+      const c = run.scene;
+      if (
+        c.kind !== "combat" ||
+        !c.ember ||
+        c.ember.window !== "choose" ||
+        run.actBearer !== null
+      )
+        return fail("The Ember bearer is locked until this Act is cleared.");
+      run.actBearer = action.hero;
+      c.ember = { bearer: action.hero, window: "closed", used: false };
+      emit(
+        "dread",
+        null,
+        `${action.hero} carries the Ember for Act ${run.act + 1}.`,
+      );
+      return finish();
+    }
+    case "work": {
+      const c = run.scene;
+      if (c.kind !== "combat" || !c.objective)
+        return fail("No Work objective is active.");
+      if (c.objective.worked >= 2)
+        return fail("Work is limited to twice per turn.");
+      if (c.energy < 1) return fail("Work costs 1 energy.");
+      const card = c.hand.find((card) => card.uid === action.uid);
+      if (!card) return fail("Choose a card in hand to discard for Work.");
+      c.energy--;
+      c.hand = c.hand.filter((x) => x.uid !== card.uid);
+      c.discard.push(card);
+      c.objective.worked++;
+      c.objective.progress++;
+      emit(
+        "draw",
+        null,
+        `Work: discarded ${cardDef(card.def).name}. Progress ${c.objective.progress}/${c.objective.target}.`,
+      );
+      win(c);
       return finish();
     }
     case "play": {
@@ -422,16 +586,62 @@ export function resolve(
       if (!card) return fail("That card is no longer in your hand.");
       const def = cardDef(card.def),
         target = c.enemies.find((e) => e.uid === action.target && e.hp > 0);
-      if (def.cost > c.energy) return fail("Not enough energy.");
+      const cost = cardCost(run, c, def);
+      if (cost > c.energy) return fail("Not enough energy.");
       if (needsTarget(def) && !target) return fail("Choose a living enemy.");
-      c.energy -= def.cost;
+      if (
+        action.empower !== undefined &&
+        !empowerTargets(c, def, action.target).includes(action.empower)
+      )
+        return fail(
+          "Aldren can empower one hit of a damage Spell once per turn.",
+        );
+      // The optional exposure is paid before the Spell's printed effects.
+      if (action.empower !== undefined) c.dread = Math.min(10, c.dread + 1);
+      if (
+        has(run, "black-lantern") &&
+        c.relicTurn &&
+        !c.relicTurn.lanternUsed &&
+        def.tags?.includes("Spell")
+      ) {
+        c.relicTurn.lanternUsed = true;
+        c.dread = Math.min(10, c.dread + 1);
+        emit(
+          "dread",
+          null,
+          "Black Lantern: first Spell costs 1 less; +1 Dread.",
+        );
+      }
+      const dreadBeforeCard = c.dread;
+      c.energy -= cost;
       c.hand = c.hand.filter((x) => x.uid !== card.uid);
       run.stats.cards++;
       const strike = (enemy: Enemy, amount: number) => {
         if (enemy.hp <= 0) return;
+        const empowered =
+          c.ember?.bearer === "Aldren" &&
+          !c.ember.used &&
+          action.empower === enemy.uid;
+        if (empowered && c.ember) {
+          c.ember.used = true;
+          accounting.ember = {
+            hero: "Aldren",
+            damage: 5,
+            block: 0,
+            dreadReduced: 0,
+          };
+          amount += 5;
+        }
         const damage = hitDamage(run, c, enemy, amount),
           absorbed = Math.min(enemy.block, damage),
           lost = Math.min(enemy.hp, damage - absorbed);
+        if (empowered && accounting.ember)
+          accounting.ember.damage =
+            lost -
+            Math.min(
+              enemy.hp,
+              Math.max(0, hitDamage(run, c, enemy, amount - 5) - enemy.block),
+            );
         enemy.block -= absorbed;
         enemy.hp -= lost;
         run.stats.damage += lost;
@@ -442,7 +652,7 @@ export function resolve(
               ? "arrow"
               : "blade",
           enemy.uid,
-          `${def.name}: ${lost} damage${absorbed ? ` · ${absorbed} blocked` : ""}`,
+          `${def.name}: ${lost} damage${absorbed ? ` · ${absorbed} blocked` : ""}${empowered ? " · Aldren +5 base damage" : ""}`,
         );
         if (enemy.hp === 0) {
           run.stats.kills++;
@@ -464,17 +674,39 @@ export function resolve(
           case "shieldStrike":
             if (target) strike(target, n + c.block);
             break;
+          case "spendBlock": {
+            const spent = c.block;
+            c.block = 0;
+            emit("shield", "party", `Spent ${spent} Block.`);
+            if (target) strike(target, n + spent);
+            break;
+          }
           case "all":
             c.enemies.forEach((enemy) => strike(enemy, n));
             break;
           case "block":
           case "resolve": {
+            const shelter = c.ember?.bearer === "Mara" && !c.ember.used;
+            if (shelter && c.ember) {
+              c.ember.used = true;
+              accounting.ember = {
+                hero: "Mara",
+                damage: 0,
+                block: 3,
+                dreadReduced: 0,
+              };
+            }
             const amount =
               n +
+              (shelter ? 3 : 0) +
               (effect.kind === "resolve" ? c.dread : 0) +
               (has(run, "thread") ? 2 : 0);
             c.block += amount;
-            emit("shield", "party", `+${amount} block`);
+            emit(
+              "shield",
+              "party",
+              `+${amount} block${shelter ? " · Mara +3" : ""}`,
+            );
             break;
           }
           case "draw": {
@@ -490,11 +722,28 @@ export function resolve(
           }
           case "dread": {
             const before = c.dread;
-            c.dread = Math.max(0, Math.min(10, c.dread + n));
+            const conceal =
+              n < 0 &&
+              before > 0 &&
+              c.ember?.bearer === "Eryn" &&
+              !c.ember.used;
+            if (conceal && c.ember) {
+              c.ember.used = true;
+              accounting.ember = {
+                hero: "Eryn",
+                damage: 0,
+                block: 0,
+                dreadReduced: Math.min(2, Math.max(0, before + n)),
+              };
+            }
+            c.dread = Math.max(
+              0,
+              Math.min(10, c.dread + n - (conceal ? 2 : 0)),
+            );
             emit(
               "dread",
               null,
-              `Dread ${c.dread - before >= 0 ? "+" : ""}${c.dread - before}`,
+              `Dread ${c.dread - before >= 0 ? "+" : ""}${c.dread - before}${conceal ? " · Eryn conceals" : ""}`,
             );
             break;
           }
@@ -519,6 +768,24 @@ export function resolve(
             break;
         }
       }
+      if (
+        has(run, "hushed-coal") &&
+        c.relicTurn &&
+        !c.relicTurn.coalUsed &&
+        dreadBeforeCard >= 6 &&
+        c.dread <= 3
+      ) {
+        c.relicTurn.coalUsed = true;
+        c.energy++;
+        const beforeDraw = c.hand.length;
+        draw(run, c, 1);
+        accounting.drawn += c.hand.length - beforeDraw;
+        emit(
+          "draw",
+          null,
+          "Hushed Coal: conceal the flame, +1 energy and draw 1.",
+        );
+      }
       if (def.exhaust) c.exhaust.push(card);
       else c.discard.push(card);
       win(c);
@@ -530,13 +797,31 @@ export function resolve(
       c.discard.push(...c.hand.filter((card) => !cardDef(card.def).retain));
       c.hand = c.hand.filter((card) => cardDef(card.def).retain);
       c.energy = 0;
+      // Check player Dread before enemy actions, including Howls. Fury lives
+      // only in this phase's modifier map, never in persistent enemy strength.
+      const recurring =
+        mode === "recurring" ||
+        (mode === "adventure" && c.dreadResponse !== undefined);
+      const response = recurring ? dreadResponse(c) : null;
+      const modifiers = new Map(
+        response?.modifiers.map((m) => [m.uid, m.attack]),
+      );
       // Old enemy block expires before threshold effects grant new block.
       c.enemies.forEach((enemy) => {
         enemy.block = 0;
       });
-      for (const threshold of thresholds(run, c)) {
+      if (response && response.band !== "none") {
+        run.stats.thresholds++;
+        c.dread = response.dreadAfter;
+        emit(
+          "dread",
+          null,
+          `${response.band} Fury: ${response.band === "major" ? "all living enemies +3" : "frontmost living enemy +2"} Attack/Drain this phase only. Dread ${c.dread}.`,
+        );
+      }
+      for (const threshold of recurring ? [] : thresholds(run, c)) {
         if (!threshold.pending) continue;
-        c.fired.push(threshold.at);
+        (c.fired ??= []).push(threshold.at);
         run.stats.thresholds++;
         const first = c.fired.length === 1;
         if (first && c.reaction === "reinforce")
@@ -558,7 +843,11 @@ export function resolve(
         const intent = intention(
           enemy,
           c,
-          mode === "candidate" ? thresholdStrength(run, c) : 0,
+          recurring
+            ? (modifiers.get(enemy.uid) ?? 0)
+            : mode === "candidate"
+              ? thresholdStrength(run, c)
+              : 0,
         );
         if (intent.kind === "guard") {
           enemy.block += intent.amount;
@@ -599,10 +888,13 @@ export function resolve(
       }
       c.turn++;
       run.stats.turns++;
-      c.block = 0;
+      if (c.objective) c.objective.worked = 0;
+      c.block = has(run, "shieldfire") ? Math.min(6, c.block) : 0;
+      if (c.relicTurn) c.relicTurn = { coalUsed: false, lanternUsed: false };
       c.energy = 3;
       const retained = c.hand.length;
       draw(run, c, 5 + (has(run, "map") ? 1 : 0));
+      if (c.ember) c.ember.used = false;
       accounting.drawn += c.hand.length - retained;
       emit("draw", null, `Turn ${c.turn}. The fellowship stands together.`);
       return finish();
@@ -618,6 +910,7 @@ export function resolve(
       if (s.relic) grantRelic(run, s.relic);
       if (s.boss) {
         run.act++;
+        run.actBearer = null;
         run.row = -1;
         run.location = null;
         heal(run, Math.ceil(run.maxHp * 0.2));
@@ -631,7 +924,11 @@ export function resolve(
       if (
         s.kind !== "shop" &&
         !(s.kind === "camp" && s.used) &&
-        !(s.kind === "event" && s.resolved !== null)
+        !(
+          s.kind === "event" &&
+          s.resolved !== null &&
+          s.pendingUpgrade === undefined
+        )
       )
         return fail("Finish this stop before continuing.");
       run.scene = { kind: "map" };
@@ -649,12 +946,32 @@ export function resolve(
       return finish();
     }
     case "upgrade": {
-      if (run.scene.kind !== "camp" || run.scene.used)
-        return fail("This camp has already been used.");
+      const s = run.scene;
+      if (
+        !(s.kind === "camp" && !s.used) &&
+        !(s.kind === "event" && s.pendingUpgrade === action.uid)
+      )
+        return fail("No improvement is available for this card.");
       const card = run.deck.find((c) => c.uid === action.uid && !c.upgraded);
       if (!card) return fail("Choose an unupgraded card.");
+      if (
+        card.def === "flame" &&
+        run.prototype?.branchUpgrades &&
+        !action.branch
+      )
+        return fail("Choose Veiled Flame or Wildfire.");
+      if (
+        action.branch &&
+        (card.def !== "flame" || !run.prototype?.branchUpgrades)
+      )
+        return fail("Only Ancient flame has a branching camp upgrade.");
+      if (action.branch) card.def = action.branch;
       card.upgraded = true;
-      run.scene.used = true;
+      if (s.kind === "camp") s.used = true;
+      if (s.kind === "event") {
+        delete s.pendingUpgrade;
+        s.resolved += ` ${cardDef(card.def).name} improved.`;
+      }
       emit("reward", null, `${cardDef(card.def).name} improved.`);
       return finish();
     }
@@ -686,8 +1003,12 @@ export function resolve(
         const pool = run.deck.filter((c) => !c.upgraded);
         if (pool.length) {
           const card = pick(run, pool);
-          card.upgraded = true;
-          results.push(`${cardDef(card.def).name} improved.`);
+          if (card.def === "flame" && run.prototype?.branchUpgrades) {
+            s.pendingUpgrade = card.uid;
+          } else {
+            card.upgraded = true;
+            results.push(`${cardDef(card.def).name} improved.`);
+          }
         } else {
           run.gold += 20;
           results.push("All cards improved. Gained 20 gold instead.");

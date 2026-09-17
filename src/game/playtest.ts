@@ -1,5 +1,5 @@
 import { cardDef } from "./content";
-import { resolve, thresholds } from "./engine";
+import { dreadResponse, resolve, thresholds } from "./engine";
 import type { RulesMode } from "./engine";
 import type { Action, Combat, Resolution, Run } from "./model";
 
@@ -13,6 +13,13 @@ export interface TestConfig {
   variant: "base" | "ablation";
 }
 export function thresholdState(run: Run, c: Combat, mode: TestRules) {
+  if (mode === "recurring") {
+    const band = dreadResponse(c).band;
+    return [
+      { at: 4, bonus: 2, state: band === "minor" ? "pending" : "inactive" },
+      { at: 8, bonus: 3, state: band === "major" ? "pending" : "inactive" },
+    ];
+  }
   return thresholds(run, c).map((t) => ({
     at: t.at,
     bonus: t.strength,
@@ -32,7 +39,8 @@ export function projectPhase(run: Run, mode: TestRules) {
 
 export interface ActionRecord {
   turn: number;
-  action: "play" | "end";
+  action: "play" | "end" | "work" | "bearer";
+  ember?: Resolution["accounting"]["ember"];
   card: string | null;
   target: number | null;
   drawn: number;
@@ -84,19 +92,31 @@ export function recordAction(
   if (
     before.scene.kind !== "combat" ||
     result.error ||
-    (action.type !== "play" && action.type !== "end")
+    (action.type !== "play" &&
+      action.type !== "end" &&
+      action.type !== "work" &&
+      action.type !== "bearer")
   )
     return record;
   const c = before.scene;
   let previous = c;
   const thresholdEvents: ActionRecord["thresholdEvents"] = [];
+  if (record.config.rules === "recurring" && action.type === "end") {
+    const response = dreadResponse(c);
+    if (response.band !== "none")
+      thresholdEvents.push({
+        at: response.band === "major" ? 8 : 4,
+        event: response.band,
+        dread: c.dread,
+      });
+  }
   for (const frame of result.frames) {
     if (frame.run.scene.kind !== "combat") continue;
     const next = frame.run.scene;
     const old = thresholdState(before, previous, record.config.rules);
     for (const t of thresholdState(frame.run, next, record.config.rules)) {
       const prior = old.find((x) => x.at === t.at);
-      if (prior?.state !== t.state)
+      if (record.config.rules !== "recurring" && prior?.state !== t.state)
         thresholdEvents.push({
           at: t.at,
           event:
@@ -115,8 +135,9 @@ export function recordAction(
   const row: ActionRecord = {
     turn: c.turn,
     action: action.type,
+    ...(result.accounting.ember ? { ember: result.accounting.ember } : {}),
     card:
-      action.type === "play"
+      action.type === "play" || action.type === "work"
         ? (c.hand.find((x) => x.uid === action.uid)?.def ?? null)
         : null,
     target: action.type === "play" ? action.target : null,

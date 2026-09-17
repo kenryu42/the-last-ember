@@ -101,8 +101,10 @@ test("route contents and RNG, and all 18 benchmark starts, retain their pre-topo
           deckId: deck.id,
           encounterId: encounter.id,
         });
+        // Rule metadata is explicit now; compare gameplay state, not its encoding.
+        const { dreadRules, actBearer, ...state } = run;
         starts.push({
-          ...run,
+          ...state,
           route: run.route.map(({ links, ...node }) => node),
         });
       }

@@ -14,7 +14,8 @@ fellowship. Enemies follow visible, repeating intentions.
 
 **Lose:** the fellowship's shared health reaches zero.
 
-This rulebook describes the normal adventure, not experimental laboratory variants.
+Journeys use the recurring-Dread / Escape / Ember prototype below. CLI controls
+can explicitly select original one-shot Dread rules for comparison.
 
 ## 1. The fellowship shares everything
 
@@ -37,6 +38,28 @@ This rulebook describes the normal adventure, not experimental laboratory varian
 The names on cards describe their identity. They do **not** impose class
 restrictions, separate turns, or separate health pools. Fellowship cards provide
 shared support.
+
+In the first encounter of each Act, draw the opening hand and then choose an
+**Ember bearer**. That choice is locked for the whole Act, including fights,
+camps, shops, and reloads. After a guardian reward advances the Act, choose again
+after drawing the next Act's first opening hand. There is no pass action, cost,
+or control. All heroes' cards remain playable. Only the chosen bearer's passive
+is active:
+
+- **Mara:** the first card Block effect each turn gains 3 Block.
+- **Eryn:** the first card that lowers Dread each turn lowers it by 2 more.
+- **Aldren:** optionally add 1 Dread to add 5 damage to one hit of one Spell each
+  turn. Use the Empower controls to select the Spell and hit. The extra Dread is
+  paid before the printed effects. Ancient flame is a Spell.
+
+The opening battle of act two is **Escape the briar road**, after opportunities
+to acquire and improve cards.
+Reach **4 Progress**, even with enemies alive. **Work:** spend 1 energy and
+discard a hand card for 1 Progress,
+at most twice per turn. The card is not played: no printed effects or play
+triggers occur. Clearing all danger automatically completes remaining Progress
+when reusable cards guarantee it. Rewards are granted only once. Other encounters
+retain kill-all victory.
 
 ### Starting supplies
 
@@ -113,7 +136,7 @@ automatically restore it.
 At the beginning of each encounter:
 
 - Shuffle the permanent deck.
-- Reset Dread to 0 and clear its triggered thresholds.
+- Reset Dread to 0.
 - Begin with 3 energy and draw 5 cards.
 - Start without Block, unless a relic grants it.
 - Apply any other encounter-start relic bonuses.
@@ -270,31 +293,26 @@ Dread
 
 **Crossing a threshold during your turn does not immediately trigger it.**
 
-When you end your turn, the game checks untriggered thresholds from low to high.
-Lowering Dread beforehand can prevent them.
+When you end your turn, the game checks the current band. Lowering Dread
+beforehand can avoid or change the response.
 
-### Standard thresholds
+### Recurring Fury
 
-Each encounter has one reaction type:
+| Dread | Response each turn |
+| --- | --- |
+| 0–3 | None |
+| 4–7 | Frontmost living enemy: +2 Attack/Drain this enemy phase only |
+| 8–10 | All living enemies: +3 Attack/Drain this phase only; then lose 4 Dread |
 
-| Reaction | At Dread 4 | At Dread 8 |
-| --- | --- | --- |
-| Fury | All living enemies gain +2 attack damage | All living enemies gain another +3 |
-| Reinforce | A new enemy joins | All living enemies gain +3 attack damage |
-| Ward | All living enemies gain 10 Block | All living enemies gain +4 attack damage |
+Major **replaces** minor. Bonuses expire after that enemy phase; they never
+accumulate. Howls happen after the check and relief, giving the player the next
+turn to respond. Intentions include projected Fury and preceding Howls.
+Low-Dread and Dread 6+ card payoffs are unchanged. Quiet bell is excluded from
+new recurring journeys and is inert there.
 
-Important details:
-
-- Each threshold triggers **once per encounter**.
-- Ending at Dread 8 or more can trigger both at once.
-- Reinforce calls a Briar wolf in Act I or an Ashbound soldier in later acts.
-- A reinforcement skips the enemy phase in which it arrives. It becomes
-  targetable on your next turn.
-- Triggered attack bonuses persist even if you later lower Dread.
-- Howl happens after the threshold check. Newly crossed thresholds wait until
-  your **next** end turn.
-- Quiet bell shifts thresholds to **5 and 9**. It does not move the card payoff
-  boundaries at 3 and 6.
+Original-rule control simulations use once-per-encounter Fury, Reinforce,
+and Ward responses at 4 and 8 (5 and 9 with Quiet bell), including permanent
+attack bonuses. They are comparison rules, not the current new-journey rules.
 
 ### Example: use the danger, then hide
 
@@ -314,13 +332,13 @@ A. Defiance
    Spend 1 energy
    Deal 14 damage because Dread is 6+
    If combat continues, end at 6 Dread
-   First consequence triggers if unused
+   Minor Fury strengthens the front enemy for this enemy phase
 
 B. Quiet as snowfall
    Spend 1 energy
    Lose 4 Dread → now 2
    Draw 1
-   End at 2 Dread → neither threshold triggers
+   End at 2 Dread → no Dread response
 ```
 
 That is the central combat tradeoff: **push for damage, or spend resources
@@ -334,7 +352,9 @@ Several cards reward building the right state before playing them.
 | --- | --- | --- |
 | Defiance | 7 damage, doubled at Dread 6+ | Raise Dread first |
 | Through the leaves | 8 damage, +6 at Dread 3 or less | Lower Dread first |
+| Fading strike | 1 energy: lower Dread by 2, then deal 4 damage, +6 at Dread 3 or less | Its own concealment can enable its attack; Eryn extends the recovery range |
 | Iron answer | Damage equal to 3 + current Block | Build Block first; it does not consume Block |
+| Break formation | 0 energy: lose all Block, then deal 4 + the Block lost as damage | Remove a threat now or preserve defense; new-journey rewards only |
 | Face the darkness | Gain Block equal to 7 + current Dread | Higher Dread means more defense |
 | A small opening | Apply 2 Vulnerable, then gain 1 Dread | Play before your attacks |
 | Challenge | Apply 2 Weak, then gain 1 Dread | Weaken dangerous enemy actions |
@@ -358,10 +378,21 @@ Same cards. Same energy. Different result.
 
 ### Improving cards
 
-Every card has one improved version, marked with `+`.
+Cards can be improved once, marked with `+`.
 
-An improvement changes the printed effect values. It does not add another upgrade
-tier or change the card's energy cost in the current card set.
+Most improvements change printed effect values without changing energy cost.
+In new journeys, improving Ancient flame at camp or through an event offers two branches:
+
+| Branch | Cost | Effect |
+| --- | ---: | --- |
+| Veiled Flame | 2 | Deal 18 damage to one enemy; gain 1 Dread |
+| Wildfire | 2 | Deal 14 damage to every enemy; gain 4 Dread |
+
+Both remain Spells. Aldren can empower one hit, not the whole Wildfire volley.
+Branches keep the original card copy and cannot be improved again. They do not
+appear as separate card rewards. If an event randomly selects Ancient flame,
+choose its branch before leaving; the event cost is paid only once. Unbranched
+CLI controls use the numerical improvement to 24 damage and 3 Dread.
 
 For example:
 
@@ -369,6 +400,8 @@ For example:
 - Shelter improves from 7 to 10 Block.
 - Defiance improves from 7 / 14 to 10 / 20 damage.
 - Borrowed fire improves from 1 to 2 energy while still adding 2 Dread.
+- Break formation improves its base damage from 4 to 7, still consuming all Block.
+- Fading strike improves from 4 / 10 to 7 / 13 damage; its Dread reduction stays 2.
 
 Always read the improved text, especially on cards with several effects.
 
@@ -434,6 +467,21 @@ an unowned relic; narrative wording does not guarantee a particular relic.
 Relics persist for the rest of the journey. You do not acquire duplicate copies
 of the same relic.
 
+New journeys start without a relic choice. The following experimental starting
+relics are available in CLI experiments, but are not part
+of normal new-game setup or ordinary relic offers:
+
+| Starting relic | Effect |
+| --- | --- |
+| Shieldfire | At turn start retain up to 6 Block remaining after the enemy phase |
+| Hushed Coal | Once per turn, a card lowering Dread from 6+ to 3 or less draws 1 card and grants 1 energy |
+| Black Lantern | The first Spell each turn costs 1 less energy, minimum 0, and adds 1 Dread before its effects |
+
+Eryn's extra reduction counts toward Hushed Coal's crossing. Work triggers none
+of these card-play effects. A zero-cost Spell still consumes Black Lantern's
+first-Spell activation and adds its Dread. Major Fury relief is not a card and
+does not activate Hushed Coal.
+
 | Relic | Effect |
 | --- | --- |
 | Copper kettle | Restore 3 health after each combat victory |
@@ -445,7 +493,7 @@ of the same relic.
 | Unfinished map | Draw +1 card at every turn start |
 | Silver thread | Each Block effect grants +2 Block |
 | Wooden bowl | Each healing effect restores +3 health |
-| Quiet bell | Dread thresholds move to 5 and 9 |
+| Quiet bell | Original-rule CLI controls only: thresholds move to 5 and 9; excluded from recurring runs |
 | Roadwarden's purse | +12 gold from combat rewards |
 | Grey feather | Begin each combat with one additional card |
 
@@ -482,7 +530,10 @@ Ordinary enemies also scale by act. Compared with Act I, they gain:
 | Energy | Resets to 3, with applicable bonuses | Starts fresh |
 | Your Block | Clears after the enemy phase | Starts fresh |
 | Dread | Persists | Resets to 0 |
-| Fired Dread thresholds | Stay fired | Reset |
+| Fury modifiers | Expire after enemy phase | None |
+| Bearer choice | Persists | Persists through the Act; choose again after advancing |
+| Bearer passive use | Resets | Resets at the start of each fight |
+| Progress | Persists; Work allowance resets to 2 | Encounter-specific |
 | Unplayed Retain cards | Stay in hand | Rejoin the shuffled deck |
 | Exhausted cards | Stay unavailable | Return |
 | Enemy statuses and bonuses | Follow combat rules | Do not carry over |
@@ -497,7 +548,7 @@ There are no permanent stat bonuses or unlock requirements between runs.
 
 ```text
 1. Read every enemy intention, from left to right.
-2. Check your energy, Block, Dread, and unused thresholds.
+2. Check energy, Block, Dread response, objective, and bearer.
 3. Decide which enemy actions you can prevent by killing their source.
 4. Sequence setup cards before their payoffs.
 5. Choose whether to accept or suppress Dread consequences.

@@ -9,6 +9,7 @@ import {
   simulateJourney,
 } from "../src/game/laboratory-journey";
 import { newRun, resolve } from "../src/game/engine";
+import { runSchema } from "../src/game/model";
 import { parseSave } from "../src/game/storage";
 
 test("public-only journey completes all stops and replays through canonical saves", () => {
@@ -84,6 +85,55 @@ test("checkpoint CLI recognizes final-boss victory and rejects ambiguous policy 
     const ambiguous = Bun.spawnSync(command);
     expect(ambiguous.exitCode).toBe(1);
     expect(ambiguous.stderr.toString()).toContain("Ambiguous seed");
+  } finally {
+    rmSync(dir, { recursive: true });
+  }
+});
+
+test("checkpoint CLI uses explicit experiment settings and rejects missing rules", () => {
+  const run = newRun(
+    "checkpoint-recurring",
+    "recurring",
+    {
+      kind: "escape",
+      target: 4,
+      ember: true,
+    },
+    "hushed-coal",
+  );
+  const travel = { type: "travel", node: "0-0-1" } as const;
+  const checkpoint = resolve(run, travel).run;
+  expect(checkpoint.scene.kind).toBe("combat");
+  const record = {
+    seed: run.seed,
+    dreadRules: run.dreadRules,
+    prototype: run.prototype,
+    startingRelic: "hushed-coal",
+    trace: [travel, journeyLegalActions(checkpoint)[0]],
+  };
+  const dir = mkdtempSync(join(tmpdir(), "checkpoint-rules-"));
+  try {
+    const path = join(dir, "journey.jsonl");
+    const command = [
+      "bun",
+      "scripts/lab-checkpoint.ts",
+      path,
+      run.seed,
+      "1",
+      "strategic",
+      "256",
+    ];
+    writeFileSync(path, JSON.stringify(record) + "\n");
+    const replay = Bun.spawnSync(command);
+    expect(replay.exitCode).toBe(0);
+    const result = z
+      .object({ checkpoint: runSchema, outcome: z.string() })
+      .parse(JSON.parse(replay.stdout.toString()));
+    expect(result.checkpoint).toEqual(checkpoint);
+    expect(result.outcome).not.toBe("timeout");
+    const { dreadRules, ...missingRules } = record;
+    writeFileSync(path, JSON.stringify(missingRules) + "\n");
+    expect(Bun.spawnSync(command).exitCode).toBe(1);
   } finally {
     rmSync(dir, { recursive: true });
   }

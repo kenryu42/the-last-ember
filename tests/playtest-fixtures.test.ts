@@ -220,7 +220,7 @@ describe("isolated v0.2 playtest fixtures", () => {
     combat(first).enemies.forEach((enemy) => {
       enemy.hp = 1;
     });
-    combat(first).fired.push(4);
+    (combat(first).fired ??= []).push(4);
     combat(first).log.push("mutated");
     combat(first).hand.length = 0;
     expect(other).toEqual(snapshot);
