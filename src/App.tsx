@@ -186,7 +186,15 @@ export function App() {
     } else void dispatch({ type: "play", uid: card.uid, target: null });
   };
   const begin = () => {
-    const next = newRun(`ember-${Date.now().toString(36)}`);
+    const next = newRun(`ember-${Date.now().toString(36)}`, "recurring", {
+      kind: "escape",
+      target: 4,
+      ember: true,
+      branchUpgrades: true,
+      blockConversion: true,
+      concealment: true,
+      escapeAct: 1,
+    });
     setError("");
     commit(next);
     setTitle(false);
@@ -475,7 +483,7 @@ export function App() {
             {
               [
                 "You share health, a deck, and three energy. Follow a lit road node. A sword begins a battle; a question mark is a story.",
-                "Strong ember magic raises Dread. At turn end, thresholds at 4 and 8 awaken once. You can lower Dread before ending to keep them quiet.",
+                "Choose who carries the Ember. Strong magic raises Dread. Every turn, 4–7 empowers the front enemy; 8–10 empowers all enemies, then falls by 4. Lower Dread before ending to avoid the response.",
                 "Click a card. Choose an enemy for attacks; the last living enemy is targeted automatically. Guards play immediately. Intentions show what happens if you end now.",
                 "Play what you need, then End turn. Your remaining hand is discarded and you draw five. Block protects now, then clears at your next turn.",
               ][tutorial]

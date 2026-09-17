@@ -63,6 +63,21 @@ The concept and every final production image were inspected with `view_media`. I
 
 Environment detail reads closer to cinematic digital oil illustration than heavy impasto. Some ruined architecture has ambiguous structural connections. The hidden-trail card has a somewhat symmetrical dark foreground shape. Bottom-row enemies extend close to their lower cell edges. These are artwork limitations, not missing assets or incorrect grid coordinates.
 
+## Encounter bearer portraits
+
+Generated with Amp Painter on 2026-09-17 for the full-page encounter bearer choice.
+Each image references the corresponding character in `companions.webp`, retaining
+Mara's shield and scar, Eryn's hood and bow, and Aldren's robes and lantern.
+These are new full-figure square paintings, not enlarged avatar crops. All three
+are opaque 1024 × 1024 WebP assets, resized and stripped with ImageMagick at quality 85.
+The original companion sheet remains in use for compact in-combat portraits.
+
+| Asset | Painter source |
+| --- | --- |
+| `public/assets/bearer-mara.webp` | https://ampcode.com/user-content/attachments/99119a2243ec40c7b31a5710ec983b065bd46dd271dc459be76afd24ef65fc26-file.png |
+| `public/assets/bearer-eryn.webp` | https://ampcode.com/user-content/attachments/abf8a29efa409ce5c28340f000fd1989714ebb0ccdd43dcafa98cffaa0663923-file.png |
+| `public/assets/bearer-aldren.webp` | https://ampcode.com/user-content/attachments/45bdd1315bb986f55e93958f7bc1ec2a05f87ccc6ee6cb04e98cf58a07fc3856-file.png |
+
 In the art-production thread, the reference-only concept is saved at `.amp/in/artifacts/combat-concept.webp`. It contains exactly five cards, visible enemy intentions, shared fellowship health, energy, and Dread. Its invented individual companion health, card costs, rule text, and keywords are NOT implementation requirements. It is not a screenshot of a running game. No game code, push, deployment, or browser UI verification was part of that art-only task.
 
 ## Fonts, icons, and sound

@@ -1,6 +1,16 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { ACTS, EVENTS, RELICS, cardDef, enemyDef } from "../game/content";
 import {
+  ACTS,
+  EVENTS,
+  RELICS,
+  cardDef,
+  enemyDef,
+  needsTarget,
+} from "../game/content";
+import {
+  cardCost,
+  dreadResponse,
+  empowerTargets,
   has,
   intention,
   reachable,
@@ -10,6 +20,7 @@ import {
 import type { RulesMode } from "../game/engine";
 import { thresholdState } from "../game/playtest";
 import type { Action, Card, Combat, Frame, Run } from "../game/model";
+import { flameBranchSchema, heroSchema } from "../game/model";
 import { Art, CardView, Icon, Modal } from "./components";
 
 export type Inspect = { title: string; cards: Card[] } | null;
@@ -127,6 +138,7 @@ export function JourneyMap({
 function Hand({
   cards,
   energy,
+  cost,
   selected,
   select,
   busy,
@@ -134,6 +146,7 @@ function Hand({
 }: {
   cards: Card[];
   energy: number;
+  cost: (card: Card) => number;
   selected: number | null;
   select: (card: Card) => void;
   busy: boolean;
@@ -168,8 +181,9 @@ function Hand({
           <CardView
             key={card.uid}
             card={card}
+            cost={cost(card)}
             onClick={() => select(card)}
-            disabled={busy || cardDef(card.def).cost > energy}
+            disabled={busy || cost(card) > energy}
             selected={selected === card.uid}
             allowArtPreview={selected === null && !busy}
           />
@@ -241,22 +255,177 @@ export function CombatBoard({
 }) {
   const [enemyInfo, setEnemyInfo] = useState<number | null>(null),
     [log, setLog] = useState(false);
+  const sceneHeading = useRef<HTMLHeadingElement>(null);
+  const choosingBearer = combat.ember?.window === "choose";
+  useLayoutEffect(() => {
+    sceneHeading.current?.focus({ preventScroll: true });
+    window.scrollTo(0, 0);
+  }, [choosingBearer]);
   const enemy = combat.enemies.find((e) => e.uid === enemyInfo);
   const bonus = mode === "candidate" ? thresholdStrength(run, combat) : 0;
+  const response =
+    mode === "recurring" || (mode === "adventure" && combat.dreadResponse)
+      ? dreadResponse(combat)
+      : null;
+  const shownIntent = (enemy: Combat["enemies"][number]) =>
+    response?.modifiers.find((m) => m.uid === enemy.uid)?.intent ??
+    intention(enemy, combat, bonus);
+  if (combat.ember?.window === "choose")
+    return (
+      <section
+        className="bearer-selection scene-enter"
+        aria-labelledby="bearer-heading"
+        aria-busy={busy}
+      >
+        <header className="bearer-intro">
+          <p className="eyebrow">The Last Ember</p>
+          <h1 id="bearer-heading" ref={sceneHeading} tabIndex={-1}>
+            Who carries the Ember?
+          </h1>
+          <p className="eyebrow">
+            Act {["I", "II", "III"][run.act]} · Locked for this Act
+          </p>
+        </header>
+        <div className="bearer-choices">
+          {heroSchema.options.map((hero) => {
+            const profile = {
+              Mara: {
+                ability: "Shelter the Flame",
+                effect:
+                  "Each turn, your first Block effect from a played card grants +3 Block.",
+              },
+              Eryn: {
+                ability: "Conceal the Flame",
+                effect:
+                  "Each turn, your first Dread-lowering card lowers it by 2 more.",
+              },
+              Aldren: {
+                ability: "Wield the Flame",
+                effect:
+                  "Once per turn, empower one Spell hit: +5 damage for +1 Dread. Your choice when casting.",
+              },
+            }[hero];
+            return (
+              <button
+                className="bearer-choice"
+                key={hero}
+                disabled={busy}
+                aria-label={`Choose ${hero}`}
+                aria-describedby={`bearer-${hero}-ability`}
+                onClick={() => dispatch({ type: "bearer", hero })}
+              >
+                <img
+                  src={`/assets/bearer-${hero.toLowerCase()}.webp`}
+                  alt=""
+                  width="1024"
+                  height="1024"
+                />
+                <span className="bearer-copy">
+                  <span className="bearer-name">{hero}</span>
+                  <span
+                    id={`bearer-${hero}-ability`}
+                    className="bearer-ability"
+                  >
+                    <strong>{profile.ability}</strong>
+                    {profile.effect}
+                  </span>
+                  <span className="bearer-call">
+                    <Icon name="arrow" size={18} /> Choose {hero}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <footer className="bearer-context">
+          <p className="bearer-lock-note">
+            All three stay with you. Your bearer cannot change until you clear
+            this Act.
+          </p>
+          <details>
+            <summary>Encounter &amp; opening hand</summary>
+            <div className="bearer-context-details">
+              <p>
+                <strong>The task</strong>{" "}
+                {combat.objective
+                  ? `Escape · ${combat.objective.target} Progress`
+                  : "Defeat every enemy"}{" "}
+                · {run.hp}/{run.maxHp} health
+              </p>
+              <p>
+                <strong>Ahead</strong>{" "}
+                {combat.enemies
+                  .filter((e) => e.hp > 0)
+                  .map(
+                    (e) =>
+                      `${enemyDef(e.def).name}: ${shownIntent(e).kind} ${shownIntent(e).amount}`,
+                  )
+                  .join(" · ")}
+              </p>
+              <p>
+                <strong>Opening hand</strong>{" "}
+                {combat.hand.map((card) => cardDef(card.def).name).join(" · ")}
+              </p>
+            </div>
+          </details>
+        </footer>
+      </section>
+    );
   return (
-    <section className="combat-board" aria-label="Combat" aria-busy={busy}>
+    <section
+      className={`combat-board ${combat.ember ? "has-ember" : ""}`}
+      aria-label="Combat"
+      aria-busy={busy}
+    >
       <div className="combat-heading">
         <div>
           <p className="eyebrow">
             {ACTS[run.act]?.place} · {combat.type}
           </p>
-          <h1>{combat.encounter}</h1>
+          <h1 ref={sceneHeading} tabIndex={-1}>
+            {combat.encounter}
+          </h1>
         </div>
         <span className="turn-indicator">
           Turn <b>{combat.turn.toString().padStart(2, "0")}</b>
           <small>{busy ? "Resolving" : "Your move"}</small>
         </span>
       </div>
+      {combat.objective && (
+        <div className="objective-panel">
+          <div>
+            <h2>
+              Escape · {combat.objective.progress}/{combat.objective.target}
+            </h2>
+            <p>
+              Reach {combat.objective.target} Progress, or clear all danger for
+              automatic completion.
+            </p>
+          </div>
+          <label>
+            Work · 1 energy · {2 - combat.objective.worked} left this turn
+            <select
+              aria-label="Discard a card to Work"
+              value=""
+              disabled={
+                busy || combat.energy < 1 || combat.objective.worked >= 2
+              }
+              onChange={(event) =>
+                dispatch({ type: "work", uid: Number(event.target.value) })
+              }
+            >
+              <option value="" disabled>
+                Discard a card → +1 Progress (no effects)
+              </option>
+              {combat.hand.map((card) => (
+                <option key={card.uid} value={card.uid}>
+                  {cardDef(card.def).name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       <div className="battlefield">
         <aside
           className={`dread-panel ${feedback?.cue === "dread" && stage === "impact" ? "dread-awakens" : ""}`}
@@ -282,28 +451,55 @@ export function CombatBoard({
             ))}
           </div>
           <p className="dread-caption">The dark is listening.</p>
-          {thresholds(run, combat).map((t) => (
-            <div
-              key={t.at}
-              className={`threshold ${t.pending ? "pending" : ""} ${t.fired ? "fired" : ""}`}
-            >
-              <b>{t.at}</b>
-              <p>
-                <strong>
-                  {mode !== "adventure"
-                    ? `${thresholdState(run, combat, mode).find((s) => s.at === t.at)?.state}${t.pending ? " · unlocks at end" : ""}`
-                    : t.fired
-                      ? "Already awakened"
-                      : t.pending
-                        ? "Activates at turn end"
-                        : "At turn end, if reached"}
-                </strong>
-                {mode === "candidate" && t.strength
-                  ? `After unlock: +${t.strength} attack while Dread is ${t.at} or higher.`
-                  : t.text}
+          {response ? (
+            <>
+              <div
+                className={`threshold ${response.band === "minor" ? "pending" : ""}`}
+              >
+                <b>4</b>
+                <p>
+                  <strong>4–7 · Minor Fury · every turn</strong>Frontmost living
+                  enemy: +2 Attack/Drain this phase only.
+                </p>
+              </div>
+              <div
+                className={`threshold ${response.band === "major" ? "pending" : ""}`}
+              >
+                <b>8</b>
+                <p>
+                  <strong>8–10 · Major Fury · replaces minor</strong>All living
+                  enemies: +3 Attack/Drain this phase only. Then lose 4 Dread.
+                </p>
+              </div>
+              <p className="dread-caption">
+                If you end now: {response.band}. Dread after response:{" "}
+                {response.dreadAfter}, before Howls. Intentions include Fury.
               </p>
-            </div>
-          ))}
+            </>
+          ) : (
+            thresholds(run, combat).map((t) => (
+              <div
+                key={t.at}
+                className={`threshold ${t.pending ? "pending" : ""} ${t.fired ? "fired" : ""}`}
+              >
+                <b>{t.at}</b>
+                <p>
+                  <strong>
+                    {mode !== "adventure"
+                      ? `${thresholdState(run, combat, mode).find((s) => s.at === t.at)?.state}${t.pending ? " · unlocks at end" : ""}`
+                      : t.fired
+                        ? "Already awakened"
+                        : t.pending
+                          ? "Activates at turn end"
+                          : "At turn end, if reached"}
+                  </strong>
+                  {mode === "candidate" && t.strength
+                    ? `After unlock: +${t.strength} attack while Dread is ${t.at} or higher.`
+                    : t.text}
+                </p>
+              </div>
+            ))
+          )}
           <button
             className="text-button combat-log-toggle"
             onClick={() => setLog(true)}
@@ -314,7 +510,7 @@ export function CombatBoard({
         <div className="enemies">
           {combat.enemies.map((enemy, index) => {
             const def = enemyDef(enemy.def),
-              intent = intention(enemy, combat, bonus),
+              intent = shownIntent(enemy),
               active = feedback?.target === enemy.uid,
               waiting = enemy.joinsOn > combat.turn,
               dead = enemy.hp <= 0;
@@ -420,13 +616,15 @@ export function CombatBoard({
         className={`fellowship-strip ${feedback?.cue === "enemy" && stage === "impact" ? "party-hit" : ""} ${feedback?.target === "party" && stage === "impact" ? `party-${feedback.cue}` : ""}`}
       >
         <div className="companions">
-          {["Mara", "Eryn", "Aldren"].map((name, index) => (
+          {heroSchema.options.map((name, index) => (
             <div className="companion" key={name} data-companion={name}>
               <Art sheet="companions" index={index} />
               <span>
                 {name}
                 <small>
-                  {["The guardian", "The ranger", "The emberkeeper"][index]}
+                  {combat.ember?.bearer === name
+                    ? `Act ${["I", "II", "III"][run.act]} bearer`
+                    : ["The guardian", "The ranger", "The emberkeeper"][index]}
                 </small>
               </span>
             </div>
@@ -449,6 +647,47 @@ export function CombatBoard({
           <span>Block</span>
         </div>
       </div>
+      {combat.ember && (
+        <div className="ember-controls">
+          <p>
+            {`${combat.ember.bearer}: ${combat.ember.used ? "ability used this turn" : "ability ready"}.`}{" "}
+            Mara: first Block +3. Eryn: first Dread-lowering card −2 more.
+            Aldren: empower one Spell hit, +5 damage for +1 Dread.
+          </p>
+          {combat.ember.bearer === "Aldren" && !combat.ember.used && (
+            <details>
+              <summary>Empower a Spell · optional · +1 Dread</summary>
+              {combat.hand.flatMap((card) =>
+                combat.enemies.flatMap((enemy) => {
+                  const def = cardDef(card.def),
+                    target = needsTarget(def) ? enemy.uid : null;
+                  return empowerTargets(combat, def, target).includes(enemy.uid)
+                    ? [
+                        <button
+                          key={`${card.uid}:${enemy.uid}`}
+                          disabled={
+                            busy || cardCost(run, combat, def) > combat.energy
+                          }
+                          onClick={() =>
+                            dispatch({
+                              type: "play",
+                              uid: card.uid,
+                              target,
+                              empower: enemy.uid,
+                            })
+                          }
+                        >
+                          {def.name} → {enemyDef(enemy.def).name} · +5 to one
+                          hit
+                        </button>,
+                      ]
+                    : [];
+                }),
+              )}
+            </details>
+          )}
+        </div>
+      )}
       <div
         className={`action-message ${selected !== null ? "target-message" : ""}`}
         role="status"
@@ -514,6 +753,7 @@ export function CombatBoard({
         <Hand
           cards={combat.hand}
           energy={combat.energy}
+          cost={(card) => cardCost(run, combat, cardDef(card.def))}
           selected={selected}
           select={select}
           busy={busy}
@@ -561,8 +801,7 @@ export function CombatBoard({
           <p>
             Intention now:{" "}
             <b>
-              {intention(enemy, combat, bonus).kind}{" "}
-              {intention(enemy, combat, bonus).amount}
+              {shownIntent(enemy).kind} {shownIntent(enemy).amount}
             </b>
             .
           </p>
@@ -600,6 +839,7 @@ export function StopScene({
   const [choose, setChoose] = useState<"upgrade" | "remove" | null>(null),
     [candidate, setCandidate] = useState<Card | null>(null);
   const s = run.scene;
+  const pendingUpgrade = s.kind === "event" ? s.pendingUpgrade : undefined;
   const leave = (
     <button className="primary" onClick={() => dispatch({ type: "leave" })}>
       Return to the road <Icon name="arrow" size={18} />
@@ -708,8 +948,37 @@ export function StopScene({
           <p className="story-copy">{EVENTS[s.event]?.text}</p>
           {s.resolved ? (
             <>
-              <p className="resolved-copy">{s.resolved}</p>
-              {leave}
+              <p className="resolved-copy">
+                {s.resolved}
+                {pendingUpgrade !== undefined
+                  ? " Choose how to improve Ancient flame."
+                  : ""}
+              </p>
+              {pendingUpgrade !== undefined ? (
+                <div className="upgrade-compare">
+                  {flameBranchSchema.options.map((branch) => (
+                    <CardView
+                      key={branch}
+                      card={{
+                        uid: pendingUpgrade,
+                        def: branch,
+                        upgraded: true,
+                      }}
+                      preview
+                      allowArtPreview={false}
+                      onClick={() => {
+                        dispatch({
+                          type: "upgrade",
+                          uid: pendingUpgrade,
+                          branch,
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                leave
+              )}
             </>
           ) : (
             <div className="choice-list">
@@ -827,7 +1096,27 @@ export function StopScene({
               <div className="upgrade-compare">
                 <CardView card={candidate} />
                 <Icon name="arrow" size={30} />
-                {choose === "upgrade" ? (
+                {choose === "upgrade" &&
+                candidate.def === "flame" &&
+                run.prototype?.branchUpgrades ? (
+                  flameBranchSchema.options.map((branch) => (
+                    <CardView
+                      key={branch}
+                      card={{ ...candidate, def: branch, upgraded: true }}
+                      preview
+                      allowArtPreview={false}
+                      onClick={() => {
+                        dispatch({
+                          type: "upgrade",
+                          uid: candidate.uid,
+                          branch,
+                        });
+                        setChoose(null);
+                        setCandidate(null);
+                      }}
+                    />
+                  ))
+                ) : choose === "upgrade" ? (
                   <CardView card={{ ...candidate, upgraded: true }} preview />
                 ) : (
                   <p>This copy will leave your deck.</p>
@@ -837,22 +1126,32 @@ export function StopScene({
                 <button onClick={() => setCandidate(null)}>
                   Choose another
                 </button>
-                <button
-                  className="primary"
-                  onClick={() => {
-                    dispatch(
-                      choose === "upgrade"
-                        ? { type: "upgrade", uid: candidate.uid }
-                        : { type: "buy", item: "remove", index: candidate.uid },
-                    );
-                    setChoose(null);
-                    setCandidate(null);
-                  }}
-                >
-                  {choose === "upgrade"
-                    ? "Confirm improvement"
-                    : "Remove · 45 gold"}
-                </button>
+                {choose === "upgrade" &&
+                candidate.def === "flame" &&
+                run.prototype?.branchUpgrades ? (
+                  <p>Choose a branch above to confirm its improvement.</p>
+                ) : (
+                  <button
+                    className="primary"
+                    onClick={() => {
+                      dispatch(
+                        choose === "upgrade"
+                          ? { type: "upgrade", uid: candidate.uid }
+                          : {
+                              type: "buy",
+                              item: "remove",
+                              index: candidate.uid,
+                            },
+                      );
+                      setChoose(null);
+                      setCandidate(null);
+                    }}
+                  >
+                    {choose === "upgrade"
+                      ? "Confirm improvement"
+                      : "Remove · 45 gold"}
+                  </button>
+                )}
               </div>
             </>
           ) : (

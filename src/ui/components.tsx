@@ -111,6 +111,7 @@ export function CardView({
   disabled = false,
   selected = false,
   label,
+  cost,
   preview = false,
   allowArtPreview = true,
 }: {
@@ -119,6 +120,7 @@ export function CardView({
   disabled?: boolean;
   selected?: boolean;
   label?: string;
+  cost?: number;
   preview?: boolean;
   allowArtPreview?: boolean;
 }) {
@@ -245,12 +247,12 @@ export function CardView({
         disabled={disabled}
         aria-label={
           label ??
-          `${def.name}${card.upgraded ? " upgraded" : ""}, ${def.cost} energy. ${def.effects.map((e) => effectText(e, card.upgraded)).join(" ")}${def.exhaust ? " Exhaust." : ""}${def.retain ? " Retain." : ""}`
+          `${def.name}${card.upgraded ? " upgraded" : ""}, ${cost ?? def.cost} energy. ${def.tags?.includes("Spell") ? "Spell. " : ""}${def.effects.map((e) => effectText(e, card.upgraded)).join(" ")}${def.exhaust ? " Exhaust." : ""}${def.retain ? " Retain." : ""}`
         }
         aria-pressed={selected}
       >
         <span className="card-heading">
-          <span className="cost">{def.cost}</span>
+          <span className="cost">{cost ?? def.cost}</span>
           <span>
             {def.name}
             {card.upgraded && <b className="upgrade-mark"> +</b>}
@@ -278,7 +280,11 @@ export function CardView({
         <span className="card-keywords">
           <Icon name="flame" size={12} />
           <span>
-            {def.exhaust ? "Exhaust" : def.retain ? "Retain" : ""}
+            {[
+              ...(def.tags ?? []),
+              ...(def.exhaust ? ["Exhaust"] : []),
+              ...(def.retain ? ["Retain"] : []),
+            ].join(" · ")}
             {preview ? " · Improved" : ""}
           </span>
         </span>
@@ -363,7 +369,14 @@ export function CardView({
 }
 function needsLabel(kinds: string[]) {
   return kinds.some((k) =>
-    ["hit", "all", "defiance", "precision", "shieldStrike"].includes(k),
+    [
+      "hit",
+      "all",
+      "defiance",
+      "precision",
+      "shieldStrike",
+      "spendBlock",
+    ].includes(k),
   )
     ? "Attack"
     : kinds.includes("block") || kinds.includes("resolve")
@@ -437,11 +450,26 @@ export function Rules() {
       </p>
       <h3>Power has a voice</h3>
       <p>
-        Dread stays between 0 and 10. At turn end, each threshold you meet
-        triggers once, low to high. Lower Dread before ending the turn to avoid
-        a pending consequence. Reinforcements wait the phase they arrive, then
-        act on the next one. Triggered thresholds never reset. Defiance rewards
-        Dread 6+, while precision thrives at 3 or less.
+        Dread stays between 0 and 10. New journeys check it every turn before
+        enemies act. At 4–7, the frontmost living enemy gains +2 Attack/Drain
+        for that phase. At 8–10, all living enemies gain +3 instead, then Dread
+        falls by 4. Howls follow this check. Defiance rewards Dread 6+, while
+        precision thrives at 3 or less.
+      </p>
+      <h3>Carry the Ember, complete the mission</h3>
+      <p>
+        Choose a bearer at the first battle of each Act, after drawing your
+        opening hand. That bearer stays locked until you clear the Act,
+        including across encounters and reloads. All heroes' cards remain
+        playable. Mara adds 3 to the first card Block effect each turn. Eryn
+        adds 2 reduction to the first Dread-lowering card. Aldren may add 1
+        Dread for +5 damage to one Spell hit, once per turn.
+      </p>
+      <p>
+        In Escape, Work costs 1 energy and discards a card without playing its
+        effects. Work at most twice per turn. Reach the printed Progress target
+        to win with enemies alive. When danger is gone and remaining Work is
+        guaranteed, the encounter finishes automatically.
       </p>
       <h3>A few words worth knowing</h3>
       <dl>

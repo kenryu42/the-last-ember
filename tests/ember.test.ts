@@ -1,4 +1,7 @@
 import { expect, test } from "bun:test";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { CombatBoard } from "../src/ui/scenes";
 import { cardDef } from "../src/game/content";
 import {
   makeCard,
@@ -78,6 +81,40 @@ test("Act bearer choice precedes actions and stays locked on later turns", () =>
     legalActions(observe(next, "recurring")).some((a) => a.type === "bearer"),
   ).toBe(false);
 });
+test("bearer screen exposes three choices and encounter context, then returns to combat", () => {
+  const run = setup("Mara", ["guard"]);
+  const render = () =>
+    renderToStaticMarkup(
+      createElement(CombatBoard, {
+        run,
+        combat: c(run),
+        dispatch: () => {},
+        selected: null,
+        select: () => {},
+        busy: false,
+        feedback: null,
+        stage: "impact",
+        inspect: () => {},
+        reduced: true,
+      }),
+    );
+  c(run).ember = { window: "choose", bearer: null, used: false };
+  const choice = render();
+  for (const hero of ["Mara", "Eryn", "Aldren"]) {
+    expect(choice).toContain(`aria-label="Choose ${hero}"`);
+    expect(choice).toContain(`/assets/bearer-${hero.toLowerCase()}.webp`);
+  }
+  expect(choice).toContain("Locked for this Act");
+  expect(choice).toContain("cannot change until you clear this Act");
+  expect(choice).toContain("Encounter &amp; opening hand");
+  expect(choice).not.toContain('aria-label="Combat"');
+  c(run).ember = { window: "closed", bearer: "Eryn", used: false };
+  const combat = render();
+  expect(combat).toContain('aria-label="Combat"');
+  expect(combat).not.toContain("bearer-selection");
+  expect(combat).not.toContain("Pass ·");
+});
+
 test("bearer persists through encounters and passive use resets each turn and fight", () => {
   let run = setup("Eryn", ["guard"]);
   c(run).ember = { bearer: "Eryn", window: "closed", used: true };
