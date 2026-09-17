@@ -45,7 +45,7 @@ const nodeSchema = z.object({
   row: z.number().int().min(0).max(5),
   lane: z.number().int().min(0).max(2),
   kind: nodeKindSchema,
-  links: z.array(z.string()),
+  links: z.array(z.string()).max(2),
 });
 export type RouteNode = z.infer<typeof nodeSchema>;
 const combatSchema = z.object({
@@ -91,7 +91,7 @@ const sceneSchema = z.discriminatedUnion("kind", [
   }),
   z.object({ kind: z.literal("ending"), won: z.boolean() }),
 ]);
-export const runSchema = z.object({
+export const runSchema = z.strictObject({
   version: z.literal(1),
   seed: z.string().min(1).max(80),
   rng: z.number().int().nonnegative(),

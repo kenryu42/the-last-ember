@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { generateRoute, newRun, reachable, resolve } from "../src/game/engine";
+import { generateRoute, newRun } from "../src/game/engine";
 import type { RouteNode } from "../src/game/model";
 import {
   createPlaytestRun,
@@ -7,7 +7,6 @@ import {
   PLAYTEST_ENCOUNTERS,
 } from "../src/game/playtest-fixtures";
 import { parseSave } from "../src/game/storage";
-import { journeyAction } from "./support/pilot";
 
 test("each road trades one future option; every full path visits camp and boss", () => {
   for (const seed of [
@@ -112,38 +111,11 @@ test("route contents and RNG, and all 18 benchmark starts, retain their pre-topo
   ).toBe("22f009a371c97336863975846eb19f7271874560320268f3b95f98560ccee619");
 });
 
-test("legacy saved three-exit roads load unchanged and remain playable until a new act", () => {
-  let run = newRun("lantern");
-  for (const node of run.route)
-    if (node.row < 4)
-      node.links = [0, 1, 2]
-        .filter((lane) => Math.abs(lane - node.lane) <= 1)
-        .map((lane) => `${run.act}-${node.row + 1}-${lane}`);
-  const original = structuredClone(run.route);
-  run = resolve(run, { type: "travel", node: "0-0-1" }).run;
-  let checkedCenter = false;
-  for (
-    let i = 0;
-    i < 1000 && run.act === 0 && run.scene.kind !== "ending";
-    i++
-  ) {
-    const loaded = parseSave(JSON.stringify(run));
-    if (loaded.kind !== "valid") throw new Error("Legacy save rejected");
-    expect(loaded.run).toEqual(run);
-    expect(loaded.run.route).toEqual(original);
-    if (run.scene.kind === "map" && run.row === 0) {
-      expect(run.route.filter((node) => reachable(run, node))).toHaveLength(3);
-      checkedCenter = true;
-    }
-    const result = resolve(loaded.run, journeyAction(loaded.run));
-    expect(result.error).toBeNull();
-    run = result.run;
-  }
-  expect(checkedCenter).toBe(true);
-  expect(run.act).toBe(1);
-  expect(run.route.find((n) => n.id === "1-0-1")?.links).toEqual([
-    "1-1-0",
-    "1-1-2",
-  ]);
-  expect(parseSave(JSON.stringify(run)).kind).toBe("valid");
+test("only current roads load; obsolete three-exit roads are rejected", () => {
+  const run = newRun("lantern");
+  expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
+  const node = run.route.find((node) => node.row === 0 && node.lane === 1);
+  if (!node) throw new Error("Missing road");
+  node.links = ["0-1-0", "0-1-1", "0-1-2"];
+  expect(parseSave(JSON.stringify(run)).kind).toBe("error");
 });

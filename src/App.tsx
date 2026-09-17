@@ -26,7 +26,7 @@ const Playtest = import.meta.env?.DEV
     )
   : null;
 
-type Panel = "rules" | "settings" | "new" | "history" | "relics" | null;
+type Panel = "rules" | "settings" | "history" | "relics" | null;
 const delay = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 export function App() {
@@ -42,8 +42,7 @@ export function App() {
   const [panel, setPanel] = useState<Panel>(null),
     [inspection, inspect] = useState<Inspect>(null),
     [inspectedCard, setInspectedCard] = useState<Card | null>(null);
-  const [seed, setSeed] = useState(""),
-    [selected, setSelected] = useState<number | null>(null),
+  const [selected, setSelected] = useState<number | null>(null),
     [busy, setBusy] = useState(false);
   const [visual, setVisual] = useState<Run | null>(null),
     [feedback, setFeedback] = useState<Frame | null>(null),
@@ -53,7 +52,6 @@ export function App() {
     ),
     [saved, setSaved] = useState(true);
   const [tutorial, setTutorial] = useState<number | null>(null);
-  const [imported, setImported] = useState<Run | null>(null);
   const [actingCard, setActingCard] = useState<Card | null>(null);
   const [benchmark, setBenchmark] = useState(false);
   const shown = visual ?? run;
@@ -171,7 +169,6 @@ export function App() {
     if (tutorial === 2 && action.type === "play") setTutorial(3);
     if (tutorial === 3 && action.type === "end") {
       setTutorial(null);
-      updateSettings({ ...settingsRef.current, tutorial: false });
     }
   };
   const select = (card: Card) => {
@@ -189,14 +186,14 @@ export function App() {
     } else void dispatch({ type: "play", uid: card.uid, target: null });
   };
   const begin = () => {
-    const next = newRun(seed || `ember-${Date.now().toString(36)}`);
+    const next = newRun(`ember-${Date.now().toString(36)}`);
     setError("");
     commit(next);
     setTitle(false);
     setPanel(null);
     setFeedback(null);
     setSelected(null);
-    if (settings.tutorial) setTutorial(0);
+    setTutorial(0);
     wakeAudio();
   };
   const exportSave = () => {
@@ -222,7 +219,6 @@ export function App() {
   };
   const closeTutorial = () => {
     setTutorial(null);
-    updateSettings({ ...settings, tutorial: false });
   };
   if (benchmark && Playtest)
     return (
@@ -333,7 +329,7 @@ export function App() {
               className={
                 run && run.scene.kind !== "ending" ? "secondary" : "primary"
               }
-              onClick={() => setPanel("new")}
+              onClick={begin}
             >
               Begin a new journey <Icon name="arrow" size={18} />
             </button>
@@ -424,7 +420,7 @@ export function App() {
                   turns ended
                 </p>
                 <div className="dialog-actions">
-                  <button className="primary" onClick={() => setPanel("new")}>
+                  <button className="primary" onClick={begin}>
                     Carry the light again
                   </button>
                   <button
@@ -499,52 +495,6 @@ export function App() {
             </button>
           </div>
         </aside>
-      )}
-      {panel === "new" && (
-        <Modal title="Carry the last ember" close={() => setPanel(null)}>
-          <p>
-            Cross three lands. Build a shared deck. Bring the light to the
-            mountain beacon.
-          </p>
-          {((run && run.scene.kind !== "ending") ||
-            loaded.kind === "error") && (
-            <p className="warning">
-              Starting a new journey replaces the existing save. Export it from
-              Settings first if you want to keep it.
-            </p>
-          )}
-          <details>
-            <summary>Choose a seed</summary>
-            <label className="field-label">
-              Journey seed
-              <input
-                value={seed}
-                maxLength={80}
-                onChange={(e) => setSeed(e.target.value)}
-                placeholder="Leave blank for a new road"
-              />
-            </label>
-            <p className="muted">
-              The same seed and decisions produce the same journey.
-            </p>
-          </details>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={settings.tutorial}
-              onChange={(e) =>
-                updateSettings({ ...settings, tutorial: e.target.checked })
-              }
-            />{" "}
-            Show the short introduction
-          </label>
-          <button className="primary full" onClick={begin}>
-            {run && run.scene.kind !== "ending"
-              ? "Replace save & begin"
-              : "Begin journey"}{" "}
-            <Icon name="arrow" size={18} />
-          </button>
-        </Modal>
       )}
       {panel === "rules" && (
         <Modal title="How to carry the light" close={() => setPanel(null)}>
@@ -654,7 +604,6 @@ export function App() {
                 disabled={busy}
                 onChange={async (event) => {
                   const file = event.target.files?.[0];
-                  setImported(null);
                   if (!file) return;
                   if (file.size > 1_000_000) {
                     setError("Save files must be smaller than 1 MB.");
@@ -663,8 +612,12 @@ export function App() {
                   try {
                     const parsed = parseSave(await file.text());
                     if (parsed.kind === "valid") {
-                      setImported(parsed.run);
                       setError("");
+                      commit(parsed.run);
+                      setTitle(false);
+                      setPanel(null);
+                      setSelected(null);
+                      setFeedback(null);
                     } else
                       setError(
                         parsed.kind === "error"
@@ -677,29 +630,6 @@ export function App() {
                 }}
               />
             </label>
-            {imported && (
-              <>
-                <p className="warning">
-                  Restore seed {imported.seed}, act {imported.act + 1},{" "}
-                  {imported.hp} health? This replaces your current journey.
-                  Settings stay unchanged.
-                </p>
-                <button
-                  className="primary"
-                  disabled={busy}
-                  onClick={() => {
-                    commit(imported);
-                    setImported(null);
-                    setTitle(false);
-                    setPanel(null);
-                    setSelected(null);
-                    setFeedback(null);
-                  }}
-                >
-                  Replace save & restore
-                </button>
-              </>
-            )}
             {error && (
               <p role="alert" className="warning">
                 {error}

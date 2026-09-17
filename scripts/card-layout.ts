@@ -256,7 +256,7 @@ try {
       await browser(
         "eval",
         `localStorage.setItem('last-ember.run.v1', ${JSON.stringify(save)});
-        localStorage.setItem('last-ember.settings.v1', JSON.stringify({music:0,effects:0,muted:true,reduced:true,shake:false,tutorial:false}));location.reload()`,
+        localStorage.setItem('last-ember.settings.v1', JSON.stringify({music:0,effects:0,muted:true,reduced:true,shake:false}));location.reload()`,
       );
       await browser(
         "wait",

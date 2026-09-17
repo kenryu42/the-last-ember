@@ -1,7 +1,24 @@
 import { expect, test } from "bun:test";
 import { newRun, resolve } from "../src/game/engine";
 import type { Run } from "../src/game/model";
-import { parseSave } from "../src/game/storage";
+import {
+  defaultSettings,
+  parseSave,
+  settingsSchema,
+} from "../src/game/storage";
+
+test("settings accept only the current format", () => {
+  const preferences = {
+    ...defaultSettings,
+    music: 0.1,
+    muted: true,
+    reduced: true,
+  };
+  expect(
+    settingsSchema.safeParse({ ...preferences, tutorial: false }).success,
+  ).toBe(false);
+  expect(settingsSchema.parse(preferences)).toEqual(preferences);
+});
 
 function atBoss(): Run {
   const run = newRun("qa-progression");

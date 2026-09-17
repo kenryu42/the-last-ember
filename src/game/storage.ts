@@ -27,13 +27,12 @@ export function saveVideoSound(enabled: boolean): void {
   }
 }
 
-export const settingsSchema = z.object({
+export const settingsSchema = z.strictObject({
   music: z.number().min(0).max(1),
   effects: z.number().min(0).max(1),
   muted: z.boolean(),
   reduced: z.boolean(),
   shake: z.boolean(),
-  tutorial: z.boolean(),
 });
 export type Settings = z.infer<typeof settingsSchema>;
 export const defaultSettings: Settings = {
@@ -42,7 +41,6 @@ export const defaultSettings: Settings = {
   muted: false,
   reduced: false,
   shake: true,
-  tutorial: true,
 };
 export type Loaded =
   | { kind: "empty" }
@@ -87,8 +85,7 @@ export function parseSave(text: string | null): Loaded {
     if (!result.success)
       return {
         kind: "error",
-        message:
-          "This save is damaged or belongs to an unsupported version. It has not been erased. Export it before starting over.",
+        message: "This save does not match the current game format.",
       };
     const run = result.data,
       s = run.scene;
@@ -153,15 +150,13 @@ export function parseSave(text: string | null): Loaded {
     if (bad)
       return {
         kind: "error",
-        message:
-          "This save has inconsistent game data. It has not been erased. Export it before starting over.",
+        message: "This save has inconsistent game data.",
       };
     return { kind: "valid", run };
   } catch {
     return {
       kind: "error",
-      message:
-        "This save could not be read. It has not been erased. Export it before starting over.",
+      message: "This save could not be read.",
     };
   }
 }

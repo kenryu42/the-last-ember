@@ -61,18 +61,7 @@ try {
   await browser("set", "viewport", "1280", "1000", "2");
   // This dedicated test session owns its disposable normal journey.
   await click("Begin a new journey");
-  await browser(
-    "eval",
-    "(()=>{const e=document.querySelector('dialog input[type=checkbox]');if(e?.checked)e.click()})()",
-  );
-  await click(
-    (await browser(
-      "eval",
-      "[...document.querySelectorAll('dialog button')].some(b=>b.textContent.includes('Replace save'))",
-    ))
-      ? "Replace save & begin"
-      : "Begin journey",
-  );
+  await click("Skip introduction");
   await clickSelector("button.brand");
   const storageBefore = await browser(
     "eval",

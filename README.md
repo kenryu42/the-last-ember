@@ -115,7 +115,8 @@ inspection-layout checks; it is not a balanced playable deck.
   run and ordered presentation snapshots. Invalid actions leave the state untouched.
   All gameplay randomness consumes the stored LCG state; presentation adds none.
 - `src/game/storage.ts`: save/settings boundaries and bounded local result history.
-  Breaking save changes require a version change and an explicit migration policy.
+  This game is unreleased. Breaking changes are fine; do not add migrations or
+  legacy compatibility unless the user explicitly requests them. See `AGENTS.md`.
 - `src/App.tsx`: input lock, immediate canonical commit/autosave, then presentation.
   Timers never determine damage or turn order. Reloading during animation resumes
   the committed result. Reduced motion settles immediately.
@@ -206,10 +207,9 @@ ordering and hit multiplicity. This is a duplicate detector, not proof of balanc
 or of every possible strategic distinction.
 
 Only two card definitions changed. Dread thresholds, boss timing, relics, rewards,
-prices and the test pilot are unchanged. Existing saves retain their IDs, upgrades,
-health and pile order; future plays of existing copies use the revised definitions.
+prices and the test pilot are unchanged. Card copies use the revised definitions.
 The illustrations still fit the concealment and energy-burden roles and contain no
-baked rules text. No new keyword or save-schema migration was needed.
+baked rules text. No new keyword was needed.
 
 Verification after this audit: **94 tests, 10,481 assertions**, typecheck, production
 build and fixture generation pass. The new focused tests failed on the old
