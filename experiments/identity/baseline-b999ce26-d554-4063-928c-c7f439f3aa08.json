@@ -1,0 +1,107 @@
+{
+  "label": "baseline",
+  "prefix": "b999ce26-d554-4063-928c-c7f439f3aa08",
+  "count": 10,
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 0,
+      "losses": 10,
+      "timeouts": 0,
+      "meanHealth": 0,
+      "meanTurns": 16.7
+    },
+    {
+      "bot": "resource",
+      "kind": "fight",
+      "runs": 90,
+      "wins": 90,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 46.477777777777774,
+      "meanTurns": 4.677777777777778
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 7,
+      "losses": 3,
+      "timeouts": 0,
+      "meanHealth": 31.2,
+      "meanTurns": 36
+    },
+    {
+      "bot": "conservative",
+      "kind": "fight",
+      "runs": 90,
+      "wins": 90,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 47.72222222222222,
+      "meanTurns": 5.2555555555555555
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 51.4,
+      "meanTurns": 39.5
+    },
+    {
+      "bot": "search",
+      "kind": "fight",
+      "runs": 90,
+      "wins": 89,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 46.71111111111111,
+      "meanTurns": 6.466666666666667
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 9,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 54,
+      "meanTurns": 35
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "fight",
+      "runs": 90,
+      "wins": 90,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 49.477777777777774,
+      "meanTurns": 5.811111111111111
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 8,
+      "losses": 2,
+      "timeouts": 0,
+      "meanHealth": 41.8,
+      "meanTurns": 34.1
+    },
+    {
+      "bot": "strategic",
+      "kind": "fight",
+      "runs": 90,
+      "wins": 90,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 52.46666666666667,
+      "meanTurns": 4.966666666666667
+    }
+  ]
+}

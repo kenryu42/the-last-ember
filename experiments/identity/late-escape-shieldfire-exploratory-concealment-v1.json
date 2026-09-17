@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-shieldfire-exploratory",
+  "prefix": "concealment-v1",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "shieldfire",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 0,
+      "losses": 2,
+      "timeouts": 0,
+      "meanHealth": 0,
+      "meanTurns": 22.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 68.5,
+      "meanTurns": 30.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 38.5,
+      "meanTurns": 29
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 62.5,
+      "meanTurns": 28.5
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 57.5,
+      "meanTurns": 32
+    }
+  ]
+}

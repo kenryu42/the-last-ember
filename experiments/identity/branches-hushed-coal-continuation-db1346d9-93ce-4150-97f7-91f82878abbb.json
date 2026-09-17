@@ -1,0 +1,59 @@
+{
+  "label": "branches-hushed-coal-continuation",
+  "prefix": "db1346d9-93ce-4150-97f7-91f82878abbb",
+  "count": 4,
+  "progression": "continuation",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 1,
+      "losses": 3,
+      "timeouts": 0,
+      "meanHealth": 3,
+      "meanTurns": 27.75
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 44.25,
+      "meanTurns": 32
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 56.5,
+      "meanTurns": 41.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53.5,
+      "meanTurns": 37.25
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 63.25,
+      "meanTurns": 31
+    }
+  ]
+}

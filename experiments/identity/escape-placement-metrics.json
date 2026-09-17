@@ -1,0 +1,4006 @@
+{
+  "prefixes": [
+    "concealment-v1",
+    "91e30aec-38cb-4b49-abc3-6074271d2247"
+  ],
+  "summary": [
+    {
+      "label": "concealment",
+      "runs": 60,
+      "wins": 55,
+      "timeouts": 0,
+      "objective": {
+        "reached": 60,
+        "work": 204,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 176,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 101,
+        "damageTaken": 249,
+        "completed": 60,
+        "livingAtCompletion": 58,
+        "escapedWithEnemies": 43,
+        "clearedEnemies": 17
+      },
+      "worked": {
+        "strike": 88,
+        "guard": 53,
+        "arrow": 48,
+        "unseen": 15
+      },
+      "played": {
+        "defiance": 9,
+        "flame": 62,
+        "arrow": 2,
+        "guard": 40,
+        "unseen": 28,
+        "strike": 25,
+        "pass": 10
+      }
+    },
+    {
+      "label": "late-escape",
+      "runs": 60,
+      "wins": 53,
+      "timeouts": 0,
+      "objective": {
+        "reached": 60,
+        "work": 230,
+        "acquired_work": 0,
+        "upgraded_work": 12,
+        "play": 208,
+        "acquired_play": 51,
+        "upgraded_play": 29,
+        "turnEnds": 89,
+        "damageTaken": 326,
+        "completed": 60,
+        "livingAtCompletion": 93,
+        "escapedWithEnemies": 55,
+        "clearedEnemies": 5
+      },
+      "worked": {
+        "strike": 77,
+        "arrow": 63,
+        "guard": 62,
+        "unseen": 19,
+        "flame": 2,
+        "defiance": 3,
+        "bread": 2,
+        "pass": 2
+      },
+      "played": {
+        "defiance": 17,
+        "arrow": 15,
+        "challenge": 12,
+        "flame": 25,
+        "strike": 19,
+        "guard": 34,
+        "trail": 11,
+        "unseen": 17,
+        "pass": 19,
+        "bread": 11,
+        "veiled-flame": 7,
+        "scout": 6,
+        "cinder": 1,
+        "rally": 9,
+        "bash": 2,
+        "spark": 2,
+        "feint": 1
+      }
+    }
+  ],
+  "runs": [
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 17,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "strike": 2
+      },
+      "played": {
+        "flame": 1,
+        "arrow": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 57,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 36,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 69,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 30,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 67,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 62,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 41,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 12,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 17,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "strike": 2
+      },
+      "played": {
+        "flame": 1,
+        "arrow": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 30,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 29,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 6,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 67,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 34,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 35,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 37,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 74,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 3,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 14,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 50,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 9,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 2
+      },
+      "played": {
+        "flame": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 43,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 42,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "strike": 3
+      },
+      "played": {
+        "flame": 1,
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 45,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 52,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "unseen": 1,
+        "strike": 3
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 63,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 53,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "unseen": 1,
+        "strike": 3
+      },
+      "played": {
+        "flame": 1,
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 56,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 48,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "strike": 3
+      },
+      "played": {
+        "flame": 1,
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "strike": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 37,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 43,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 55,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 1,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1
+      },
+      "played": {
+        "unseen": 2,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 39,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 47,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 35,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 53,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 21,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "strike": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 60,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 61,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 1,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1
+      },
+      "played": {
+        "unseen": 2,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 38,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 38,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 76,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "unseen": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 47,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 2,
+        "guard": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 12,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 44,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "strike": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 24,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1,
+        "strike": 2
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 40,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "strike": 2
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 55,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 2,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 50,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "arrow": 1,
+        "strike": 1
+      },
+      "played": {
+        "unseen": 2,
+        "flame": 2,
+        "pass": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 67,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 2,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 67,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "guard": 1,
+        "strike": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 1,
+        "strike": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 74,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 2,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 1
+      }
+    },
+    {
+      "label": "concealment",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 50,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "unseen": 1,
+        "strike": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "flame": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 8,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 13,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "arrow": 1,
+        "strike": 1
+      },
+      "played": {
+        "arrow": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 64,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 2
+      },
+      "played": {
+        "flame": 1,
+        "strike": 1,
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 73,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 6,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "trail": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 24,
+      "objective": {
+        "reached": 1,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 53,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 2,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "unseen": 2,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 2,
+        "trail": 1,
+        "pass": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 55,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 2
+      },
+      "played": {
+        "flame": 1,
+        "strike": 1,
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 3,
+        "upgraded_play": 1,
+        "turnEnds": 2,
+        "damageTaken": 6,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 2,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "arrow": 1,
+        "challenge": 1,
+        "trail": 2,
+        "pass": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 37,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 2
+      },
+      "played": {
+        "flame": 1,
+        "strike": 1,
+        "defiance": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 78,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 6,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "trail": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 41,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 8,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 13,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "arrow": 1,
+        "strike": 1
+      },
+      "played": {
+        "arrow": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 23,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 6,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "trail": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 55,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 43,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 2,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "unseen": 2,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 2,
+        "trail": 1,
+        "pass": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 64,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1
+      },
+      "played": {
+        "flame": 2,
+        "strike": 1,
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 3,
+        "upgraded_play": 1,
+        "turnEnds": 2,
+        "damageTaken": 6,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 2,
+        "guard": 1
+      },
+      "played": {
+        "flame": 1,
+        "arrow": 1,
+        "challenge": 1,
+        "trail": 2,
+        "pass": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 52,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 63,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 6,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "trail": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 8,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 12,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 1,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 2,
+        "arrow": 1
+      },
+      "played": {
+        "arrow": 1,
+        "veiled-flame": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 51,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 49,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 2,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "scout": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 48,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 79,
+      "objective": {
+        "reached": 1,
+        "play": 9,
+        "acquired_play": 2,
+        "upgraded_play": 2,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 3,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 3,
+        "unseen": 1
+      },
+      "played": {
+        "guard": 3,
+        "scout": 1,
+        "unseen": 1,
+        "bread": 1,
+        "veiled-flame": 2,
+        "trail": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 42,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 68,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 2,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "scout": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:0",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 77,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "unseen": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "concealment-v1:1",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 42,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 2,
+        "unseen": 1,
+        "strike": 1
+      },
+      "played": {
+        "guard": 1,
+        "cinder": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 45,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1,
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "shieldfire",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 1,
+        "flame": 1,
+        "defiance": 1
+      },
+      "played": {
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 36,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 2,
+        "arrow": 1
+      },
+      "played": {
+        "pass": 1,
+        "rally": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 35,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "arrow": 2
+      },
+      "played": {
+        "flame": 1,
+        "strike": 2,
+        "rally": 1,
+        "scout": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 3,
+        "damageTaken": 9,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "unseen": 1
+      },
+      "played": {
+        "flame": 2,
+        "strike": 1,
+        "unseen": 2,
+        "challenge": 1,
+        "guard": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 2,
+        "upgraded_play": 1,
+        "turnEnds": 3,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "unseen": 1,
+        "guard": 1,
+        "arrow": 1,
+        "strike": 1
+      },
+      "played": {
+        "bash": 1,
+        "guard": 2,
+        "bread": 1,
+        "flame": 1,
+        "strike": 1,
+        "spark": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 9,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "strike": 1,
+        "unseen": 1
+      },
+      "played": {
+        "flame": 2,
+        "strike": 1,
+        "defiance": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 44,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 9,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "bread": 1,
+        "guard": 1
+      },
+      "played": {
+        "rally": 1,
+        "defiance": 1,
+        "arrow": 1,
+        "flame": 1,
+        "guard": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 49,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 10,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "arrow": 1,
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "shieldfire",
+      "outcome": "win",
+      "hp": 30,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 3,
+        "pass": 1
+      },
+      "played": {
+        "flame": 1,
+        "strike": 2,
+        "arrow": 1,
+        "rally": 1,
+        "scout": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 2,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 1,
+        "guard": 1
+      },
+      "played": {
+        "defiance": 1,
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "hushed-coal",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 1,
+        "flame": 1,
+        "defiance": 1
+      },
+      "played": {
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 45,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 2,
+        "arrow": 1
+      },
+      "played": {
+        "pass": 1,
+        "rally": 1,
+        "unseen": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 64,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 6,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 2,
+        "unseen": 1,
+        "guard": 1
+      },
+      "played": {
+        "guard": 1,
+        "defiance": 1,
+        "rally": 1,
+        "flame": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 3,
+        "damageTaken": 9,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "guard": 1,
+        "unseen": 1
+      },
+      "played": {
+        "flame": 2,
+        "strike": 1,
+        "unseen": 2,
+        "challenge": 1,
+        "guard": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 1,
+        "strike": 2,
+        "guard": 1
+      },
+      "played": {
+        "guard": 2,
+        "bash": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 57,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 2,
+        "upgraded_play": 0,
+        "turnEnds": 2,
+        "damageTaken": 9,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "strike": 1,
+        "unseen": 1
+      },
+      "played": {
+        "flame": 2,
+        "strike": 1,
+        "defiance": 1,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 75,
+      "objective": {
+        "reached": 1,
+        "play": 4,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 14,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 2,
+        "arrow": 1
+      },
+      "played": {
+        "pass": 1,
+        "flame": 1,
+        "strike": 1,
+        "feint": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 47,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 2,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 12,
+        "completed": 1,
+        "livingAtCompletion": 0,
+        "escapedWithEnemies": false,
+        "clearedEnemies": true
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "guard": 1,
+        "flame": 2,
+        "arrow": 1,
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "hushed-coal",
+      "outcome": "win",
+      "hp": 61,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 1,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "arrow": 2,
+        "defiance": 1,
+        "guard": 1
+      },
+      "played": {
+        "guard": 1,
+        "unseen": 1,
+        "rally": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 58,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "unseen": 1,
+        "strike": 1,
+        "arrow": 1
+      },
+      "played": {
+        "defiance": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "resource",
+      "relic": "black-lantern",
+      "outcome": "loss",
+      "hp": 0,
+      "objective": {
+        "reached": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "play": 1,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "turnEnds": 1,
+        "damageTaken": 16,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "guard": 2,
+        "arrow": 1
+      },
+      "played": {
+        "arrow": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 35,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 0,
+        "upgraded_play": 2,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 2,
+        "guard": 1
+      },
+      "played": {
+        "pass": 1,
+        "defiance": 1,
+        "veiled-flame": 1,
+        "strike": 1,
+        "guard": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "conservative",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 34,
+      "objective": {
+        "reached": 1,
+        "play": 5,
+        "acquired_play": 2,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 2,
+        "arrow": 1,
+        "strike": 1
+      },
+      "played": {
+        "veiled-flame": 1,
+        "strike": 1,
+        "rally": 1,
+        "spark": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 55,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 3,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 2
+      },
+      "played": {
+        "guard": 2,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 80,
+      "objective": {
+        "reached": 1,
+        "play": 7,
+        "acquired_play": 2,
+        "upgraded_play": 2,
+        "turnEnds": 2,
+        "damageTaken": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "guard": 1,
+        "arrow": 1,
+        "strike": 2
+      },
+      "played": {
+        "guard": 1,
+        "veiled-flame": 1,
+        "strike": 2,
+        "pass": 1,
+        "rally": 1,
+        "scout": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 56,
+      "objective": {
+        "reached": 1,
+        "play": 3,
+        "acquired_play": 1,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 3,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 2,
+        "arrow": 2
+      },
+      "played": {
+        "guard": 2,
+        "challenge": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "search-tempo",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 70,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 1,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 1,
+        "unseen": 1,
+        "bread": 1
+      },
+      "played": {
+        "guard": 1,
+        "pass": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 6,
+        "acquired_play": 0,
+        "upgraded_play": 2,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 0,
+        "turnEnds": 2,
+        "damageTaken": 2,
+        "completed": 1,
+        "livingAtCompletion": 1,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 2,
+        "guard": 1
+      },
+      "played": {
+        "pass": 1,
+        "defiance": 1,
+        "veiled-flame": 1,
+        "strike": 1,
+        "guard": 1,
+        "bread": 1
+      }
+    },
+    {
+      "label": "late-escape",
+      "seed": "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+      "bot": "strategic",
+      "relic": "black-lantern",
+      "outcome": "win",
+      "hp": 65,
+      "objective": {
+        "reached": 1,
+        "play": 2,
+        "acquired_play": 0,
+        "upgraded_play": 0,
+        "work": 4,
+        "acquired_work": 0,
+        "upgraded_work": 1,
+        "turnEnds": 1,
+        "damageTaken": 4,
+        "completed": 1,
+        "livingAtCompletion": 2,
+        "escapedWithEnemies": true,
+        "clearedEnemies": false
+      },
+      "worked": {
+        "strike": 1,
+        "arrow": 1,
+        "unseen": 1,
+        "pass": 1
+      },
+      "played": {
+        "guard": 1,
+        "bread": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "label": "branches-black-lantern-build-aware",
+  "prefix": "identity-followup-v1",
+  "count": 4,
+  "progression": "build-aware",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 3,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 23.5,
+      "meanTurns": 18.75
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53.25,
+      "meanTurns": 21.25
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 72,
+      "meanTurns": 27.75
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 64.5,
+      "meanTurns": 23.75
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 55.5,
+      "meanTurns": 19.25
+    }
+  ]
+}

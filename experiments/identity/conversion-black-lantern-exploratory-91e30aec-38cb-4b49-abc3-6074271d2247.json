@@ -1,0 +1,59 @@
+{
+  "label": "conversion-black-lantern-exploratory",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 4,
+  "progression": "exploratory",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 23.75,
+      "meanTurns": 24.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53.25,
+      "meanTurns": 26.75
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 61.75,
+      "meanTurns": 32.25
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53.25,
+      "meanTurns": 26.75
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 52.5,
+      "meanTurns": 22.75
+    }
+  ]
+}

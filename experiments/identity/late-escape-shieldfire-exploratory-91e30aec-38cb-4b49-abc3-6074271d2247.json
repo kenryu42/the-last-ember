@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-shieldfire-exploratory",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "shieldfire",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 1,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 22.5,
+      "meanTurns": 18.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 35.5,
+      "meanTurns": 35.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 67.5,
+      "meanTurns": 27.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.5,
+      "meanTurns": 31
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 39.5,
+      "meanTurns": 27.5
+    }
+  ]
+}

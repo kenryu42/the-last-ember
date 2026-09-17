@@ -36,14 +36,56 @@ selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
 
-Dread is checked **at turn end**, not when you cast. Lowering it first can prevent
-an untriggered threshold. Each consequence fires once per encounter. Reinforcements
-wait their arrival phase. High-Dread cards remain useful after thresholds fire.
-The Rules dialog explains status durations and the complete combat contract.
+New journeys use **recurring Dread**: at turn end, 4–7 temporarily strengthens
+the front enemy by 2; 8–10 strengthens all enemies by 3 and then loses 4 Dread.
+Howls happen afterward. The opening battle of act two is an Escape: spend 1 energy and
+discard a card to Work toward 4 Progress, at most twice per turn. Choose an
+Ember bearer after drawing the first encounter's opening hand in each Act. That
+bearer stays locked through the Act's fights, camps, shops, and reloads. Choose
+again after a boss reward advances the Act. There is no pass action, cost, or
+control, and every hero's cards remain playable. Bearer passives still reset each
+turn and at the start of each fight.
+New journeys start without a relic or a build-selection step. Ancient
+flame has two upgrades at camps and upgrade events: Veiled Flame for concealment
+or Wildfire for groups. New rewards include Break formation, a zero-energy attack
+that converts all remaining Block into damage instead of preserving it, and
+Fading strike, which lowers Dread before checking its precision damage bonus.
+CLI benchmarks can explicitly select original rules for comparison.
+See [IDENTITY_EXPERIMENT.md](IDENTITY_EXPERIMENT.md) for paired results, limitations,
+and the evidence behind these small card experiments.
+
+Play the current rules autonomously with
+`bun scripts/lab.ts journey --rules recurring --prototype late-escape --relic shieldfire --progression exploratory --games 10 --bot search --seed demo`.
+Record full paired campaigns with
+`bun scripts/identity-campaign.ts late-escape identity-v1 10 shieldfire exploratory`;
+omit the prefix to generate and record fresh entropy seeds. Labels `baseline`,
+`recurring`, `escape` (6 Progress), and `escape-v2` (4 Progress) isolate earlier stages.
+The archived `bearer-v2` label added the earlier encounter-level bearer rules; an
+optional relic argument adds the starting-relic stage. Its bearer and passing
+measurements are historical, not evidence for the current Act-locked rule.
+The default progression policy remains `static`. `build-aware` tests acquiring
+existing support; it does not alter reward eligibility or combat rules.
+`continuation` preserves those acquisition rankings but compares Flame branches
+through sampled combat continuations. It is an experimental evaluator, not an
+optimal policy. `branches` retains the earlier 30-design reward pool;
+`conversion` adds Break formation for 31 reward designs; `concealment` adds
+Fading strike for 32. `exploratory` samples reward choices, including skip, with
+independent seeded randomness; other progression decisions use `build-aware`.
+`late-escape` moves the single Escape to act two's opening, after card rewards,
+without changing its formation or target.
+`exploratory` tests acquisition blind spots, not optimal deckbuilding, and does not alter
+the game's offer generation. Compare constructed cards separately with
+`bun scripts/block-study.ts <fresh-seed> concealment`.
+`sampled` replaces only reward selection with four real combat trials per option,
+including skip, using public deck/relic/health/act information and independent
+fixed seeds. It requires recurring Dread and bearers. It costs up to 16 trial
+fights per reward screen and is diagnostic, not the default policy. Trial outcomes
+are recorded in `rewardEvaluations`; shop and camp rankings remain `build-aware`.
 
 There are 18 stops over three acts: ordinary battles, optional elites, events,
-merchants, camps, and three guardians. The release contains 32 upgradeable cards,
-12 relics, eight events, eight ordinary enemy types, three act-specific elite
+merchants, camps, and three guardians. The game contains 34 base card designs,
+two Ancient flame upgrade branches, 15 relics including three starter-only choices,
+eight events, eight ordinary enemy types, three act-specific elite
 formations, and three bosses with telegraphed phase changes. Victory lights the
 beacon; defeat remembers the fellowship's attempt. Results and custom seeds support
 replay without permanent stat grinding or unlock gates.

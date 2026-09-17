@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-black-lantern-exploratory",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 1,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 29,
+      "meanTurns": 24.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 34.5,
+      "meanTurns": 26.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 67.5,
+      "meanTurns": 33.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 63,
+      "meanTurns": 26
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 65,
+      "meanTurns": 24
+    }
+  ]
+}

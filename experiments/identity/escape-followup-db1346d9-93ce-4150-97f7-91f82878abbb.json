@@ -1,0 +1,624 @@
+{
+  "method": {
+    "rules": "recurring",
+    "encounter": "escape",
+    "decks": [
+      "quiet",
+      "exposed",
+      "defense"
+    ],
+    "targets": [
+      4,
+      5
+    ],
+    "planners": {
+      "work-first": "Take the first legal Work action; otherwise use planV2 at health weight 3.",
+      "threat-first": "Public one-step defense policy with Work removed from its candidate actions.",
+      "health-weighted": "Public planV2 at health weight 8 and budget 256.",
+      "fast-kill": "Public one-step offense policy with Work removed from its candidate actions."
+    },
+    "pareto": "Win and HP are maximized; turn ends are minimized. Surviving enemies after escape have no utility cost. Work and surviving enemies are reported only."
+  },
+  "prefix": "escape-followup-heldout-v1",
+  "freshSeed": "db1346d9-93ce-4150-97f7-91f82878abbb",
+  "seeds": [
+    "escape-followup-heldout-v1:0",
+    "escape-followup-heldout-v1:1",
+    "escape-followup-heldout-v1:2",
+    "escape-followup-heldout-v1:3",
+    "escape-followup-heldout-v1:4",
+    "escape-followup-heldout-v1:5",
+    "escape-followup-heldout-v1:6",
+    "escape-followup-heldout-v1:7",
+    "escape-followup-heldout-v1:8",
+    "escape-followup-heldout-v1:9",
+    "escape-followup-heldout-v1:10",
+    "escape-followup-heldout-v1:11",
+    "escape-followup-heldout-v1:12",
+    "escape-followup-heldout-v1:13",
+    "escape-followup-heldout-v1:14",
+    "escape-followup-heldout-v1:15",
+    "escape-followup-heldout-v1:16",
+    "escape-followup-heldout-v1:17",
+    "escape-followup-heldout-v1:18",
+    "escape-followup-heldout-v1:19",
+    "escape-followup-heldout-v1:20",
+    "escape-followup-heldout-v1:21",
+    "escape-followup-heldout-v1:22",
+    "escape-followup-heldout-v1:23",
+    "fresh:db1346d9-93ce-4150-97f7-91f82878abbb"
+  ],
+  "rows": 2400,
+  "cells": [
+    {
+      "target": 4,
+      "relic": null,
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 62.96,
+      "meanTurns": 1,
+      "meanWork": 4,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 4,
+      "relic": null,
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.65333333333334,
+      "meanTurns": 2.3866666666666667,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": null,
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.45333333333333,
+      "meanTurns": 2.28,
+      "meanWork": 2.72,
+      "meanLivingEnemies": 0.7866666666666666
+    },
+    {
+      "target": 4,
+      "relic": null,
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.01333333333334,
+      "meanTurns": 1.88,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 63.14666666666667,
+      "meanTurns": 1,
+      "meanWork": 4,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.65333333333334,
+      "meanTurns": 2.3066666666666666,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.65333333333334,
+      "meanTurns": 2.2133333333333334,
+      "meanWork": 2.8266666666666667,
+      "meanLivingEnemies": 0.8666666666666667
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.24,
+      "meanTurns": 1.8133333333333332,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 63.13333333333333,
+      "meanTurns": 1,
+      "meanWork": 4,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.65333333333334,
+      "meanTurns": 2.3866666666666667,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.52,
+      "meanTurns": 2.3066666666666666,
+      "meanWork": 2.7333333333333334,
+      "meanLivingEnemies": 0.7866666666666666
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.16,
+      "meanTurns": 1.88,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 62.81333333333333,
+      "meanTurns": 1,
+      "meanWork": 4,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 66.05333333333333,
+      "meanTurns": 2.2533333333333334,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.61333333333333,
+      "meanTurns": 2.1866666666666665,
+      "meanWork": 2.8933333333333335,
+      "meanLivingEnemies": 0.8666666666666667
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.90666666666667,
+      "meanTurns": 1.84,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 60.4,
+      "meanTurns": 2,
+      "meanWork": 5,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.65333333333334,
+      "meanTurns": 2.3866666666666667,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.58666666666667,
+      "meanTurns": 2.7866666666666666,
+      "meanWork": 2.8533333333333335,
+      "meanLivingEnemies": 0.48
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.04,
+      "meanTurns": 1.88,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 60.2,
+      "meanTurns": 2,
+      "meanWork": 5,
+      "meanLivingEnemies": 1.9866666666666666
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.64,
+      "meanTurns": 2.2933333333333334,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.61333333333333,
+      "meanTurns": 2.7333333333333334,
+      "meanWork": 3.066666666666667,
+      "meanLivingEnemies": 0.56
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.24,
+      "meanTurns": 1.8,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 60.053333333333335,
+      "meanTurns": 2,
+      "meanWork": 5,
+      "meanLivingEnemies": 1.9733333333333334
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.65333333333334,
+      "meanTurns": 2.3866666666666667,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.6,
+      "meanTurns": 2.7733333333333334,
+      "meanWork": 2.92,
+      "meanLivingEnemies": 0.5066666666666667
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.18666666666667,
+      "meanTurns": 1.8933333333333333,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "planner": "work-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 60.54666666666667,
+      "meanTurns": 2,
+      "meanWork": 5,
+      "meanLivingEnemies": 1.92
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "planner": "threat-first",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 66.05333333333333,
+      "meanTurns": 2.2533333333333334,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "planner": "health-weighted",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 67.54666666666667,
+      "meanTurns": 2.6133333333333333,
+      "meanWork": 3.0933333333333333,
+      "meanLivingEnemies": 0.5466666666666666
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "planner": "fast-kill",
+      "runs": 75,
+      "wins": 75,
+      "meanHp": 65.88,
+      "meanTurns": 1.84,
+      "meanWork": 0,
+      "meanLivingEnemies": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "target": 4,
+      "relic": null,
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 30,
+      "alternativeDominates": 2,
+      "incomparableOrEqual": 43
+    },
+    {
+      "target": 4,
+      "relic": null,
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 16,
+      "alternativeDominates": 5,
+      "incomparableOrEqual": 54
+    },
+    {
+      "target": 4,
+      "relic": null,
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 25,
+      "alternativeDominates": 9,
+      "incomparableOrEqual": 41
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 30,
+      "alternativeDominates": 2,
+      "incomparableOrEqual": 43
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 14,
+      "alternativeDominates": 6,
+      "incomparableOrEqual": 55
+    },
+    {
+      "target": 4,
+      "relic": "shieldfire",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 22,
+      "alternativeDominates": 9,
+      "incomparableOrEqual": 44
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 30,
+      "alternativeDominates": 2,
+      "incomparableOrEqual": 43
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 15,
+      "alternativeDominates": 5,
+      "incomparableOrEqual": 55
+    },
+    {
+      "target": 4,
+      "relic": "hushed-coal",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 23,
+      "alternativeDominates": 9,
+      "incomparableOrEqual": 43
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 24,
+      "alternativeDominates": 7,
+      "incomparableOrEqual": 44
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 10,
+      "alternativeDominates": 8,
+      "incomparableOrEqual": 57
+    },
+    {
+      "target": 4,
+      "relic": "black-lantern",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 19,
+      "alternativeDominates": 15,
+      "incomparableOrEqual": 41
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 6,
+      "alternativeDominates": 37,
+      "incomparableOrEqual": 32
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 6,
+      "alternativeDominates": 18,
+      "incomparableOrEqual": 51
+    },
+    {
+      "target": 5,
+      "relic": null,
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 3,
+      "alternativeDominates": 54,
+      "incomparableOrEqual": 18
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 5,
+      "alternativeDominates": 37,
+      "incomparableOrEqual": 33
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 10,
+      "alternativeDominates": 18,
+      "incomparableOrEqual": 47
+    },
+    {
+      "target": 5,
+      "relic": "shieldfire",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 3,
+      "alternativeDominates": 57,
+      "incomparableOrEqual": 15
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 6,
+      "alternativeDominates": 37,
+      "incomparableOrEqual": 32
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 7,
+      "alternativeDominates": 20,
+      "incomparableOrEqual": 48
+    },
+    {
+      "target": 5,
+      "relic": "hushed-coal",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 3,
+      "alternativeDominates": 55,
+      "incomparableOrEqual": 17
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "alternative": "threat-first",
+      "pairs": 75,
+      "rushDominates": 4,
+      "alternativeDominates": 41,
+      "incomparableOrEqual": 30
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "alternative": "health-weighted",
+      "pairs": 75,
+      "rushDominates": 7,
+      "alternativeDominates": 25,
+      "incomparableOrEqual": 43
+    },
+    {
+      "target": 5,
+      "relic": "black-lantern",
+      "alternative": "fast-kill",
+      "pairs": 75,
+      "rushDominates": 3,
+      "alternativeDominates": 54,
+      "incomparableOrEqual": 18
+    }
+  ]
+}

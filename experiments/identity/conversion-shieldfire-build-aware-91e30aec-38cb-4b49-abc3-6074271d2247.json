@@ -1,0 +1,59 @@
+{
+  "label": "conversion-shieldfire-build-aware",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 4,
+  "progression": "build-aware",
+  "startingRelic": "shieldfire",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 33.25,
+      "meanTurns": 22.25
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 61,
+      "meanTurns": 24.25
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 73.5,
+      "meanTurns": 27.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 74.5,
+      "meanTurns": 25
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 65.75,
+      "meanTurns": 28.75
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "label": "conversion-hushed-coal-continuation",
+  "prefix": "identity-followup-v1",
+  "count": 4,
+  "progression": "continuation",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 3,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 25.75,
+      "meanTurns": 24
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 47.75,
+      "meanTurns": 34.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 59,
+      "meanTurns": 39
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 43,
+      "meanTurns": 31
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 60.5,
+      "meanTurns": 34
+    }
+  ]
+}

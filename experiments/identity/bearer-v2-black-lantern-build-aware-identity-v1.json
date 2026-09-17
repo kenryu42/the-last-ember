@@ -1,0 +1,59 @@
+{
+  "label": "bearer-v2-black-lantern-build-aware",
+  "prefix": "identity-v1",
+  "count": 10,
+  "progression": "build-aware",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 9,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 36.2,
+      "meanTurns": 18.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 55.9,
+      "meanTurns": 22.1
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 60.3,
+      "meanTurns": 23.7
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 62.8,
+      "meanTurns": 18.7
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 58,
+      "meanTurns": 19.2
+    }
+  ]
+}

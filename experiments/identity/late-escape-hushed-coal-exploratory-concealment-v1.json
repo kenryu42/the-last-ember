@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-hushed-coal-exploratory",
+  "prefix": "concealment-v1",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 1,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 20.5,
+      "meanTurns": 26
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 44,
+      "meanTurns": 28.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 49,
+      "meanTurns": 29.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 67,
+      "meanTurns": 24.5
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 57.5,
+      "meanTurns": 28
+    }
+  ]
+}

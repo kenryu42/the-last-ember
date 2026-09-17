@@ -1,0 +1,107 @@
+{
+  "label": "bearer",
+  "prefix": "identity-v1",
+  "count": 10,
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 8,
+      "losses": 2,
+      "timeouts": 0,
+      "meanHealth": 22.6,
+      "meanTurns": 23.9
+    },
+    {
+      "bot": "resource",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53.75833333333333,
+      "meanTurns": 4.05
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 46.3,
+      "meanTurns": 30.6
+    },
+    {
+      "bot": "conservative",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 58.13333333333333,
+      "meanTurns": 4.4
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 67,
+      "meanTurns": 36.5
+    },
+    {
+      "bot": "search",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 60.9,
+      "meanTurns": 4.75
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.6,
+      "meanTurns": 32.3
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 60.49166666666667,
+      "meanTurns": 4.466666666666667
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.2,
+      "meanTurns": 29.5
+    },
+    {
+      "bot": "strategic",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 59.75,
+      "meanTurns": 4.183333333333334
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "label": "concealment-hushed-coal-build-aware",
+  "prefix": "concealment-v1",
+  "count": 4,
+  "progression": "build-aware",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 3,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 15,
+      "meanTurns": 28.75
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 46.75,
+      "meanTurns": 30.75
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 67.75,
+      "meanTurns": 37.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 52.25,
+      "meanTurns": 32.25
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 53,
+      "meanTurns": 29.25
+    }
+  ]
+}

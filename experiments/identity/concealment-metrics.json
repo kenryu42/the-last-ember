@@ -1,0 +1,617 @@
+{
+  "prefixes": [
+    "concealment-v1",
+    "91e30aec-38cb-4b49-abc3-6074271d2247"
+  ],
+  "journeys": [
+    {
+      "label": "conversion",
+      "policy": "build-aware",
+      "relic": "shieldfire",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "win": 38,
+      "hp": 2259,
+      "turns": 1035,
+      "rewardScreens": 227,
+      "skipped": 21,
+      "loss": 2,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 12,
+          "offered": 23,
+          "selected": 11,
+          "play": 54,
+          "positiveBlockPlays": 29,
+          "aboveLowBandPlays": 28,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "conversion",
+      "policy": "build-aware",
+      "relic": "hushed-coal",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 3,
+      "hp": 2024,
+      "turns": 1364,
+      "rewardScreens": 228,
+      "skipped": 26,
+      "win": 37,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 0,
+          "offered": 24,
+          "selected": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "conversion",
+      "policy": "build-aware",
+      "relic": "black-lantern",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "win": 40,
+      "hp": 2311,
+      "turns": 1000,
+      "rewardScreens": 236,
+      "skipped": 24,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 0,
+          "offered": 23,
+          "selected": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "conversion",
+      "policy": "exploratory",
+      "relic": "shieldfire",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 1,
+      "hp": 1900,
+      "turns": 1240,
+      "rewardScreens": 233,
+      "skipped": 55,
+      "win": 39,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 8,
+          "offered": 23,
+          "selected": 6,
+          "play": 54,
+          "positiveBlockPlays": 37,
+          "aboveLowBandPlays": 19,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "conversion",
+      "policy": "exploratory",
+      "relic": "hushed-coal",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 3,
+      "hp": 1814,
+      "turns": 1333,
+      "rewardScreens": 233,
+      "skipped": 52,
+      "win": 37,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 2,
+          "offered": 21,
+          "selected": 3,
+          "play": 23,
+          "positiveBlockPlays": 10,
+          "aboveLowBandPlays": 11,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "conversion",
+      "policy": "exploratory",
+      "relic": "black-lantern",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "win": 38,
+      "hp": 1948,
+      "turns": 1047,
+      "rewardScreens": 225,
+      "skipped": 54,
+      "loss": 2,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 8,
+          "offered": 20,
+          "selected": 8,
+          "play": 37,
+          "positiveBlockPlays": 30,
+          "aboveLowBandPlays": 12,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 0,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "build-aware",
+      "relic": "shieldfire",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 2,
+      "hp": 2052,
+      "turns": 1065,
+      "rewardScreens": 226,
+      "skipped": 24,
+      "win": 38,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 7,
+          "offered": 11,
+          "selected": 7,
+          "play": 48,
+          "positiveBlockPlays": 43,
+          "aboveLowBandPlays": 25,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 18,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "build-aware",
+      "relic": "hushed-coal",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 1,
+      "hp": 1932,
+      "turns": 1223,
+      "rewardScreens": 227,
+      "skipped": 32,
+      "win": 39,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 0,
+          "offered": 21,
+          "selected": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 12,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "build-aware",
+      "relic": "black-lantern",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 2,
+      "hp": 2245,
+      "turns": 960,
+      "rewardScreens": 221,
+      "skipped": 32,
+      "win": 38,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 0,
+          "offered": 23,
+          "selected": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 26,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "exploratory",
+      "relic": "shieldfire",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 4,
+      "hp": 1709,
+      "turns": 1110,
+      "rewardScreens": 236,
+      "skipped": 54,
+      "win": 36,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 10,
+          "offered": 18,
+          "selected": 3,
+          "play": 51,
+          "positiveBlockPlays": 39,
+          "aboveLowBandPlays": 26,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 3,
+          "offered": 19,
+          "selected": 3,
+          "play": 24,
+          "positiveBlockPlays": 18,
+          "aboveLowBandPlays": 7,
+          "dreadReduced": 29,
+          "crossedLowBand": 7,
+          "erynActivations": 1
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "exploratory",
+      "relic": "hushed-coal",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "loss": 4,
+      "hp": 1561,
+      "turns": 1207,
+      "rewardScreens": 240,
+      "skipped": 66,
+      "win": 36,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 6,
+          "offered": 28,
+          "selected": 6,
+          "play": 19,
+          "positiveBlockPlays": 14,
+          "aboveLowBandPlays": 9,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 5,
+          "offered": 16,
+          "selected": 5,
+          "play": 28,
+          "positiveBlockPlays": 19,
+          "aboveLowBandPlays": 11,
+          "dreadReduced": 37,
+          "crossedLowBand": 6,
+          "erynActivations": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "exploratory",
+      "relic": "black-lantern",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:1",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:2",
+        "91e30aec-38cb-4b49-abc3-6074271d2247:3",
+        "concealment-v1:0",
+        "concealment-v1:1",
+        "concealment-v1:2",
+        "concealment-v1:3"
+      ],
+      "runs": 40,
+      "win": 40,
+      "hp": 1824,
+      "turns": 966,
+      "rewardScreens": 221,
+      "skipped": 56,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 6,
+          "offered": 24,
+          "selected": 6,
+          "play": 11,
+          "positiveBlockPlays": 7,
+          "aboveLowBandPlays": 5,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 4,
+          "offered": 18,
+          "selected": 4,
+          "play": 23,
+          "positiveBlockPlays": 18,
+          "aboveLowBandPlays": 17,
+          "dreadReduced": 42,
+          "crossedLowBand": 13,
+          "erynActivations": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "sampled",
+      "relic": "shieldfire",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "concealment-v1:0"
+      ],
+      "runs": 10,
+      "win": 10,
+      "hp": 552,
+      "turns": 314,
+      "evaluationTrials": 928,
+      "evaluationWins": 928,
+      "evaluationTimeouts": 0,
+      "rewardScreens": 58,
+      "skipped": 24,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 1,
+          "offered": 8,
+          "selected": 1,
+          "play": 3,
+          "positiveBlockPlays": 2,
+          "aboveLowBandPlays": 3,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 13,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "sampled",
+      "relic": "hushed-coal",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "concealment-v1:0"
+      ],
+      "runs": 10,
+      "loss": 1,
+      "hp": 427,
+      "turns": 328,
+      "evaluationTrials": 928,
+      "evaluationWins": 889,
+      "evaluationTimeouts": 0,
+      "rewardScreens": 58,
+      "skipped": 23,
+      "win": 9,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 0,
+          "offered": 7,
+          "selected": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 10,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "label": "concealment",
+      "policy": "sampled",
+      "relic": "black-lantern",
+      "seeds": [
+        "91e30aec-38cb-4b49-abc3-6074271d2247:0",
+        "concealment-v1:0"
+      ],
+      "runs": 10,
+      "loss": 1,
+      "hp": 499,
+      "turns": 263,
+      "evaluationTrials": 880,
+      "evaluationWins": 870,
+      "evaluationTimeouts": 0,
+      "rewardScreens": 55,
+      "skipped": 18,
+      "win": 9,
+      "cards": {
+        "break-formation": {
+          "finalDecks": 3,
+          "offered": 8,
+          "selected": 3,
+          "play": 22,
+          "positiveBlockPlays": 12,
+          "aboveLowBandPlays": 7,
+          "dreadReduced": 0,
+          "crossedLowBand": 0,
+          "erynActivations": 0
+        },
+        "fading-strike": {
+          "finalDecks": 0,
+          "offered": 7,
+          "selected": 0
+        }
+      }
+    }
+  ],
+  "constructed": {
+    "runs": 864,
+    "wins": 864,
+    "timeouts": 0,
+    "seeds": [
+      "14aed60e-fd7d-4c24-924f-3c3c498cd965",
+      "block-study-v1:0",
+      "block-study-v1:1",
+      "block-study-v1:2",
+      "block-study-v1:3",
+      "block-study-v1:4"
+    ],
+    "pairs": {
+      "needle": {
+        "pairs": 288,
+        "hpOld": 53,
+        "fasterOld": 72,
+        "hpTie": 165,
+        "turnTie": 177,
+        "hpNew": 70,
+        "fasterNew": 39
+      },
+      "silence": {
+        "pairs": 288,
+        "hpNew": 68,
+        "turnTie": 189,
+        "hpOld": 45,
+        "fasterNew": 86,
+        "fasterOld": 13,
+        "hpTie": 175
+      }
+    }
+  }
+}

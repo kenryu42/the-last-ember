@@ -1,0 +1,59 @@
+{
+  "label": "branches-shieldfire-build-aware",
+  "prefix": "identity-v1",
+  "count": 10,
+  "progression": "build-aware",
+  "startingRelic": "shieldfire",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 9,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 40.1,
+      "meanTurns": 24.2
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 61.7,
+      "meanTurns": 27.5
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 69.7,
+      "meanTurns": 33.4
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 63.7,
+      "meanTurns": 32.4
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 66.1,
+      "meanTurns": 28.3
+    }
+  ]
+}

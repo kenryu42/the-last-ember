@@ -1,0 +1,59 @@
+{
+  "label": "conversion-black-lantern-exploratory",
+  "prefix": "concealment-v1",
+  "count": 4,
+  "progression": "exploratory",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 2,
+      "losses": 2,
+      "timeouts": 0,
+      "meanHealth": 7.5,
+      "meanTurns": 19.25
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 61,
+      "meanTurns": 24
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 57.75,
+      "meanTurns": 35
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 60,
+      "meanTurns": 27.25
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 4,
+      "wins": 4,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 56.25,
+      "meanTurns": 23.25
+    }
+  ]
+}

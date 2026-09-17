@@ -1,0 +1,107 @@
+{
+  "label": "escape-v2",
+  "prefix": "b999ce26-d554-4063-928c-c7f439f3aa08",
+  "count": 10,
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 3,
+      "losses": 7,
+      "timeouts": 0,
+      "meanHealth": 8.8,
+      "meanTurns": 25.6
+    },
+    {
+      "bot": "resource",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 52.166666666666664,
+      "meanTurns": 4.083333333333333
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 8,
+      "losses": 2,
+      "timeouts": 0,
+      "meanHealth": 38.2,
+      "meanTurns": 33.5
+    },
+    {
+      "bot": "conservative",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.19166666666667,
+      "meanTurns": 4.575
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 9,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 54,
+      "meanTurns": 34.5
+    },
+    {
+      "bot": "search",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 55.583333333333336,
+      "meanTurns": 5.025
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 55.3,
+      "meanTurns": 30
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 56.24166666666667,
+      "meanTurns": 4.483333333333333
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 50.7,
+      "meanTurns": 32.6
+    },
+    {
+      "bot": "strategic",
+      "kind": "fight",
+      "runs": 120,
+      "wins": 120,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 57.516666666666666,
+      "meanTurns": 4.275
+    }
+  ]
+}

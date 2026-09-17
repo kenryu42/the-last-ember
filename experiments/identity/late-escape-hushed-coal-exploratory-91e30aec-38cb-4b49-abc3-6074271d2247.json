@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-hushed-coal-exploratory",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 1,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 1,
+      "meanTurns": 21
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.5,
+      "meanTurns": 34
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 70,
+      "meanTurns": 29
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 66,
+      "meanTurns": 36
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54,
+      "meanTurns": 32
+    }
+  ]
+}

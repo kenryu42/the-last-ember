@@ -1,0 +1,59 @@
+{
+  "label": "late-escape-black-lantern-exploratory",
+  "prefix": "concealment-v1",
+  "count": 2,
+  "progression": "exploratory",
+  "startingRelic": "black-lantern",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 1,
+      "losses": 1,
+      "timeouts": 0,
+      "meanHealth": 6,
+      "meanTurns": 21
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 50,
+      "meanTurns": 21
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 63.5,
+      "meanTurns": 28.5
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 55,
+      "meanTurns": 25
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 2,
+      "wins": 2,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 59.5,
+      "meanTurns": 20.5
+    }
+  ]
+}

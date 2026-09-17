@@ -1,0 +1,59 @@
+{
+  "label": "concealment-shieldfire-sampled",
+  "prefix": "91e30aec-38cb-4b49-abc3-6074271d2247",
+  "count": 1,
+  "progression": "sampled",
+  "startingRelic": "shieldfire",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 1,
+      "wins": 1,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 7,
+      "meanTurns": 22
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 1,
+      "wins": 1,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 48,
+      "meanTurns": 43
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 1,
+      "wins": 1,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 79,
+      "meanTurns": 42
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 1,
+      "wins": 1,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 62,
+      "meanTurns": 29
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 1,
+      "wins": 1,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 63,
+      "meanTurns": 33
+    }
+  ]
+}

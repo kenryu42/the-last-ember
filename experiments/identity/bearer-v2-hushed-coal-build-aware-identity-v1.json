@@ -1,0 +1,59 @@
+{
+  "label": "bearer-v2-hushed-coal-build-aware",
+  "prefix": "identity-v1",
+  "count": 10,
+  "progression": "build-aware",
+  "startingRelic": "hushed-coal",
+  "summary": [
+    {
+      "bot": "resource",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 6,
+      "losses": 4,
+      "timeouts": 0,
+      "meanHealth": 13.1,
+      "meanTurns": 22.9
+    },
+    {
+      "bot": "conservative",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 56.6,
+      "meanTurns": 34.7
+    },
+    {
+      "bot": "search",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 69.6,
+      "meanTurns": 37.3
+    },
+    {
+      "bot": "search-tempo",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 54.2,
+      "meanTurns": 34.4
+    },
+    {
+      "bot": "strategic",
+      "kind": "journey",
+      "runs": 10,
+      "wins": 10,
+      "losses": 0,
+      "timeouts": 0,
+      "meanHealth": 61.5,
+      "meanTurns": 33.1
+    }
+  ]
+}
