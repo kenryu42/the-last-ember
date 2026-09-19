@@ -1580,27 +1580,27 @@ input[type="range"] {
   animation: scene-enter 0.45s ease-out;
 }
 .enemy-unit.anticipate.cue-enemy {
-  animation: windup 0.2s ease-out;
+  animation: windup var(--combat-travel) ease-out;
 }
 .enemy-unit.impact.cue-blade .enemy-art,
 .enemy-unit.impact.cue-arrow .enemy-art,
 .enemy-unit.impact.cue-spell .enemy-art {
-  animation: recoil 0.28s ease-out;
+  animation: recoil var(--combat-impact) ease-out;
 }
 .enemy-unit.impact.cue-enemy {
-  animation: lunge 0.28s ease-out;
+  animation: lunge var(--combat-impact) ease-out;
 }
 .party-hit {
-  animation: party-hit 0.28s ease-out;
+  animation: party-hit var(--combat-impact) ease-out;
 }
 .party-shield {
-  animation: shield-glow 0.25s ease-out;
+  animation: shield-glow var(--combat-impact) ease-out;
 }
 .party-heal {
-  animation: heal-glow 0.25s ease-out;
+  animation: heal-glow var(--combat-impact) ease-out;
 }
 .dread-awakens .dread-meter {
-  animation: dread-pulse 0.23s ease-out;
+  animation: dread-pulse var(--combat-impact) ease-out;
 }
 @keyframes dread-pulse {
   45% {

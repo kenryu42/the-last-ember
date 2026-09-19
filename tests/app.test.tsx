@@ -5,6 +5,27 @@ import { CARDS } from "../src/game/content";
 import { makeCard, newRun, resolve, startCombat } from "../src/game/engine";
 import { CardView } from "../src/ui/components";
 import { CombatBoard } from "../src/ui/scenes";
+import { attackTiming } from "../src/ui/combat-effects";
+
+test.each([
+  ["blade", false, 360, 420],
+  ["arrow", false, 360, 420],
+  ["enemy", false, 300, 420],
+  ["spell", false, 510, 480],
+  ["spell", true, 630, 480],
+  ["draw", false, 90, 135],
+  ["shield", false, 90, 390],
+] as const)(
+  "%s timing scales travel and impact together",
+  (cue, powerful, travel, impact) => {
+    for (const speed of [0.5, 1, 1.25, 2]) {
+      expect(attackTiming(cue, powerful, speed)).toEqual({
+        travel: travel / speed,
+        impact: impact / speed,
+      });
+    }
+  },
+);
 
 test("auto-end requires zero energy and no playable free cards", () => {
   const run = newRun("auto-end");

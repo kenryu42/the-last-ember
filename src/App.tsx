@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { ACTS, RELICS, cardDef, needsTarget } from "./game/content";
 import { cardCost, newRun, resolve } from "./game/engine";
 import type { Action, Card, Frame, Run } from "./game/model";
@@ -70,6 +71,7 @@ export function App() {
     [saved, setSaved] = useState(true);
   const [tutorial, setTutorial] = useState<number | null>(null);
   const [actingCard, setActingCard] = useState<Card | null>(null);
+  const [animationSpeed, setAnimationSpeed] = useState(settings.gameplaySpeed);
   const [benchmark, setBenchmark] = useState(false);
   const shown = visual ?? run;
   useEffect(() => {
@@ -114,6 +116,8 @@ export function App() {
     setSelected(null);
     setError("");
     setFeedback(null);
+    const speed = settingsRef.current.gameplaySpeed;
+    setAnimationSpeed(speed);
     const playedCard =
       action.type === "play" && before.scene.kind === "combat"
         ? (before.scene.hand.find((card) => card.uid === action.uid) ?? null)
@@ -143,7 +147,7 @@ export function App() {
                 opacity: 0,
               },
             ],
-            { duration: 360, easing: "cubic-bezier(.3,0,.5,1)" },
+            { duration: 540 / speed, easing: "cubic-bezier(.3,0,.5,1)" },
           );
           animation.onfinish = () => ghost.remove();
         }
@@ -158,7 +162,7 @@ export function App() {
         setFeedback(frame);
         setStage("anticipate");
         const powerful = powerfulCard(playedCard);
-        const timing = attackTiming(frame.cue, powerful);
+        const timing = attackTiming(frame.cue, powerful, speed);
         if (["blade", "arrow", "spell", "enemy"].includes(frame.cue))
           sound(frame.cue, { phase: "launch", blocked: false, powerful });
         await delay(timing.travel);
@@ -255,18 +259,34 @@ export function App() {
         <Playtest close={() => setBenchmark(false)} />
       </Suspense>
     );
+  const timing = attackTiming(
+    feedback?.cue ?? "draw",
+    powerfulCard(actingCard),
+    animationSpeed,
+  );
+  const presentationStyle: CSSProperties & {
+    "--combat-travel": string;
+    "--combat-impact": string;
+  } = {
+    backgroundImage: `url(/assets/${title ? "forest" : (ACTS[shown?.act ?? 0]?.file ?? "forest")}.webp)`,
+    "--combat-travel": `${timing.travel}ms`,
+    "--combat-impact": `${timing.impact}ms`,
+  };
   return (
     <main
       className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !title ? "in-combat" : ""}`}
-      style={{
-        backgroundImage: `url(/assets/${title ? "forest" : (ACTS[shown?.act ?? 0]?.file ?? "forest")}.webp)`,
-      }}
+      style={presentationStyle}
       onPointerDown={wakeAudio}
       onKeyDown={wakeAudio}
     >
       <div className="atmosphere" aria-hidden="true" />
       {!title && busy && feedback && !settings.reduced && (
-        <CombatEffects frame={feedback} stage={stage} card={actingCard} />
+        <CombatEffects
+          frame={feedback}
+          stage={stage}
+          card={actingCard}
+          speed={animationSpeed}
+        />
       )}
       <header className="topbar">
         <button
@@ -533,6 +553,28 @@ export function App() {
       {panel === "settings" && (
         <Modal title="By your own light" close={() => setPanel(null)}>
           <div className="settings-fields">
+            <label>
+              Gameplay speed <span>{settings.gameplaySpeed}×</span>
+              <input
+                aria-label="Gameplay speed"
+                aria-describedby="gameplay-speed-help"
+                type="range"
+                min="0.5"
+                max="2"
+                step="0.25"
+                value={settings.gameplaySpeed}
+                onChange={(e) =>
+                  updateSettings({
+                    ...settings,
+                    gameplaySpeed: Number(e.target.value),
+                  })
+                }
+              />
+            </label>
+            <small id="gameplay-speed-help">
+              0.5× slower · 1× default · 2× faster. Applies to the next action.
+              Reduced motion skips animations at any speed.
+            </small>
             <label className="toggle">
               <input
                 type="checkbox"

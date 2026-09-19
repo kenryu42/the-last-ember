@@ -39,6 +39,7 @@ export const settingsSchema = z.strictObject({
   muted: z.boolean(),
   reduced: z.boolean(),
   shake: z.boolean(),
+  gameplaySpeed: z.number().min(0.5).max(2),
 });
 export type Settings = z.infer<typeof settingsSchema>;
 export const defaultSettings: Settings = {
@@ -47,6 +48,7 @@ export const defaultSettings: Settings = {
   muted: false,
   reduced: false,
   shake: true,
+  gameplaySpeed: 1,
 };
 export type Loaded =
   | { kind: "empty" }

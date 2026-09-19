@@ -161,7 +161,9 @@ inspection-layout checks; it is not a balanced playable deck.
   legacy compatibility unless the user explicitly requests them. See `AGENTS.md`.
 - `src/App.tsx`: input lock, immediate canonical commit/autosave, then presentation.
   Timers never determine damage or turn order. Reloading during animation resumes
-  the committed result. Reduced motion settles immediately.
+  the committed result. Settings persist gameplay speed from 0.5× to 2×, with
+  1× as the default. Speed changes apply to the next action and scale combat
+  effects and reactions together. Reduced motion settles immediately at any speed.
 - `src/ui/`: scene rendering, card/inspection components, local audio, responsive CSS.
 - `src/ui/combat-effects.tsx`: presentation-only sword arcs, arrows, fireballs, and
   impacts. Geometry is measured once per effect. Damage snapshots and impact sounds

@@ -20,6 +20,23 @@ test("settings accept only the current format", () => {
   expect(settingsSchema.parse(preferences)).toEqual(preferences);
 });
 
+test("gameplay speed defaults to 1 and accepts only the supported range", () => {
+  expect(defaultSettings.gameplaySpeed).toBe(1);
+  for (const gameplaySpeed of [0.5, 1, 1.25, 2]) {
+    const preferences = { ...defaultSettings, gameplaySpeed };
+    expect(
+      settingsSchema.parse(JSON.parse(JSON.stringify(preferences))),
+    ).toEqual(preferences);
+  }
+  for (const gameplaySpeed of [0, 0.49, 2.01, Infinity, NaN, "1", null]) {
+    expect(
+      settingsSchema.safeParse({ ...defaultSettings, gameplaySpeed }).success,
+    ).toBe(false);
+  }
+  const { gameplaySpeed, ...missingSpeed } = defaultSettings;
+  expect(settingsSchema.safeParse(missingSpeed).success).toBe(false);
+});
+
 test("saves require explicit rules and reject obsolete fields without conversion", () => {
   for (const rules of ["original", "recurring"] as const) {
     const run = newRun("current-format", rules);

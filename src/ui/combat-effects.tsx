@@ -8,11 +8,16 @@ import "./combat-effects.css";
 export function powerfulCard(card: Card | null) {
   return card !== null && (card.upgraded || cardDef(card.def).cost >= 2);
 }
-export function attackTiming(cue: Cue, powerful: boolean) {
-  if (cue === "spell") return { travel: powerful ? 420 : 340, impact: 320 };
-  if (cue === "blade" || cue === "arrow") return { travel: 240, impact: 280 };
-  if (cue === "enemy") return { travel: 200, impact: 280 };
-  return { travel: 60, impact: cue === "draw" ? 90 : 260 };
+export function attackTiming(cue: Cue, powerful: boolean, speed: number) {
+  const timing =
+    cue === "spell"
+      ? { travel: powerful ? 630 : 510, impact: 480 }
+      : cue === "blade" || cue === "arrow"
+        ? { travel: 360, impact: 420 }
+        : cue === "enemy"
+          ? { travel: 300, impact: 420 }
+          : { travel: 90, impact: cue === "draw" ? 135 : 390 };
+  return { travel: timing.travel / speed, impact: timing.impact / speed };
 }
 
 type Geometry = { x: number; y: number; dx: number; dy: number; angle: number };
@@ -29,14 +34,16 @@ export function CombatEffects({
   frame,
   stage,
   card,
+  speed,
 }: {
   frame: Frame;
   stage: "anticipate" | "impact";
   card: Card | null;
+  speed: number;
 }) {
   const [geometry, setGeometry] = useState<Geometry | null>(null);
   const powerful = powerfulCard(card);
-  const timing = attackTiming(frame.cue, powerful);
+  const timing = attackTiming(frame.cue, powerful, speed);
   useLayoutEffect(() => {
     const owner = card ? cardDef(card.def).owner : "Mara";
     const party = document
@@ -145,7 +152,7 @@ export function CombatEffects({
               key={i}
               style={{
                 rotate: `${i * 137.5}deg`,
-                animationDelay: `${(i % 3) * 12}ms`,
+                animationDelay: `${((i % 3) * 18) / speed}ms`,
               }}
             />
           ))}
