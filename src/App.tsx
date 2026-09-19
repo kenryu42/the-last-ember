@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ACTS, RELICS, cardDef, needsTarget } from "./game/content";
-import { newRun, resolve } from "./game/engine";
+import { cardCost, newRun, resolve } from "./game/engine";
 import type { Action, Card, Frame, Run } from "./game/model";
 import {
   SAVE_KEY,
@@ -29,6 +29,23 @@ const Playtest = import.meta.env?.DEV
 type Panel = "rules" | "settings" | "history" | "relics" | null;
 const delay = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+export function shouldAutoEndTurn(run: Run) {
+  const combat = run.scene;
+  return (
+    combat.kind === "combat" &&
+    combat.energy === 0 &&
+    combat.ember?.window !== "choose" &&
+    !combat.hand.some((card) => {
+      const def = cardDef(card.def);
+      return (
+        cardCost(run, combat, def) === 0 &&
+        (!needsTarget(def) || combat.enemies.some((enemy) => enemy.hp > 0))
+      );
+    })
+  );
+}
+
 export function App() {
   const [loaded] = useState(loadRun),
     [run, setRun] = useState<Run | null>(
@@ -166,10 +183,14 @@ export function App() {
     setVisual(null);
     locked.current = false;
     setBusy(false);
-    if (tutorial === 2 && action.type === "play") setTutorial(3);
-    if (tutorial === 3 && action.type === "end") {
-      setTutorial(null);
-    }
+    setTutorial((step) =>
+      step === 2 && action.type === "play"
+        ? 3
+        : step === 3 && action.type === "end"
+          ? null
+          : step,
+    );
+    if (shouldAutoEndTurn(result.run)) await dispatch({ type: "end" });
   };
   const select = (card: Card) => {
     wakeAudio();

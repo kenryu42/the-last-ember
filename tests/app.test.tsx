@@ -1,10 +1,87 @@
 import { expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
-import { App } from "../src/App";
+import { App, shouldAutoEndTurn } from "../src/App";
 import { CARDS } from "../src/game/content";
-import { newRun, startCombat } from "../src/game/engine";
+import { makeCard, newRun, resolve, startCombat } from "../src/game/engine";
 import { CardView } from "../src/ui/components";
 import { CombatBoard } from "../src/ui/scenes";
+
+test("auto-end requires zero energy and no playable free cards", () => {
+  const run = newRun("auto-end");
+  expect(shouldAutoEndTurn(run)).toBe(false);
+  startCombat(run, "battle");
+  if (run.scene.kind !== "combat") throw new Error("Expected combat");
+  const combat = run.scene;
+  combat.hand = [makeCard(run, "guard")];
+  combat.energy = 1;
+  expect(shouldAutoEndTurn(run)).toBe(false);
+  combat.energy = 0;
+  expect(shouldAutoEndTurn(run)).toBe(true);
+  combat.hand.push(makeCard(run, "feint"));
+  expect(shouldAutoEndTurn(run)).toBe(false);
+  combat.enemies.forEach((enemy) => {
+    enemy.hp = 0;
+  });
+  expect(shouldAutoEndTurn(run)).toBe(true);
+  combat.hand = [];
+  expect(shouldAutoEndTurn(run)).toBe(true);
+  combat.ember = { window: "choose", bearer: null, used: false };
+  expect(shouldAutoEndTurn(run)).toBe(false);
+});
+
+test("auto-end honors effective costs and consumed discounts", () => {
+  const run = newRun("auto-end-discount");
+  startCombat(run, "battle");
+  if (run.scene.kind !== "combat") throw new Error("Expected combat");
+  run.scene.energy = 0;
+  run.scene.hand = [makeCard(run, "cinder")];
+  expect(shouldAutoEndTurn(run)).toBe(true);
+  run.relics = ["black-lantern"];
+  expect(shouldAutoEndTurn(run)).toBe(false);
+  run.scene.relicTurn = {
+    lanternUsed: true,
+    coalUsed: false,
+  };
+  expect(shouldAutoEndTurn(run)).toBe(true);
+});
+
+test("auto-end checks resolved draws and energy gains, then the last free card", () => {
+  const run = newRun("auto-end-effects");
+  startCombat(run, "battle");
+  if (run.scene.kind !== "combat") throw new Error("Expected combat");
+  run.scene.energy = 1;
+  const guard = makeCard(run, "guard"),
+    scout = makeCard(run, "scout");
+  const rally = makeCard(run, "rally"),
+    courage = makeCard(run, "courage");
+  run.scene.hand = [guard, scout];
+  run.scene.draw = [rally, courage];
+  let result = resolve(run, { type: "play", uid: guard.uid, target: null });
+  expect(result.error).toBeNull();
+  expect(shouldAutoEndTurn(result.run)).toBe(false);
+  result = resolve(result.run, { type: "play", uid: scout.uid, target: null });
+  expect(result.error).toBeNull();
+  expect(shouldAutoEndTurn(result.run)).toBe(false);
+  const gained = resolve(result.run, {
+    type: "play",
+    uid: rally.uid,
+    target: null,
+  });
+  expect(gained.error).toBeNull();
+  if (gained.run.scene.kind !== "combat") throw new Error("Expected combat");
+  expect(gained.run.scene.energy).toBe(1);
+  gained.run.scene.hand = [];
+  expect(shouldAutoEndTurn(gained.run)).toBe(false);
+  if (result.run.scene.kind !== "combat") throw new Error("Expected combat");
+  result.run.scene.hand = [courage];
+  result = resolve(result.run, {
+    type: "play",
+    uid: courage.uid,
+    target: null,
+  });
+  expect(result.error).toBeNull();
+  expect(shouldAutoEndTurn(result.run)).toBe(true);
+});
 
 test("title renders a playable identity and accessible entry points", () => {
   const html = renderToStaticMarkup(<App />);
