@@ -369,9 +369,9 @@ export function App() {
       onKeyDown={wakeAudio}
     >
       <div className="atmosphere" aria-hidden="true" />
-      {!title && busy && feedback && !settings.reduced && (
+      {!settings.reduced && (
         <CombatEffects
-          frame={feedback}
+          frame={!title && busy ? feedback : null}
           stage={stage}
           card={actingCard}
           speed={animationSpeed}

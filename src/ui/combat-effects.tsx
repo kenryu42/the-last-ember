@@ -1,8 +1,11 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { cardDef } from "../game/content";
 import type { Card, Cue, Frame } from "../game/model";
+import { PixiCombatLayer } from "./pixi-combat-layer";
+import { frameAttack } from "./attack-kind";
+import type { AttackRequest } from "./pixi-attacks";
 import "./combat-effects.css";
 
 export function powerfulCard(card: Card | null) {
@@ -36,15 +39,21 @@ export function CombatEffects({
   card,
   speed,
 }: {
-  frame: Frame;
+  frame: Frame | null;
   stage: "anticipate" | "impact";
   card: Card | null;
   speed: number;
 }) {
-  const [geometry, setGeometry] = useState<Geometry | null>(null);
+  const [geometry, setGeometry] = useState<
+    (Geometry & { frame: Frame }) | null
+  >(null);
   const powerful = powerfulCard(card);
-  const timing = attackTiming(frame.cue, powerful, speed);
+  const timing = attackTiming(frame?.cue ?? "draw", powerful, speed);
   useLayoutEffect(() => {
+    if (!frame) {
+      setGeometry(null);
+      return;
+    }
     const owner = card ? cardDef(card.def).owner : "Mara";
     const party = document
       .querySelector(".party-health")
@@ -73,13 +82,40 @@ export function CombatEffects({
       y = source.top + source.height / 2;
     const dx = target.left + target.width / 2 - x,
       dy = target.top + target.height * 0.45 - y;
-    setGeometry({ x, y, dx, dy, angle: (Math.atan2(dy, dx) * 180) / Math.PI });
+    setGeometry({
+      frame,
+      x,
+      y,
+      dx,
+      dy,
+      angle: (Math.atan2(dy, dx) * 180) / Math.PI,
+    });
   }, [frame, card]);
+  const kind = frameAttack(frame);
+  const request = useMemo<AttackRequest | null>(
+    () =>
+      kind && frame && geometry?.frame === frame
+        ? {
+            kind,
+            geometry,
+            stage,
+            powerful,
+            blocked: frame.text.includes("blocked"),
+            duration: stage === "anticipate" ? timing.travel : timing.impact,
+          }
+        : null,
+    [kind, frame, geometry, stage, powerful, timing.travel, timing.impact],
+  );
+  const layer = <PixiCombatLayer request={request} />;
   if (
+    !frame ||
     !geometry ||
+    geometry.frame !== frame ||
+    kind ||
+    stage !== "impact" ||
     ["draw", "reward", "victory", "defeat", "death"].includes(frame.cue)
   )
-    return null;
+    return <>{layer}</>;
   const style: EffectStyle = {
     left: geometry.x,
     top: geometry.y,
@@ -90,75 +126,41 @@ export function CombatEffects({
     "--impact": `${timing.impact}ms`,
   };
   const blocked = frame.text.includes("blocked");
-  return createPortal(
-    <div
-      aria-hidden="true"
-      className={`combat-fx fx-${frame.cue} ${powerful ? "fx-powerful" : ""} ${blocked ? "fx-blocked" : ""}`}
-      style={style}
-    >
-      {stage === "anticipate" ? (
-        frame.cue === "spell" ||
-        frame.cue === "arrow" ||
-        frame.cue === "enemy" ? (
-          <div className="fx-flight">
-            <div className="fx-direction">
-              {frame.cue === "spell" ? (
-                <div className="fx-fireball">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-              ) : frame.cue === "arrow" ? (
-                <svg className="fx-arrow-shaft" viewBox="0 0 150 30">
-                  <path d="M4 15H134M120 6l22 9-22 9 5-9ZM12 15 2 5M19 15 9 5M12 15 2 25M19 15 9 25" />
-                </svg>
-              ) : (
-                <div className="fx-enemy-streak" />
-              )}
-            </div>
-          </div>
-        ) : frame.cue === "blade" ? (
+  return (
+    <>
+      {layer}
+      {createPortal(
+        <div
+          aria-hidden="true"
+          className={`combat-fx fx-${frame.cue} ${powerful ? "fx-powerful" : ""} ${blocked ? "fx-blocked" : ""}`}
+          style={style}
+        >
           <div className="fx-at-target">
-            <svg className="fx-sword-windup" viewBox="0 0 240 240">
-              <path d="M40 195 181 28 197 22 196 40 58 211ZM28 177 77 219M33 209 20 224" />
-            </svg>
-          </div>
-        ) : null
-      ) : (
-        <div className="fx-at-target">
-          {frame.cue === "blade" ? (
-            <svg className="fx-sword-cut" viewBox="0 0 240 240">
-              <path
-                className="fx-cut-shadow"
-                d="M16 205Q115 72 225 35Q158 90 16 205Z"
+            {frame.cue === "shield" || blocked ? (
+              <svg className="fx-shield-shape" viewBox="0 0 200 220">
+                <path d="M100 16 170 46V113Q162 171 100 206Q38 171 30 113V46Z" />
+                <path d="M100 43V177M53 78H147" />
+              </svg>
+            ) : frame.cue === "heal" ? (
+              <div className="fx-healing-light" />
+            ) : (
+              <div className="fx-burst" />
+            )}
+            <div className="fx-shockwave" />
+            {Array.from({ length: powerful ? 12 : 8 }, (_, i) => (
+              <span
+                className="fx-spark"
+                key={i}
+                style={{
+                  rotate: `${i * 137.5}deg`,
+                  animationDelay: `${((i % 3) * 18) / speed}ms`,
+                }}
               />
-              <path className="fx-cut-edge" d="M16 205Q115 72 225 35" />
-              <path className="fx-cut-second" d="M30 207Q133 106 215 67" />
-            </svg>
-          ) : frame.cue === "shield" || blocked ? (
-            <svg className="fx-shield-shape" viewBox="0 0 200 220">
-              <path d="M100 16 170 46V113Q162 171 100 206Q38 171 30 113V46Z" />
-              <path d="M100 43V177M53 78H147" />
-            </svg>
-          ) : frame.cue === "heal" ? (
-            <div className="fx-healing-light" />
-          ) : (
-            <div className="fx-burst" />
-          )}
-          <div className="fx-shockwave" />
-          {Array.from({ length: powerful ? 12 : 8 }, (_, i) => (
-            <span
-              className="fx-spark"
-              key={i}
-              style={{
-                rotate: `${i * 137.5}deg`,
-                animationDelay: `${((i % 3) * 18) / speed}ms`,
-              }}
-            />
-          ))}
-        </div>
+            ))}
+          </div>
+        </div>,
+        document.body,
       )}
-    </div>,
-    document.body,
+    </>
   );
 }

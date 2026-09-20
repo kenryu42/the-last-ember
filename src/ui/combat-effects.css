@@ -13,122 +13,6 @@
   width: 0;
   height: 0;
 }
-.fx-flight {
-  position: absolute;
-  animation: fx-flight var(--travel) cubic-bezier(0.4, 0, 0.7, 1) both;
-}
-.fx-direction {
-  transform: rotate(var(--angle));
-}
-.fx-fireball {
-  position: absolute;
-  width: 44px;
-  height: 44px;
-  margin: -22px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 65% 50%,
-    #fffbe1 0 16%,
-    #ffd082 30%,
-    #ec7532 57%,
-    #92351100 74%
-  );
-  box-shadow: 0 0 22px 7px #ed822d80;
-}
-.fx-powerful .fx-fireball {
-  width: 64px;
-  height: 64px;
-  margin: -32px;
-}
-.fx-fireball::before {
-  content: "";
-  position: absolute;
-  right: 18px;
-  top: 10%;
-  height: 80%;
-  width: 170px;
-  border-radius: 100% 0 0 100%;
-  background: linear-gradient(90deg, transparent, #d8541820, #f3a83fcc);
-}
-.fx-fireball i {
-  position: absolute;
-  right: 25px;
-  width: 90px;
-  height: 3px;
-  background: #ffc965;
-  border-radius: 100%;
-  rotate: 8deg;
-}
-.fx-fireball i:nth-child(2) {
-  top: 40%;
-  width: 130px;
-  rotate: -7deg;
-}
-.fx-fireball i:nth-child(3) {
-  top: 90%;
-  rotate: 16deg;
-  width: 75px;
-}
-.fx-arrow-shaft {
-  position: absolute;
-  width: 150px;
-  height: 30px;
-  left: -135px;
-  top: -15px;
-  overflow: visible;
-  fill: #d6c7a6;
-  stroke: #ead9b0;
-  stroke-width: 2;
-  filter: drop-shadow(0 1px 3px #000);
-}
-.fx-enemy-streak {
-  position: absolute;
-  width: 80px;
-  height: 5px;
-  left: -70px;
-  background: linear-gradient(90deg, transparent, #d8a27c);
-  border-radius: 100%;
-}
-.fx-sword-windup,
-.fx-sword-cut {
-  position: absolute;
-  width: 240px;
-  height: 240px;
-  left: -120px;
-  top: -120px;
-  overflow: visible;
-}
-.fx-sword-windup {
-  fill: #c8dce290;
-  stroke: #f2e8c5;
-  stroke-width: 1.4;
-  transform-origin: 18% 85%;
-  animation: fx-ready var(--travel) ease-in both;
-}
-.fx-sword-cut {
-  animation: fx-cut var(--impact) ease-out both;
-}
-.fx-cut-shadow {
-  fill: #e7e8d980;
-}
-.fx-cut-edge {
-  fill: none;
-  stroke: #fff7de;
-  stroke-width: 5;
-  stroke-linecap: round;
-}
-.fx-cut-second {
-  fill: none;
-  stroke: #f1c68c;
-  stroke-width: 2;
-  opacity: 0.65;
-}
-.fx-powerful .fx-sword-cut {
-  width: 290px;
-  height: 290px;
-  left: -145px;
-  top: -145px;
-}
 .fx-burst {
   width: 150px;
   height: 150px;
@@ -163,13 +47,6 @@
   border-radius: 100%;
   background: linear-gradient(90deg, transparent, currentColor);
   animation: fx-sparks var(--impact) ease-out both;
-}
-.fx-spell {
-  color: #ffb25f;
-}
-.fx-spell .fx-spark {
-  width: 65px;
-  height: 5px;
 }
 .fx-powerful .fx-burst {
   width: 220px;
@@ -209,46 +86,6 @@
 }
 .fx-dread .fx-shockwave {
   border-style: dashed;
-}
-@keyframes fx-flight {
-  0% {
-    transform: translate(0, 0) scale(0.35);
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--dx), var(--dy)) scale(1);
-    opacity: 1;
-  }
-}
-@keyframes fx-ready {
-  0% {
-    transform: rotate(-32deg) scale(0.7);
-    opacity: 0;
-  }
-  70% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: rotate(12deg) scale(1);
-    opacity: 1;
-  }
-}
-@keyframes fx-cut {
-  0% {
-    transform: scale(0.55) rotate(-10deg);
-    opacity: 1;
-  }
-  35% {
-    transform: scale(1.12) rotate(7deg);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.3) rotate(12deg);
-    opacity: 0;
-  }
 }
 @keyframes fx-bloom {
   0% {
@@ -299,4 +136,17 @@
 }
 [data-reduced="true"] .combat-fx {
   display: none;
+}
+
+/* Enemy attacks land at the fellowship. No generic projectile between units. */
+.pixi-combat-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.pixi-combat-layer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
