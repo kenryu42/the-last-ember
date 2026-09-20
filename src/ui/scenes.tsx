@@ -41,13 +41,61 @@ export function JourneyCrossroads({
       className="crossroads scene-enter"
       aria-labelledby="crossroads-title"
     >
-      <img
-        className="crossroads-landscape"
-        src={`/assets/journey/${act?.file}-${run.row + 2}.webp`}
-        alt={`${location?.name}: three paths through ${act?.place}.`}
-        fetchPriority="high"
-      />
-      <div className="crossroads-shade" aria-hidden="true" />
+      <div className="crossroads-view">
+        <div className="crossroads-canvas">
+          <img
+            className="crossroads-landscape"
+            src={`/assets/journey/${act?.file}-${run.row + 2}.webp`}
+            alt={`${location?.name}: three paths through ${act?.place}.`}
+            fetchPriority="high"
+          />
+          <div className="crossroads-shade" aria-hidden="true" />
+          <nav className="crossroads-paths" aria-label="Choose a path">
+            {location?.pathAnchors.map(([x, y], lane, anchors) => {
+              const node = paths.find((path) => path.lane === lane);
+              if (!node) return null;
+              const previous = anchors[lane - 1];
+              const next = anchors[lane + 1];
+              const left = previous ? (previous[0] + x) / 2 : 0;
+              const right = next ? (x + next[0]) / 2 : 100;
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  data-node={node.id}
+                  className="crossroads-path"
+                  style={{ left: `${left}%`, width: `${right - left}%` }}
+                  aria-label={
+                    [
+                      "Take the left path",
+                      "Go straight ahead",
+                      "Take the right path",
+                    ][lane]
+                  }
+                  aria-describedby="crossroads-hint"
+                  onClick={() => dispatch({ type: "travel", node: node.id })}
+                >
+                  <span
+                    className="path-marker"
+                    style={{
+                      left: `${((x - left) / (right - left)) * 100}%`,
+                      top: `${y}%`,
+                    }}
+                    aria-hidden="true"
+                  >
+                    <span className="path-bearing">
+                      {["↖", "↑", "↗"][lane]}
+                    </span>
+                    <span className="path-label">
+                      {["Left path", "Straight ahead", "Right path"][lane]}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
       <header className="crossroads-heading">
         <div>
           <p className="eyebrow">
@@ -55,40 +103,12 @@ export function JourneyCrossroads({
           </p>
           <h1 id="crossroads-title">{location?.name}</h1>
           <p className="story-copy">{location?.description}</p>
+          <p className="crossroads-hint" id="crossroads-hint">
+            Choose a path in the landscape.
+          </p>
         </div>
         <p className="crossroads-progress">Crossroads {run.row + 2} of 6</p>
       </header>
-      <div className="crossroads-decision">
-        <p className="crossroads-prompt">Which way will you go?</p>
-        <p className="crossroads-hint" id="crossroads-hint">
-          What lies beyond is yours to discover.
-        </p>
-        <nav className="crossroads-paths" aria-label="Choose a path">
-          {paths.map((node) => (
-            <button
-              key={node.id}
-              data-node={node.id}
-              className="crossroads-path"
-              aria-describedby="crossroads-hint"
-              onClick={() => dispatch({ type: "travel", node: node.id })}
-            >
-              <span className="path-bearing" aria-hidden="true">
-                {["↖", "↑", "↗"][node.lane]}
-              </span>
-              <span>
-                {
-                  [
-                    "Take the left path",
-                    "Go straight ahead",
-                    "Take the right path",
-                  ][node.lane]
-                }
-              </span>
-              <small>Venture onward</small>
-            </button>
-          ))}
-        </nav>
-      </div>
     </section>
   );
 }

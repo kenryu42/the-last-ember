@@ -643,31 +643,61 @@ export const ACTS = [
     crossroads: [
       {
         name: "The fern gate",
+        pathAnchors: [
+          [18, 59],
+          [50, 64],
+          [82, 59],
+        ],
         description:
           "The road thins beneath the trees. Three trails disappear into the green.",
       },
       {
         name: "The silver brook",
+        pathAnchors: [
+          [18, 48],
+          [50, 62],
+          [87, 43],
+        ],
         description:
           "Water slips over pale stones. Beyond its banks, the forest keeps its own counsel.",
       },
       {
         name: "The fallen giant",
+        pathAnchors: [
+          [12, 65],
+          [57, 61],
+          [90, 43],
+        ],
         description:
           "An old oak lies across the hollow. New paths have grown around its roots.",
       },
       {
         name: "The white stones",
+        pathAnchors: [
+          [19, 68],
+          [50, 77],
+          [82, 67],
+        ],
         description:
           "Pale stones rise from a quiet glade. Wildflowers soften the edges of three worn trails.",
       },
       {
         name: "The rain hollow",
+        pathAnchors: [
+          [20, 58],
+          [55, 63],
+          [87, 51],
+        ],
         description:
           "Rain still clings to the leaves. The sound of falling water follows you into the ravine.",
       },
       {
         name: "The elder boughs",
+        pathAnchors: [
+          [20, 69],
+          [57, 63],
+          [88, 64],
+        ],
         description:
           "The oldest trees lean together overhead. For a moment, even the wind is still.",
       },
@@ -683,31 +713,61 @@ export const ACTS = [
     crossroads: [
       {
         name: "The reed causeway",
+        pathAnchors: [
+          [14, 68],
+          [51, 66],
+          [86, 69],
+        ],
         description:
           "Broken roads rise above the marsh. Avel's empty windows watch from the mist.",
       },
       {
         name: "The sunken square",
+        pathAnchors: [
+          [15, 66],
+          [48, 71],
+          [92, 65],
+        ],
         description:
           "Still water fills the old square. Three dry ways remain between the stones.",
       },
       {
         name: "The willow bridges",
+        pathAnchors: [
+          [17, 61],
+          [50, 63],
+          [84, 58],
+        ],
         description:
           "Willow branches trail across the canals. Beyond the bridges, the city is quiet.",
       },
       {
         name: "The broken aqueduct",
+        pathAnchors: [
+          [25, 68],
+          [52, 65],
+          [85, 48],
+        ],
         description:
           "Water gathers beneath the old arches. Your footsteps echo against the stone.",
       },
       {
         name: "The drowned garden",
+        pathAnchors: [
+          [19, 73],
+          [53, 60],
+          [86, 57],
+        ],
         description:
           "The garden has outlived its walls. Paths wind between the reeds and fallen pillars.",
       },
       {
         name: "The quiet ramparts",
+        pathAnchors: [
+          [17, 67],
+          [52, 67],
+          [85, 51],
+        ],
         description:
           "No banners hang above the gates. The last light settles on the empty walls.",
       },
@@ -722,31 +782,61 @@ export const ACTS = [
     crossroads: [
       {
         name: "The last pines",
+        pathAnchors: [
+          [15, 58],
+          [50, 78],
+          [86, 62],
+        ],
         description:
           "The trees give way to open sky. Three trails climb beyond their shelter.",
       },
       {
         name: "The glass tarn",
+        pathAnchors: [
+          [20, 79],
+          [62, 64],
+          [91, 66],
+        ],
         description:
           "A still lake holds the morning sky. The paths divide along its stony shore.",
       },
       {
         name: "The wind-carved pass",
+        pathAnchors: [
+          [24, 58],
+          [56, 77],
+          [91, 49],
+        ],
         description:
           "Wind has worn a doorway through the mountain. Snow gathers where the stone gives shelter.",
       },
       {
         name: "The blue crevasse",
+        pathAnchors: [
+          [22, 65],
+          [50, 62],
+          [86, 67],
+        ],
         description:
           "Old ice shines beneath the rock. Three crossings lead deeper into the heights.",
       },
       {
         name: "The cloud stair",
+        pathAnchors: [
+          [20, 58],
+          [53, 46],
+          [87, 58],
+        ],
         description:
           "The world below has vanished into cloud. Worn steps catch the last warmth of the sun.",
       },
       {
         name: "The pale summit",
+        pathAnchors: [
+          [22, 48],
+          [52, 61],
+          [84, 61],
+        ],
         description:
           "The beacon stands dark against the evening sky. Only the wind moves on the heights.",
       },
@@ -758,7 +848,12 @@ export const ACTS = [
   file: string;
   intro: string;
   boss: EnemyKind;
-  crossroads: { name: string; description: string }[];
+  crossroads: {
+    name: string;
+    description: string;
+    /** Left, straight and right trail markers, as percentages of the uncropped art. */
+    pathAnchors: [[number, number], [number, number], [number, number]];
+  }[];
 }[];
 export interface EventChoice {
   label: string;

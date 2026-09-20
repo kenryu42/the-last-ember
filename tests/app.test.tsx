@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { App, shouldAutoEndTurn } from "../src/App";
-import { CARDS } from "../src/game/content";
+import { ACTS, CARDS } from "../src/game/content";
 import {
   generateRoute,
   makeCard,
@@ -37,6 +37,40 @@ test("crossroads show only three current paths without leaking encounters", asyn
       expect(html).toContain("Go straight ahead");
       expect(html).toContain("Take the right path");
       expect(html).toContain(`Crossroads ${row + 2} of 6`);
+      expect(html).toContain("Choose a path in the landscape.");
+      expect(html).not.toContain("crossroads-decision");
+      const regions = [
+        ...html.matchAll(
+          /class="crossroads-path" style="left:([\d.]+)%;width:([\d.]+)%"/g,
+        ),
+      ];
+      const markers = [
+        ...html.matchAll(
+          /class="path-marker" style="left:([\d.]+)%;top:([\d.]+)%"/g,
+        ),
+      ];
+      expect(regions).toHaveLength(3);
+      expect(markers).toHaveLength(3);
+      let edge = 0;
+      regions.forEach((region, lane) => {
+        const left = Number(region[1]),
+          width = Number(region[2]);
+        expect(left).toBeCloseTo(edge);
+        expect(width).toBeGreaterThan(0);
+        edge = left + width;
+        const anchor = ACTS[act]?.crossroads[row + 1]?.pathAnchors[lane];
+        const marker = markers[lane];
+        if (!anchor || !marker) throw new Error("Missing trail marker");
+        const [x, y] = anchor;
+        expect(x).toBeGreaterThan(left);
+        expect(x).toBeLessThan(edge);
+        expect(y).toBeGreaterThan(0);
+        expect(y).toBeLessThan(100);
+        // Recover image coordinates from the region-relative marker position.
+        expect(left + (Number(marker[1]) * width) / 100).toBeCloseTo(x);
+        expect(Number(marker[2])).toBe(y);
+      });
+      expect(edge).toBeCloseTo(100);
       const image = html.match(/src="([^"]+\.webp)"/)?.[1];
       if (!image) throw new Error("Missing crossroads art");
       images.add(image);

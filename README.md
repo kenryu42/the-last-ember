@@ -91,7 +91,9 @@ beacon; defeat remembers the fellowship's attempt. Results and custom seeds supp
 replay without permanent stat grinding or unlock gates.
 
 The adventure shows only the current crossroads, with three choices: left,
-straight ahead, and right. Encounters are hidden until a path is chosen; no future
+straight ahead, and right. Click or tap a region of the illustration to travel;
+trail markers highlight on hover or keyboard focus. Tab between paths and use
+Enter or Space to choose. Encounters are hidden until a path is chosen; no future
 route or encounter icons are displayed. Each of the 18 stops has a unique local
 illustration and location description: Briarwood forest, the flooded ruins of
 Avel, and the alpine high watch. All three final approaches reach the Act's guardian.
