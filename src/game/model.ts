@@ -90,6 +90,8 @@ const combatSchema = z.object({
   kind: z.literal("combat"),
   encounter: z.string(),
   type: z.enum(["battle", "elite", "boss"]),
+  // Adventure presentation only; headless encounters do not need an entry gate.
+  introPending: z.literal(true).optional(),
   turn: z.number().int().positive(),
   energy: z.number().nonnegative(),
   block: z.number().nonnegative(),

@@ -865,156 +865,168 @@ export interface EventChoice {
   upgrade?: boolean;
   maxHp?: number;
 }
-export const EVENTS: { title: string; text: string; choices: EventChoice[] }[] =
-  [
-    {
-      title: "A window still lit",
-      text: "An old woman opens her door before Mara can knock. There is soup enough for four, she says. There has always been soup enough for four.",
-      choices: [
-        {
-          label: "Share the table",
-          detail: "Restore 12 health. Pay 15 gold.",
-          hp: 12,
-          gold: -15,
-        },
-        {
-          label: "Leave wood by the door",
-          detail: "Gain Shared bread.",
-          hp: 0,
-          gold: 0,
-          card: "bread",
-        },
-      ],
-    },
-    {
-      title: "The listening well",
-      text: "Aldren hears his own voice below the water, saying words he has not yet learned. Eryn ties a rope around his waist.",
-      choices: [
-        {
-          label: "Listen a little longer",
-          detail: "Lose 8 health. Gain Old knowledge.",
-          hp: -8,
-          gold: 0,
-          card: "remember",
-        },
-        { label: "Pull him back", detail: "Restore 5 health.", hp: 5, gold: 0 },
-      ],
-    },
-    {
-      title: "The empty tollhouse",
-      text: "The ledger lists every traveler who passed here. The final entry reads: three, carrying a light. The ink is still wet.",
-      choices: [
-        {
-          label: "Take the abandoned purse",
-          detail: "Gain 40 gold. Lose 6 health.",
-          hp: -6,
-          gold: 40,
-        },
-        {
-          label: "Burn the final page",
-          detail: "Gain Quiet as snowfall.",
-          hp: 0,
-          gold: 0,
-          card: "silence",
-        },
-      ],
-    },
-    {
-      title: "A soldier’s grave",
-      text: "Mara recognizes the knot tied around the broken spear. She kneels, and the others turn away to give her a moment.",
-      choices: [
-        {
-          label: "Keep the oath",
-          detail: "Lose 6 health. Gain a relic.",
-          hp: -6,
-          gold: 0,
-          relic: true,
-        },
-        {
-          label: "Let the watch end",
-          detail: "Restore 8 health.",
-          hp: 8,
-          gold: 0,
-        },
-      ],
-    },
-    {
-      title: "The narrow crossing",
-      text: "The bridge has gone. A child on the far bank points to a fallen tree, then waits to see whether you trust her.",
-      choices: [
-        {
-          label: "Follow her path",
-          detail: "Gain Hidden trail and 15 gold.",
-          hp: 0,
-          gold: 15,
-          card: "trail",
-        },
-        {
-          label: "Repair the ropeway",
-          detail: "Lose 8 health. Upgrade a random unupgraded card.",
-          hp: -8,
-          gold: 0,
-          upgrade: true,
-        },
-      ],
-    },
-    {
-      title: "A pocket of summer",
-      text: "Beneath a leaning stone, wild strawberries grow in snow. Eryn eats one and laughs for the first time in days.",
-      choices: [
-        {
-          label: "Rest in the sunlight",
-          detail: "Restore 15 health.",
-          hp: 15,
-          gold: 0,
-        },
-        {
-          label: "Save seeds for home",
-          detail: "Maximum health +6. Restore 6 health.",
-          hp: 6,
-          gold: 0,
-          maxHp: 6,
-        },
-      ],
-    },
-    {
-      title: "The charcoal seller",
-      text: "His fire has not gone out in thirty winters. He offers a coal, wrapped in leaves, for the long climb ahead.",
-      choices: [
-        {
-          label: "Buy the singing coal",
-          detail: "Pay 35 gold. Gain a relic.",
-          hp: 0,
-          gold: -35,
-          relic: true,
-        },
-        {
-          label: "Trade a story",
-          detail: "Gain Borrowed fire.",
-          hp: 0,
-          gold: 0,
-          card: "spark",
-        },
-      ],
-    },
-    {
-      title: "Names in the frost",
-      text: "The wall is carved with the names of those who lit the beacon before. There is room beside them. Aldren puts his knife away.",
-      choices: [
-        {
-          label: "We will return to write them",
-          detail: "Gain A promise of home.",
-          hp: 0,
-          gold: 0,
-          card: "home",
-        },
-        {
-          label: "Remember the forgotten",
-          detail: "Lose 5 health. Gain a relic.",
-          hp: -5,
-          gold: 0,
-          relic: true,
-        },
-      ],
-    },
-  ];
+export const EVENTS: {
+  title: string;
+  art: string;
+  text: string;
+  choices: EventChoice[];
+}[] = [
+  {
+    title: "A window still lit",
+    art: "window",
+    text: "An old woman opens her door before Mara can knock. There is soup enough for four, she says. There has always been soup enough for four.",
+    choices: [
+      {
+        label: "Share the table",
+        detail: "Restore 12 health. Pay 15 gold.",
+        hp: 12,
+        gold: -15,
+      },
+      {
+        label: "Leave wood by the door",
+        detail: "Gain Shared bread.",
+        hp: 0,
+        gold: 0,
+        card: "bread",
+      },
+    ],
+  },
+  {
+    title: "The listening well",
+    art: "well",
+    text: "Aldren hears his own voice below the water, saying words he has not yet learned. Eryn ties a rope around his waist.",
+    choices: [
+      {
+        label: "Listen a little longer",
+        detail: "Lose 8 health. Gain Old knowledge.",
+        hp: -8,
+        gold: 0,
+        card: "remember",
+      },
+      { label: "Pull him back", detail: "Restore 5 health.", hp: 5, gold: 0 },
+    ],
+  },
+  {
+    title: "The empty tollhouse",
+    art: "tollhouse",
+    text: "The ledger lists every traveler who passed here. The final entry reads: three, carrying a light. The ink is still wet.",
+    choices: [
+      {
+        label: "Take the abandoned purse",
+        detail: "Gain 40 gold. Lose 6 health.",
+        hp: -6,
+        gold: 40,
+      },
+      {
+        label: "Burn the final page",
+        detail: "Gain Quiet as snowfall.",
+        hp: 0,
+        gold: 0,
+        card: "silence",
+      },
+    ],
+  },
+  {
+    title: "A soldier’s grave",
+    art: "grave",
+    text: "Mara recognizes the knot tied around the broken spear. She kneels, and the others turn away to give her a moment.",
+    choices: [
+      {
+        label: "Keep the oath",
+        detail: "Lose 6 health. Gain a relic.",
+        hp: -6,
+        gold: 0,
+        relic: true,
+      },
+      {
+        label: "Let the watch end",
+        detail: "Restore 8 health.",
+        hp: 8,
+        gold: 0,
+      },
+    ],
+  },
+  {
+    title: "The narrow crossing",
+    art: "crossing",
+    text: "The bridge has gone. A child on the far bank points to a fallen tree, then waits to see whether you trust her.",
+    choices: [
+      {
+        label: "Follow her path",
+        detail: "Gain Hidden trail and 15 gold.",
+        hp: 0,
+        gold: 15,
+        card: "trail",
+      },
+      {
+        label: "Repair the ropeway",
+        detail: "Lose 8 health. Upgrade a random unupgraded card.",
+        hp: -8,
+        gold: 0,
+        upgrade: true,
+      },
+    ],
+  },
+  {
+    title: "A pocket of summer",
+    art: "summer",
+    text: "Beneath a leaning stone, wild strawberries grow in snow. Eryn eats one and laughs for the first time in days.",
+    choices: [
+      {
+        label: "Rest in the sunlight",
+        detail: "Restore 15 health.",
+        hp: 15,
+        gold: 0,
+      },
+      {
+        label: "Save seeds for home",
+        detail: "Maximum health +6. Restore 6 health.",
+        hp: 6,
+        gold: 0,
+        maxHp: 6,
+      },
+    ],
+  },
+  {
+    title: "The charcoal seller",
+    art: "charcoal",
+    text: "His fire has not gone out in thirty winters. He offers a coal, wrapped in leaves, for the long climb ahead.",
+    choices: [
+      {
+        label: "Buy the singing coal",
+        detail: "Pay 35 gold. Gain a relic.",
+        hp: 0,
+        gold: -35,
+        relic: true,
+      },
+      {
+        label: "Trade a story",
+        detail: "Gain Borrowed fire.",
+        hp: 0,
+        gold: 0,
+        card: "spark",
+      },
+    ],
+  },
+  {
+    title: "Names in the frost",
+    art: "names",
+    text: "The wall is carved with the names of those who lit the beacon before. There is room beside them. Aldren puts his knife away.",
+    choices: [
+      {
+        label: "We will return to write them",
+        detail: "Gain A promise of home.",
+        hp: 0,
+        gold: 0,
+        card: "home",
+      },
+      {
+        label: "Remember the forgotten",
+        detail: "Lose 5 health. Gain a relic.",
+        hp: -5,
+        gold: 0,
+        relic: true,
+      },
+    ],
+  },
+];

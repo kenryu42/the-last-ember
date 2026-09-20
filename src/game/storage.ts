@@ -146,6 +146,7 @@ export function parseSave(text: string | null): Loaded {
       (s.kind === "combat" &&
         (run.hp === 0 ||
           !s.enemies.some((e) => e.hp > 0) ||
+          (s.introPending && s.turn !== 1) ||
           (run.dreadRules === "recurring"
             ? s.dreadResponse !== "fury" || s.fired !== undefined
             : s.dreadResponse !== undefined || s.fired === undefined) ||

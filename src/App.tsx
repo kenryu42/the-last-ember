@@ -1,8 +1,15 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { CSSProperties } from "react";
 import { ACTS, RELICS, cardDef, needsTarget } from "./game/content";
 import { cardCost, newRun, resolve } from "./game/engine";
-import type { Action, Card, Frame, Run } from "./game/model";
+import type { Action, Card, Frame, RouteNode, Run } from "./game/model";
 import {
   SAVE_KEY,
   loadHistory,
@@ -19,6 +26,7 @@ import { CombatEffects, attackTiming, powerfulCard } from "./ui/combat-effects";
 import { Art, CardView, Icon, Modal, Rules } from "./ui/components";
 import { CombatBoard, JourneyCrossroads, StopScene } from "./ui/scenes";
 import type { Inspect } from "./ui/scenes";
+import { ArrivalTransition, EncounterIntro } from "./ui/encounters";
 import "./ui/style.css";
 
 const Playtest = import.meta.env?.DEV
@@ -35,6 +43,7 @@ export function shouldAutoEndTurn(run: Run) {
   const combat = run.scene;
   return (
     combat.kind === "combat" &&
+    !combat.introPending &&
     combat.energy === 0 &&
     combat.ember?.window !== "choose" &&
     !combat.hand.some((card) => {
@@ -72,8 +81,16 @@ export function App() {
   const [tutorial, setTutorial] = useState<number | null>(null);
   const [actingCard, setActingCard] = useState<Card | null>(null);
   const [animationSpeed, setAnimationSpeed] = useState(settings.gameplaySpeed);
+  const [arrival, setArrival] = useState<{ from: Run; node: RouteNode } | null>(
+    null,
+  );
   const [benchmark, setBenchmark] = useState(false);
   const shown = visual ?? run;
+  const completeArrival = useCallback(() => {
+    setArrival(null);
+    locked.current = false;
+    setBusy(false);
+  }, []);
   useEffect(() => {
     setSoundscape(shown, title);
   }, [shown, title]);
@@ -104,6 +121,11 @@ export function App() {
   };
   const dispatch = async (action: Action) => {
     if (!current.current || locked.current) return;
+    if (
+      current.current.scene.kind === "combat" &&
+      current.current.scene.introPending
+    )
+      return;
     wakeAudio();
     const before = current.current,
       result = resolve(before, action);
@@ -153,6 +175,23 @@ export function App() {
         }
       }
     }
+    if (action.type === "travel") {
+      const node = before.route.find((node) => node.id === action.node);
+      if (node) {
+        // Save the resolved encounter before animating. Reloading cannot reroll it
+        // or bypass the battle introduction; the engine's RNG stays untouched.
+        const arrived: Run =
+          result.run.scene.kind === "combat"
+            ? {
+                ...result.run,
+                scene: { ...result.run.scene, introPending: true },
+              }
+            : result.run;
+        commit(arrived);
+        setArrival({ from: before, node });
+        return;
+      }
+    }
     commit(result.run);
     if (result.run.scene.kind === "ending" && before.scene.kind !== "ending")
       recordEnding(result.run);
@@ -195,6 +234,18 @@ export function App() {
           : step,
     );
     if (shouldAutoEndTurn(result.run)) await dispatch({ type: "end" });
+  };
+  const enterEncounter = () => {
+    const active = current.current;
+    if (
+      locked.current ||
+      active?.scene.kind !== "combat" ||
+      !active.scene.introPending
+    )
+      return;
+    const scene = { ...active.scene };
+    delete scene.introPending;
+    commit({ ...active, scene });
   };
   const select = (card: Card) => {
     wakeAudio();
@@ -274,7 +325,7 @@ export function App() {
   };
   return (
     <main
-      className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !title ? "in-combat" : ""}`}
+      className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !shown.scene.introPending && !arrival && !title ? "in-combat" : ""}`}
       style={presentationStyle}
       onPointerDown={wakeAudio}
       onKeyDown={wakeAudio}
@@ -401,6 +452,15 @@ export function App() {
             Turn-based · Saved locally · Made for a quiet evening
           </p>
         </section>
+      ) : arrival && shown ? (
+        <ArrivalTransition
+          from={arrival.from}
+          node={arrival.node}
+          destination={shown}
+          speed={settings.gameplaySpeed}
+          reduced={settings.reduced}
+          complete={completeArrival}
+        />
       ) : (
         shown && (
           <>
@@ -411,7 +471,14 @@ export function App() {
                 dispatch={(action) => void dispatch(action)}
               />
             )}
-            {shown.scene.kind === "combat" && (
+            {shown.scene.kind === "combat" && shown.scene.introPending && (
+              <EncounterIntro
+                run={shown}
+                combat={shown.scene}
+                enter={enterEncounter}
+              />
+            )}
+            {shown.scene.kind === "combat" && !shown.scene.introPending && (
               <CombatBoard
                 run={shown}
                 combat={shown.scene}
@@ -508,44 +575,47 @@ export function App() {
           </button>
         </div>
       )}
-      {tutorial !== null && !title && (
-        <aside className="tutorial" role="region" aria-label="Introduction">
-          <div className="eyebrow">A first journey · {tutorial + 1} / 4</div>
-          <h3>
-            {
-              [
-                "Stay together",
-                "Power has a price",
-                "Make your first move",
-                "Let them answer",
-              ][tutorial]
-            }
-          </h3>
-          <p>
-            {
-              [
-                "You share health, a deck, and three energy. At each crossroads, choose left, straight ahead, or right. You discover what waits only after choosing a path.",
-                "Choose who carries the Ember. Strong magic raises Dread. Every turn, 4–7 empowers the front enemy; 8–10 empowers all enemies, then falls by 4. Lower Dread before ending to avoid the response.",
-                "Click a card. Choose an enemy for attacks; the last living enemy is targeted automatically. Guards play immediately. Intentions show what happens if you end now.",
-                "Play what you need, then End turn. Your remaining hand is discarded and you draw five. Block protects now, then clears at your next turn.",
-              ][tutorial]
-            }
-          </p>
-          <div className="dialog-actions">
-            {tutorial < 2 && (
-              <button
-                className="primary"
-                onClick={() => setTutorial(tutorial + 1)}
-              >
-                Next
+      {tutorial !== null &&
+        !title &&
+        !arrival &&
+        !(shown?.scene.kind === "combat" && shown.scene.introPending) && (
+          <aside className="tutorial" role="region" aria-label="Introduction">
+            <div className="eyebrow">A first journey · {tutorial + 1} / 4</div>
+            <h3>
+              {
+                [
+                  "Stay together",
+                  "Power has a price",
+                  "Make your first move",
+                  "Let them answer",
+                ][tutorial]
+              }
+            </h3>
+            <p>
+              {
+                [
+                  "You share health, a deck, and three energy. At each crossroads, choose left, straight ahead, or right. You discover what waits only after choosing a path.",
+                  "Choose who carries the Ember. Strong magic raises Dread. Every turn, 4–7 empowers the front enemy; 8–10 empowers all enemies, then falls by 4. Lower Dread before ending to avoid the response.",
+                  "Click a card. Choose an enemy for attacks; the last living enemy is targeted automatically. Guards play immediately. Intentions show what happens if you end now.",
+                  "Play what you need, then End turn. Your remaining hand is discarded and you draw five. Block protects now, then clears at your next turn.",
+                ][tutorial]
+              }
+            </p>
+            <div className="dialog-actions">
+              {tutorial < 2 && (
+                <button
+                  className="primary"
+                  onClick={() => setTutorial(tutorial + 1)}
+                >
+                  Next
+                </button>
+              )}
+              <button className="text-button" onClick={closeTutorial}>
+                {tutorial < 2 ? "Skip introduction" : "Got it"}
               </button>
-            )}
-            <button className="text-button" onClick={closeTutorial}>
-              {tutorial < 2 ? "Skip introduction" : "Got it"}
-            </button>
-          </div>
-        </aside>
-      )}
+            </div>
+          </aside>
+        )}
       {panel === "rules" && (
         <Modal title="How to carry the light" close={() => setPanel(null)}>
           <Rules />

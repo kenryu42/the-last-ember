@@ -102,6 +102,17 @@ can change seeded journey outcomes. Earlier measurements below describe their
 historical topology. Current saves require three paths per crossroads; old
 development routes are not migrated. See `ART_PROVENANCE.md` for the new artwork.
 
+A short, skippable approach moves toward the chosen trail before revealing the
+encounter. Gameplay speed scales the approach; reduced motion uses a brief fade
+without zooming. Battles pause on a full-scene illustration until **Prepare for
+battle**, before any Ember bearer selection or combat controls. The resolved
+encounter and pending introduction save immediately, so reloading during travel
+cannot reroll enemies or skip the introduction. Shops, camps, and story events
+show their actual choices directly over their illustrations, without another
+Continue screen. Combat paintings match the enemy formation and Act; shops and
+camps have Act-specific art, and each story has its own painting. Sources are in
+`ENCOUNTER_ART_PROVENANCE.md`.
+
 **Progress saves after every committed action.** Continue restores the exact draw
 order, rewards, stock, and RNG state. Settings → Export journey makes a portable
 JSON backup; Restore validates it and requires explicit replacement confirmation.
