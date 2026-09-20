@@ -774,23 +774,50 @@ export function CombatBoard({
         <Modal
           title={enemyDef(enemy.def).name}
           close={() => setEnemyInfo(null)}
+          wide
         >
-          <p>{enemyDef(enemy.def).special}</p>
-          <p>
-            Intention now:{" "}
-            <b>
-              {shownIntent(enemy).kind} {shownIntent(enemy).amount}
-            </b>
-            .
-          </p>
-          <p>
-            Base cycle:{" "}
-            {enemyDef(enemy.def)
-              .pattern.map((i) => `${i.kind} ${i.amount}`)
-              .join(" → ")}
-            . Attack modifiers and Weak are already included in the visible
-            intention.
-          </p>
+          <div className="enemy-inspection">
+            <div
+              className="enemy-portrait"
+              role="img"
+              aria-label={enemyDef(enemy.def).name}
+            >
+              <Art sheet="enemies" index={enemyDef(enemy.def).art} />
+            </div>
+            <div className="enemy-inspection-details">
+              <p>{enemyDef(enemy.def).special}</p>
+              <div className="enemy-inspection-intent">
+                <span className="eyebrow">Current intention</span>
+                <strong>
+                  {shownIntent(enemy).kind} {shownIntent(enemy).amount}
+                </strong>
+              </div>
+              <dl className="enemy-inspection-stats">
+                <div>
+                  <dt>Health</dt>
+                  <dd>
+                    {enemy.hp} / {enemy.maxHp}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Block</dt>
+                  <dd>{enemy.block}</dd>
+                </div>
+              </dl>
+              <h3>Base cycle</h3>
+              <ol className="enemy-inspection-cycle">
+                {enemyDef(enemy.def).pattern.map((intent, index) => (
+                  <li key={index}>
+                    {intent.kind} <b>{intent.amount}</b>
+                  </li>
+                ))}
+              </ol>
+              <p className="enemy-inspection-note">
+                Attack modifiers and Weak are already included in the current
+                intention. The base cycle shows unmodified values.
+              </p>
+            </div>
+          </div>
         </Modal>
       )}
       {log && (

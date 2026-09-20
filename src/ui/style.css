@@ -1348,6 +1348,81 @@ button.primary:hover:not(:disabled) {
 .modal.wide {
   width: min(1060px, calc(100vw - 35px));
 }
+.modal:has(.enemy-inspection) {
+  width: min(900px, calc(100vw - 35px));
+}
+.enemy-inspection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 32px;
+  align-items: start;
+}
+.enemy-portrait {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 50% 50% 12px 12px;
+}
+.enemy-portrait .art {
+  width: 100%;
+  aspect-ratio: 1 / 1.05;
+}
+.enemy-portrait .art-image {
+  width: auto;
+  height: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.enemy-inspection-intent {
+  padding: 18px;
+  border: 1px solid #aa997680;
+  border-radius: 6px;
+  background: #b8a5760c;
+}
+.enemy-inspection-intent strong {
+  display: block;
+  margin-top: 10px;
+  font:
+    600 30px "Cormorant Garamond",
+    Georgia,
+    serif;
+  text-transform: capitalize;
+  color: var(--amber);
+}
+.enemy-inspection-stats {
+  display: flex;
+  gap: 40px;
+  margin: 22px 0;
+}
+.enemy-inspection-stats dt {
+  font-size: 12px;
+  color: var(--dim);
+}
+.enemy-inspection-stats dd {
+  margin: 6px 0 0;
+  font-size: 20px;
+}
+.enemy-inspection-cycle {
+  padding-left: 22px;
+  display: grid;
+  gap: 8px;
+  text-transform: capitalize;
+  font-size: 14px;
+}
+.modal .enemy-inspection-note {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--dim);
+}
+@media (max-width: 700px) {
+  .enemy-inspection {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .enemy-portrait {
+    width: min(100%, 280px);
+    justify-self: center;
+  }
+}
 .modal::backdrop {
   background: #050f12b9;
   backdrop-filter: blur(5px);
