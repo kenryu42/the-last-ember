@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { EVENTS, cardDef, value } from "./content";
-import { newRun, random, resolve, startCombat } from "./engine";
+import { needsActBearer, newRun, random, resolve, startCombat } from "./engine";
 import type { Action, Run, StartingRelic } from "./model";
-import { flameBranchSchema } from "./model";
+import { flameBranchSchema, heroSchema } from "./model";
 import {
   legalActions,
   observe,
@@ -33,7 +33,9 @@ export function journeyLegalActions(run: Run): Action[] {
         observe(run, run.dreadRules === "recurring" ? "recurring" : "control"),
       );
     case "map":
-      candidates = run.route.map((n) => ({ type: "travel", node: n.id }));
+      candidates = needsActBearer(run)
+        ? heroSchema.options.map((hero) => ({ type: "bearer", hero }))
+        : run.route.map((n) => ({ type: "travel", node: n.id }));
       break;
     case "reward":
       candidates = [null, ...s.cards].map((card) => ({ type: "reward", card }));

@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import type { CSSProperties } from "react";
+import { flushSync } from "react-dom";
 import { ACTS, RELICS, cardDef, needsTarget } from "./game/content";
 import { cardCost, newRun, resolve } from "./game/engine";
 import type { Action, Card, Frame, RouteNode, Run } from "./game/model";
@@ -23,6 +24,13 @@ import {
 import type { Settings } from "./game/storage";
 import { configureAudio, setSoundscape, sound, wakeAudio } from "./ui/audio";
 import { CombatEffects, attackTiming, powerfulCard } from "./ui/combat-effects";
+import {
+  animateDiscard,
+  animateDraw,
+  animateShuffle,
+  discardedHand,
+  drawSequence,
+} from "./ui/card-motion";
 import { Art, CardView, Icon, Modal, Rules } from "./ui/components";
 import { CombatBoard, JourneyCrossroads, StopScene } from "./ui/scenes";
 import type { Inspect } from "./ui/scenes";
@@ -201,7 +209,17 @@ export function App() {
     if (result.run.scene.kind === "ending" && before.scene.kind !== "ending")
       recordEnding(result.run);
     if (before.scene.kind === "combat" && !settingsRef.current.reduced) {
-      setVisual(before);
+      let presented = before;
+      flushSync(() => setVisual(before));
+      if (action.type === "end") {
+        const discarded = discardedHand(before.scene);
+        await animateDiscard(
+          before.scene.hand.filter((card) => !cardDef(card.def).retain),
+          speed,
+        );
+        presented = { ...before, scene: discarded };
+        flushSync(() => setVisual(presented));
+      }
       for (const frame of result.frames) {
         setFeedback(frame);
         setStage("anticipate");
@@ -212,13 +230,26 @@ export function App() {
         await delay(timing.travel);
         // Keep the board mounted until input unlocks. Revealing reward controls
         // sooner makes an apparently available click disappear into the lock.
-        if (frame.run.scene.kind === "combat") setVisual(frame.run);
         setStage("impact");
         sound(frame.cue, {
           phase: "impact",
           blocked: frame.text.includes("blocked"),
           powerful,
         });
+        if (
+          frame.run.scene.kind === "combat" &&
+          presented.scene.kind === "combat"
+        ) {
+          const sequence = drawSequence(presented.scene, frame.run.scene);
+          flushSync(() => setVisual({ ...frame.run, scene: sequence.initial }));
+          for (const step of sequence.steps) {
+            if (step.kind === "shuffle") await animateShuffle(speed);
+            flushSync(() => setVisual({ ...frame.run, scene: step.combat }));
+            if (step.kind === "draw") await animateDraw(step.card, speed);
+          }
+          presented = frame.run;
+          setVisual(frame.run);
+        }
         await delay(timing.impact);
       }
     } else if (result.frames.length) {
@@ -473,6 +504,7 @@ export function App() {
               <JourneyCrossroads
                 key={`${shown.act}-${shown.row}`}
                 run={shown}
+                busy={busy}
                 dispatch={(action) => void dispatch(action)}
               />
             )}

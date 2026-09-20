@@ -415,6 +415,15 @@ export function hitDamage(
     (has(run, "coal") && combat.dread >= 6 ? 3 : 0);
   return Math.floor(amount * (enemy.vulnerable > 0 ? 1.5 : 1));
 }
+export function needsActBearer(run: Run): boolean {
+  return (
+    run.prototype?.ember === true &&
+    run.actBearer === null &&
+    run.scene.kind === "map" &&
+    run.row === -1
+  );
+}
+
 export function resolve(
   input: Run,
   action: Action,
@@ -490,8 +499,8 @@ export function resolve(
   };
   if (run.scene.kind === "ending") return fail("This journey has ended.");
   if (
-    run.scene.kind === "combat" &&
-    run.scene.ember?.window === "choose" &&
+    (needsActBearer(run) ||
+      (run.scene.kind === "combat" && run.scene.ember?.window === "choose")) &&
     action.type !== "bearer"
   )
     return fail("Choose this Act's starting Ember bearer first.");
@@ -538,6 +547,10 @@ export function resolve(
     }
     case "bearer": {
       const c = run.scene;
+      if (needsActBearer(run)) {
+        run.actBearer = action.hero;
+        return finish();
+      }
       if (
         c.kind !== "combat" ||
         !c.ember ||

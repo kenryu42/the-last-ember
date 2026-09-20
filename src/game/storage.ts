@@ -114,15 +114,8 @@ export function parseSave(text: string | null): Loaded {
     const bad =
       !validProgression(run) ||
       (run.prototype?.ember === true &&
-        ((run.row === -1 && run.actBearer !== null) ||
-          (run.row >= 0 &&
-            run.actBearer === null &&
-            !(
-              s.kind === "combat" &&
-              run.row === 0 &&
-              s.turn === 1 &&
-              s.ember?.window === "choose"
-            )))) ||
+        run.row >= 0 &&
+        run.actBearer === null) ||
       run.hp > run.maxHp ||
       run.deck.some((c) => !cardIds.has(c.def)) ||
       run.deck.some(

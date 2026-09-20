@@ -2526,6 +2526,18 @@ input[type="range"] {
   pointer-events: none;
   margin: 0;
 }
+.card-deal-back {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid #aa9366;
+  border-radius: inherit;
+  background: #26312c url(/assets/wayfarer-back.webp) center / 100% 100%;
+  pointer-events: none;
+}
+.hand-card:has([data-motion="draw"]) {
+  z-index: 22;
+}
 .art {
   position: relative;
   overflow: hidden;

@@ -45,6 +45,14 @@ selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
 
+Ending a turn sweeps unplayed cards into Discard while Retain cards stay in the
+hand. After enemy actions, new cards deal from Draw into the fan one at a time.
+If Draw empties partway through a deal, Discard transfers face-down into Draw
+before the remaining cards arrive. Mid-turn draw effects use the same animation;
+the hand limit and empty piles never produce fake card flights. These animations
+follow the already-resolved engine snapshots, respect gameplay speed and reduced
+motion, and do not consume RNG or delay saving the resolved action.
+
 New journeys use **recurring Dread**: at turn end, 4–7 temporarily strengthens
 the front enemy by 2; 8–10 strengthens all enemies by 3 and then loses 4 Dread.
 Howls happen afterward. The opening battle of act two is an Escape: spend 1 energy and
@@ -99,6 +107,8 @@ formations, and three bosses with telegraphed phase changes. Victory lights the
 beacon; defeat remembers the fellowship's attempt. Results and custom seeds support
 replay without permanent stat grinding or unlock gates.
 
+Each Act starts with choosing an Ember bearer, before the first path choice.
+The bearer stays locked for the Act, including after reloading at the crossroads.
 The adventure shows only the current crossroads, with three choices: left,
 straight ahead, and right. Click or tap a region of the illustration to travel;
 trail markers highlight on hover or keyboard focus. Tab between paths and use
@@ -114,7 +124,7 @@ development routes are not migrated. See `ART_PROVENANCE.md` for the new artwork
 A short, skippable approach moves toward the chosen trail before revealing the
 encounter. Gameplay speed scales the approach; reduced motion uses a brief fade
 without zooming. Battles pause on a full-scene illustration until **Prepare for
-battle**, before any Ember bearer selection or combat controls. The resolved
+battle**, before showing combat controls. The resolved
 encounter and pending introduction save immediately, so reloading during travel
 cannot reroll enemies or skip the introduction. Shops, camps, and story events
 show their actual choices directly over their illustrations, without another
@@ -190,6 +200,8 @@ inspection-layout checks; it is not a balanced playable deck.
   1× as the default. Speed changes apply to the next action and scale combat
   effects and reactions together. Reduced motion settles immediately at any speed.
 - `src/ui/`: scene rendering, card/inspection components, local audio, responsive CSS.
+- `src/ui/card-motion.ts`: presentation-only discard/deal steps and card flights,
+  reconstructed from resolved snapshots without rerunning a shuffle.
 - `src/ui/combat-effects.tsx`: presentation-only sword arcs, arrows, fireballs, and
   impacts. Geometry is measured once per effect. Damage snapshots and impact sounds
   arrive together; these effects never feed back into the engine.

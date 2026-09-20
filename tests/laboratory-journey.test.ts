@@ -101,15 +101,16 @@ test("checkpoint CLI uses explicit experiment settings and rejects missing rules
     },
     "hushed-coal",
   );
+  const bearer = { type: "bearer", hero: "Eryn" } as const;
   const travel = { type: "travel", node: "0-0-1" } as const;
-  const checkpoint = resolve(run, travel).run;
+  const checkpoint = resolve(resolve(run, bearer).run, travel).run;
   expect(checkpoint.scene.kind).toBe("combat");
   const record = {
     seed: run.seed,
     dreadRules: run.dreadRules,
     prototype: run.prototype,
     startingRelic: "hushed-coal",
-    trace: [travel, journeyLegalActions(checkpoint)[0]],
+    trace: [bearer, travel, journeyLegalActions(checkpoint)[0]],
   };
   const dir = mkdtempSync(join(tmpdir(), "checkpoint-rules-"));
   try {
@@ -119,7 +120,7 @@ test("checkpoint CLI uses explicit experiment settings and rejects missing rules
       "scripts/lab-checkpoint.ts",
       path,
       run.seed,
-      "1",
+      "2",
       "strategic",
       "256",
     ];

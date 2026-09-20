@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { CombatBoard } from "../src/ui/scenes";
+import { JourneyCrossroads } from "../src/ui/scenes";
 import { cardDef } from "../src/game/content";
 import {
   makeCard,
@@ -81,24 +81,75 @@ test("Act bearer choice precedes actions and stays locked on later turns", () =>
     legalActions(observe(next, "recurring")).some((a) => a.type === "bearer"),
   ).toBe(false);
 });
-test("bearer screen exposes three choices and encounter context, then returns to combat", () => {
-  const run = setup("Mara", ["guard"]);
+test("each Act requires a bearer before travel, without drawing or consuming RNG", () => {
+  let run = newRun("act-start", "recurring", {
+    kind: "escape",
+    target: 4,
+    ember: true,
+  });
+  for (const hero of ["Eryn", "Aldren", "Mara"] as const) {
+    expect(run.row).toBe(-1);
+    expect(run.actBearer).toBeNull();
+    expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
+    const node = run.route.find((n) => n.row === 0);
+    if (!node) throw new Error("Missing opening node");
+    expect(journeyLegalActions(run)).toEqual([
+      { type: "bearer", hero: "Mara" },
+      { type: "bearer", hero: "Eryn" },
+      { type: "bearer", hero: "Aldren" },
+    ]);
+    const rejected = resolve(run, { type: "travel", node: node.id });
+    expect(rejected.error).toContain("starting Ember bearer");
+    expect(rejected.run).toEqual(run);
+    const choice = resolve(run, { type: "bearer", hero });
+    expect(choice.error).toBeNull();
+    expect(choice.run).toEqual({ ...run, actBearer: hero });
+    run = choice.run;
+    expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
+    expect(resolve(run, { type: "bearer", hero: "Mara" }).error).toContain(
+      "locked",
+    );
+    const travel = resolve(run, { type: "travel", node: node.id });
+    expect(travel.error).toBeNull();
+    run = travel.run;
+    expect(c(run).ember).toEqual({
+      window: "closed",
+      bearer: hero,
+      used: false,
+    });
+    expect(c(run).hand).toHaveLength(5);
+    expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
+    const missingBearer = structuredClone(run);
+    missingBearer.actBearer = null;
+    c(missingBearer).ember = { window: "choose", bearer: null, used: false };
+    expect(parseSave(JSON.stringify(missingBearer)).kind).toBe("error");
+    if (run.act < 2) {
+      run.scene = {
+        kind: "reward",
+        cards: [],
+        relic: null,
+        gold: 0,
+        boss: true,
+      };
+      run = resolve(run, { type: "reward", card: null }).run;
+    }
+  }
+});
+
+test("Act-start screen exposes three choices, then reveals the crossroads", () => {
+  let run = newRun("bearer-screen", "recurring", {
+    kind: "escape",
+    target: 4,
+    ember: true,
+  });
   const render = () =>
     renderToStaticMarkup(
-      createElement(CombatBoard, {
+      createElement(JourneyCrossroads, {
         run,
-        combat: c(run),
         dispatch: () => {},
-        selected: null,
-        select: () => {},
         busy: false,
-        feedback: null,
-        stage: "impact",
-        inspect: () => {},
-        reduced: true,
       }),
     );
-  c(run).ember = { window: "choose", bearer: null, used: false };
   const choice = render();
   for (const hero of ["Mara", "Eryn", "Aldren"]) {
     expect(choice).toContain(`aria-label="Choose ${hero}"`);
@@ -106,13 +157,13 @@ test("bearer screen exposes three choices and encounter context, then returns to
   }
   expect(choice).toContain("Locked for this Act");
   expect(choice).toContain("cannot change until you clear this Act");
-  expect(choice).toContain("Encounter &amp; opening hand");
+  expect(choice).not.toContain("Encounter &amp; opening hand");
   expect(choice).not.toContain('aria-label="Combat"');
-  c(run).ember = { window: "closed", bearer: "Eryn", used: false };
-  const combat = render();
-  expect(combat).toContain('aria-label="Combat"');
-  expect(combat).not.toContain("bearer-selection");
-  expect(combat).not.toContain("Pass ·");
+  expect(choice).not.toContain('aria-label="Choose a path"');
+  run = resolve(run, { type: "bearer", hero: "Eryn" }).run;
+  const crossroads = render();
+  expect(crossroads).toContain('aria-label="Choose a path"');
+  expect(crossroads).not.toContain("bearer-selection");
 });
 
 test("bearer persists through encounters and passive use resets each turn and fight", () => {
@@ -169,6 +220,8 @@ test("a full journey chooses once per Act and round-trips the locked bearer thro
     run = next.run;
     if (action.type === "bearer") {
       expect(before.actBearer).toBeNull();
+      expect(before.scene.kind).toBe("map");
+      expect(before.row).toBe(-1);
       expect(chosenActs).not.toContain(before.act);
       chosenActs.push(before.act);
       expect(run.actBearer).toBe(action.hero);
@@ -296,10 +349,10 @@ test("recurring objective and bearer saves round-trip and reject mixed rules", (
   });
   const node = run.route.find((n) => n.row === 0);
   if (!node) throw new Error("Missing opening node");
+  run = resolve(run, { type: "bearer", hero: "Eryn" }).run;
   run = resolve(run, { type: "travel", node: node.id }).run;
   const load = (state: Run) => parseSave(JSON.stringify(state));
   expect(load(run)).toEqual({ kind: "valid", run });
-  run = resolve(run, { type: "bearer", hero: "Eryn" }).run;
   run = resolve(run, { type: "end" }).run;
   expect(load(run)).toEqual({ kind: "valid", run });
   c(run).fired = [];

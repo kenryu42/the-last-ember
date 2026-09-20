@@ -39,10 +39,10 @@ The names on cards describe their identity. They do **not** impose class
 restrictions, separate turns, or separate health pools. Fellowship cards provide
 shared support.
 
-In the first encounter of each Act, draw the opening hand and then choose an
-**Ember bearer**. That choice is locked for the whole Act, including fights,
+At the start of each Act, choose an **Ember bearer** before choosing your first
+path. That choice is locked for the whole Act, including fights,
 camps, shops, and reloads. After a guardian reward advances the Act, choose again
-after drawing the next Act's first opening hand. There is no pass action, cost,
+before the next Act's first crossroads. There is no pass action, cost,
 or control. All heroes' cards remain playable. Only the chosen bearer's passive
 is active:
 
