@@ -109,6 +109,7 @@ export function CardView({
   card,
   onClick,
   disabled = false,
+  unavailable = false,
   selected = false,
   label,
   cost,
@@ -118,6 +119,7 @@ export function CardView({
   card: Card;
   onClick?: () => void;
   disabled?: boolean;
+  unavailable?: boolean;
   selected?: boolean;
   label?: string;
   cost?: number;
@@ -168,26 +170,29 @@ export function CardView({
     const panel = artwork.current;
     const anchor = button.current;
     if (!showArt || !panel || !anchor) return;
-    const rect = anchor.getBoundingClientRect();
-    const width = Math.min(
-      480,
-      window.innerWidth - 24,
-      (window.innerHeight - 80) * 1.5,
-    );
-    const height = width / 1.5 + 38;
-    const left =
-      rect.right + width + 20 <= window.innerWidth
-        ? rect.right + 8
-        : rect.left - width - 8 >= 12
-          ? rect.left - width - 8
-          : Math.max(12, Math.min(window.innerWidth - width - 12, rect.left));
-    const top =
-      rect.bottom + height + 20 <= window.innerHeight
-        ? rect.top
-        : rect.top - height - 8;
-    panel.style.width = `${width}px`;
-    panel.style.left = `${left}px`;
-    panel.style.top = `${Math.max(12, Math.min(window.innerHeight - height - 12, top))}px`;
+    let frame = 0;
+    const position = () => {
+      const rect = anchor.getBoundingClientRect();
+      const top = Math.max(12, rect.top);
+      const width = Math.min(
+        480,
+        window.innerWidth - 24,
+        Math.max(1, window.innerHeight - top - 12 - 38) * 1.5,
+      );
+      const left =
+        rect.right + width + 20 <= window.innerWidth
+          ? rect.right + 8
+          : rect.left - width - 8 >= 12
+            ? rect.left - width - 8
+            : Math.max(12, Math.min(window.innerWidth - width - 12, rect.left));
+      panel.style.width = `${width}px`;
+      panel.style.left = `${left}px`;
+      panel.style.top = `${top}px`;
+      // Transforms do not trigger ResizeObserver. Follow the card's lift and
+      // hand reflow for as long as its artwork is open.
+      frame = requestAnimationFrame(position);
+    };
+    position();
     panel.showPopover();
     const video = panel.querySelector("video");
     if (video) {
@@ -215,6 +220,7 @@ export function CardView({
     window.addEventListener("blur", close);
     document.addEventListener("visibilitychange", visibilityChanged);
     return () => {
+      cancelAnimationFrame(frame);
       video?.pause();
       panel.hidePopover();
       window.removeEventListener("keydown", escape, true);
@@ -245,6 +251,7 @@ export function CardView({
           onClick?.();
         }}
         disabled={disabled}
+        aria-disabled={unavailable || undefined}
         aria-label={
           label ??
           `${def.name}${card.upgraded ? " upgraded" : ""}, ${cost ?? def.cost} energy. ${def.tags?.includes("Spell") ? "Spell. " : ""}${def.effects.map((e) => effectText(e, card.upgraded)).join(" ")}${def.exhaust ? " Exhaust." : ""}${def.retain ? " Retain." : ""}`

@@ -201,6 +201,35 @@ async function checkFaces() {
   const faces = document.querySelectorAll<HTMLElement>(".game-card");
   if (!faces.length) throw new Error("No card faces rendered");
   for (const face of faces) {
+    if (face.closest(".hand")) {
+      // Inspect each face upright, as a player reads an overlapping fan.
+      face.scrollIntoView({ block: "center" });
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
+      face.focus({ preventScroll: true });
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
+      const popup = face.parentElement?.querySelector(
+        ".card-art-popover:popover-open",
+      );
+      if (!popup) throw new Error("Missing focused card artwork");
+      const preview = popup.getBoundingClientRect();
+      if (
+        Math.abs(preview.top - Math.max(12, face.getBoundingClientRect().top)) >
+        1
+      )
+        throw new Error(
+          `Artwork must align with card top: ${face.dataset.def}`,
+        );
+      if (
+        preview.left < 0 ||
+        preview.right > innerWidth ||
+        preview.bottom > innerHeight
+      )
+        throw new Error(`Artwork outside viewport: ${face.dataset.def}`);
+    }
     const bounds = face.getBoundingClientRect();
     if (Math.abs(bounds.width / bounds.height - 230 / 326) > 0.001)
       throw new Error(`Distorted card: ${face.dataset.def}`);
@@ -232,6 +261,61 @@ async function checkFaces() {
   return { width: innerWidth, checked: faces.length, ratio: "230:326" };
 }
 
+async function checkHand() {
+  if (document.activeElement instanceof HTMLElement)
+    document.activeElement.blur();
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  const hand = document.querySelector<HTMLElement>(".hand");
+  if (!hand || hand.scrollWidth > hand.clientWidth)
+    throw new Error("Hand must fit without horizontal scrolling");
+  const cards = [...hand.querySelectorAll<HTMLButtonElement>(".game-card")];
+  if (cards.length !== 10) throw new Error("Expected full hand");
+  for (const card of cards) {
+    const bounds = card.getBoundingClientRect();
+    if (bounds.left < 0 || bounds.right > innerWidth)
+      throw new Error(`Offscreen card: ${card.dataset.def}`);
+    const seal = card.querySelector(".cost");
+    if (!seal) throw new Error("Missing cost");
+    seal.scrollIntoView({ block: "center" });
+    const cost = seal.getBoundingClientRect();
+    if (
+      !card.contains(
+        document.elementFromPoint(
+          cost.left + cost.width / 2,
+          cost.top + cost.height / 2,
+        ),
+      )
+    )
+      throw new Error(`Covered selection area: ${card.dataset.def}`);
+  }
+  const first = cards[0],
+    last = cards.at(-1);
+  if (!first || !last) throw new Error("Missing hand edges");
+  first.focus();
+  first.dispatchEvent(
+    new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }),
+  );
+  if (document.activeElement !== last) throw new Error("Left arrow must wrap");
+  last.dispatchEvent(
+    new KeyboardEvent("keydown", { key: "Home", bubbles: true }),
+  );
+  if (document.activeElement !== first)
+    throw new Error("Home must select first card");
+  first.dispatchEvent(
+    new KeyboardEvent("keydown", { key: "End", bubbles: true }),
+  );
+  if (document.activeElement !== last)
+    throw new Error("End must select last card");
+  last.blur();
+  return {
+    width: innerWidth,
+    cards: cards.length,
+    scrolling: false,
+    selectionAreas: "exposed",
+    keyboard: "passed",
+  };
+}
+
 const run = newRun("card-layout-study");
 run.deck = CARDS.map((card) => makeCard(run, card.id));
 const camp = run.route.find((node) => node.kind === "camp");
@@ -256,7 +340,7 @@ try {
       await browser(
         "eval",
         `localStorage.setItem('last-ember.run.v1', ${JSON.stringify(save)});
-        localStorage.setItem('last-ember.settings.v1', JSON.stringify({music:0,effects:0,muted:true,reduced:true,shake:false}));location.reload()`,
+        localStorage.setItem('last-ember.settings.v1', JSON.stringify({music:0,effects:0,muted:true,reduced:true,shake:false,gameplaySpeed:1}));location.reload()`,
       );
       await browser(
         "wait",
@@ -355,22 +439,12 @@ try {
       }
       await browser("wait", ".game-card");
       await browser("mouse", "move", "0", "0");
+      if (fixture === combat) await browser("press", "Tab");
       console.log(
         JSON.stringify(await browser("eval", `(${checkFaces.toString()})()`)),
       );
       if (fixture === combat) {
-        for (const edge of ["first", "last"]) {
-          await browser(
-            "eval",
-            `(()=>{const hand=document.querySelector('.hand');hand.style.scrollBehavior='auto';hand.scrollLeft=${edge === "first" ? "0" : "hand.scrollWidth"};})()`,
-          );
-          console.log(
-            await browser(
-              "eval",
-              `(()=>{const hand=document.querySelector('.hand'),cards=hand.querySelectorAll('.game-card'),card=cards[${edge === "first" ? "0" : "cards.length-1"}],b=card.getBoundingClientRect(),h=hand.getBoundingClientRect();if(b.left<h.left-1||b.right>h.right+1)throw Error('Hand edge unreachable');return '${edge} card reachable at ${width}px';})()`,
-            ),
-          );
-        }
+        console.log(await browser("eval", `(${checkHand.toString()})()`));
       }
     }
   }

@@ -18,20 +18,25 @@ solo game's rules; it does not invent PvP matchups or first-player statistics.
 Start a journey, choose a reachable road, and read enemy intentions before playing
 cards. Click a targeted card, then an enemy; Escape cancels. With only one living
 enemy, the card targets it automatically. Other cards play on click. Tab and
-Enter/Space work throughout. Larger hands scroll and have explicit
-previous/more controls. Inspection is available for every pile, the permanent deck,
+Enter/Space work throughout. The hand forms a shallow fan with adaptive overlap,
+without horizontal scrolling or pagination. Hover or keyboard focus raises a
+complete card; Left/Right arrows cycle through the hand, and Home/End jump to its
+edges. On touch, tap to inspect, then use Play card or Choose target. Narrow screens
+split larger hands into rows. Cards you cannot afford remain inspectable but cannot
+be played. Inspection is available for every pile, the permanent deck,
 enemies, relics, and upgrades.
 
-Hover a card's artwork or focus the card with the keyboard to see its full base or upgraded
-painting. You can move onto the preview to inspect it; Escape dismisses it without
-closing the underlying dialog. Clicking the card still performs its normal action.
+Hover a card's artwork or focus the card with the keyboard
+to see its full base or upgraded painting. You can move onto the preview to inspect
+it; Escape dismisses it without closing the underlying dialog. Clicking the card
+still performs its normal action.
 The preview fits the viewport and uses the native browser Popover API.
 
 Cards use the selected **Wayfarer** design: stitched leather, quiet parchment,
 wax energy seals and mounted paintings. All names, costs, rules and keywords remain
 live text. The common bookcloth back marks the face-down draw pile, with a subdued
 empty state; clicking it still inspects the pile with order hidden. Upgraded art
-and the title's `+` remain distinct. Hand previews are suspended during target
+and the title's `+` remain distinct. Hand art popovers are suspended during target
 selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
@@ -319,7 +324,9 @@ and reachable controls, then confirms that
 only Shoulder the burden improves and the camp is consumed. It prints 256 checked
 comparison faces and focused title bounds, and writes four screenshots under `/tmp`.
 It also checks all 64 deck variants and a real ten-card hand at both widths for
-proportions and text overflow, including access to the first and last hand cards.
+proportions and text overflow. The hand checks inspect each face upright and verify
+that every cost seal is exposed, no horizontal scrolling is needed, and keyboard
+navigation reaches both ends of the fan.
 This regression reproduced overflow before the shared CSS fix. The narrow camp
 and read-only screenshots, plus desktop equivalents, were inspected after it.
 

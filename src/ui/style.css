@@ -822,39 +822,73 @@ button.primary:hover:not(:disabled) {
 }
 .hand-window {
   min-width: 0;
+  position: relative;
 }
-.hand-scroll-controls {
+.hand-touch-action {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 8px;
-  font-size: 10px;
-  color: #bbc8bb;
-}
-.hand-scroll-controls button {
-  padding: 4px 8px;
+  position: sticky;
+  bottom: 12px;
+  z-index: 30;
+  padding: 8px;
+  border: 1px solid #786043;
+  border-radius: 8px;
+  background: #14221ff5;
+  font-size: 12px;
   color: #e7d6a9;
 }
-.compact-hand-controls {
-  display: flex;
-}
-@media (max-width: 1000px) {
-  .compact-hand-controls {
-    display: flex;
-  }
-  .hand-scroll-controls > span {
-    display: none;
-  }
+.hand-touch-action button {
+  min-height: 44px;
 }
 .hand {
-  display: flex;
-  justify-content: safe center;
-  overflow-x: auto;
-  gap: 9px;
+  position: relative;
   min-width: 0;
-  align-items: center;
-  /* Keep the 18px selected lift and its outline inside the scroll viewport. */
-  padding: 24px 4px 8px;
+  isolation: isolate;
+}
+.hand-card {
+  position: absolute;
+  z-index: var(--hand-order);
+  transition:
+    left 0.2s ease-out,
+    top 0.2s ease-out;
+}
+.hand .hand-card .game-card {
+  --card-width: inherit;
+  transform-origin: top left;
+  transform: translateY(var(--fan-drop)) rotate(var(--fan-angle));
+}
+.hand-card .game-card[aria-disabled="true"] {
+  filter: saturate(0.55);
+  cursor: not-allowed;
+}
+.hand-card:has(:focus-visible),
+.hand-card.inspected,
+.hand-card.targeting {
+  z-index: 20;
+}
+.hand .hand-card:has(:focus-visible) .game-card,
+.hand .hand-card.inspected .game-card,
+.hand .hand-card.targeting .game-card {
+  transform: translate(var(--inspect-shift), -100px) scale(var(--inspect-scale));
+  border-color: #efcc83;
+  box-shadow:
+    0 0 0 2px #edc4786b,
+    0 12px 26px #051014b0;
+}
+@media (hover: hover) {
+  .hand-card:hover {
+    z-index: 21;
+  }
+  .hand .hand-card:hover .game-card {
+    transform: translate(var(--inspect-shift), -100px)
+      scale(var(--inspect-scale));
+    border-color: #efcc83;
+    box-shadow:
+      0 0 0 2px #edc4786b,
+      0 12px 26px #051014b0;
+  }
 }
 .game-card {
   --card-width: 200px;
@@ -1135,11 +1169,6 @@ button.primary:hover:not(:disabled) {
   color: #a2b0a2;
   font-style: italic;
   padding: 70px 0;
-}
-.large-hand {
-  justify-content: flex-start;
-  overflow-x: auto;
-  padding: 24px 5px 20px;
 }
 .stop-scene {
   text-align: center;
@@ -1823,9 +1852,6 @@ input[type="range"] {
   .end-turn {
     width: 105px;
   }
-  .hand {
-    gap: 7px;
-  }
   .crossroads {
     margin-inline: -28px;
   }
@@ -1876,10 +1902,6 @@ input[type="range"] {
   }
   .companions {
     gap: 9px;
-  }
-  .hand {
-    justify-content: flex-start;
-    overflow-x: auto;
   }
   .shop-layout {
     flex-direction: column;
@@ -2075,8 +2097,17 @@ input[type="range"] {
     width: 17px;
   }
   .hand-area {
-    grid-template-columns: 48px minmax(0, 1fr) 69px;
+    grid-template-columns: 1fr 1fr;
     gap: 6px;
+  }
+  .hand-window {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .energy-pile,
+  .end-pile {
+    flex-direction: row;
+    justify-content: center;
   }
   .energy-orb {
     width: 42px;
