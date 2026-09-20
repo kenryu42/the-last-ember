@@ -150,7 +150,11 @@ export function App() {
         `.hand [data-card="${action.uid}"]`,
       );
       const destination = document
-        .querySelector(".end-pile")
+        .querySelector(
+          playedCard && cardDef(playedCard.def).exhaust
+            ? '[data-pile="exhaust"]'
+            : '[data-pile="discard"] .pile-stack',
+        )
         ?.getBoundingClientRect();
       if (source && destination) {
         const rect = source.getBoundingClientRect(),
@@ -159,19 +163,20 @@ export function App() {
           ghost.classList.add("flying-card");
           ghost.classList.remove("selected");
           ghost.setAttribute("aria-hidden", "true");
-          ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;`;
+          ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;--card-width:${rect.width}px;width:${rect.width}px;height:${rect.height}px;transform-origin:top left;animation:none;`;
           document.body.append(ghost);
           const animation = ghost.animate(
             [
               { transform: "translateY(-10px) scale(1)", opacity: 1 },
               {
-                transform: `translate(${destination.left - rect.left}px,${destination.top - rect.top}px) scale(.25) rotate(12deg)`,
+                transform: `translate(${destination.left - rect.left}px,${destination.top - rect.top}px) scale(${destination.width / rect.width}) rotate(4deg)`,
                 opacity: 0,
               },
             ],
             { duration: 540 / speed, easing: "cubic-bezier(.3,0,.5,1)" },
           );
           animation.onfinish = () => ghost.remove();
+          animation.oncancel = () => ghost.remove();
         }
       }
     }

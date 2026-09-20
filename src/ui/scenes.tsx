@@ -22,7 +22,7 @@ import type { RulesMode } from "../game/engine";
 import { thresholdState } from "../game/playtest";
 import type { Action, Card, Combat, Frame, Run } from "../game/model";
 import { flameBranchSchema, heroSchema } from "../game/model";
-import { Art, CardView, Icon, Modal } from "./components";
+import { Art, CardPile, CardView, Icon, Modal } from "./components";
 import { EncounterIllustration, encounterArt } from "./encounters";
 
 export type Inspect = { title: string; cards: Card[] } | null;
@@ -801,8 +801,9 @@ export function CombatBoard({
             <b>{combat.energy}</b>
             <span>Energy</span>
           </div>
-          <button
-            className="pile"
+          <CardPile
+            kind="draw"
+            cards={combat.draw}
             onClick={() =>
               inspect({
                 title: "Draw pile · order hidden",
@@ -811,16 +812,7 @@ export function CombatBoard({
                 ),
               })
             }
-          >
-            <span
-              className="card-back"
-              aria-hidden="true"
-              data-empty={combat.draw.length === 0}
-            />
-            <span>
-              Draw <b>{combat.draw.length}</b>
-            </span>
-          </button>
+          />
         </div>
         <Hand
           cards={combat.hand}
@@ -839,19 +831,16 @@ export function CombatBoard({
             {busy ? "Resolving…" : "End turn"}
             <Icon name="arrow" size={17} />
           </button>
-          <button
-            className="pile"
+          <CardPile
+            kind="discard"
+            cards={combat.discard}
             onClick={() =>
               inspect({ title: "Discard pile", cards: combat.discard })
             }
-          >
-            <Icon name="deck" />
-            <span>
-              Discard <b>{combat.discard.length}</b>
-            </span>
-          </button>
+          />
           <button
             className="text-button"
+            data-pile="exhaust"
             onClick={() =>
               inspect({
                 title: "Exhausted · returns next combat",

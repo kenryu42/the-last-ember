@@ -9,7 +9,7 @@ import {
   resolve,
   startCombat,
 } from "../src/game/engine";
-import { CardView } from "../src/ui/components";
+import { CardPile, CardView } from "../src/ui/components";
 import { CombatBoard, JourneyCrossroads } from "../src/ui/scenes";
 import { attackTiming } from "../src/ui/combat-effects";
 
@@ -263,18 +263,64 @@ test("Wayfarer draw back remains decorative and distinguishes an empty pile", as
     );
   expect(combat.draw.length).toBeGreaterThan(0);
   expect(render()).toContain(
-    'class="card-back" aria-hidden="true" data-empty="false"',
+    'class="pile-stack" aria-hidden="true" data-empty="false"',
   );
   combat.discard.push(...combat.draw);
   combat.draw = [];
   const empty = render();
   expect(empty).toContain(
-    'class="card-back" aria-hidden="true" data-empty="true"',
+    'class="pile-stack" aria-hidden="true" data-empty="true"',
   );
   expect(empty).toContain("Draw <b>0</b>");
   for (const asset of ["face", "back"]) {
     expect(
       await Bun.file(`public/assets/wayfarer-${asset}.webp`).exists(),
     ).toBe(true);
+  }
+});
+
+test("physical piles hide draw order and show the latest discarded card", () => {
+  const cards = [
+    { uid: 41, def: "flame", upgraded: false },
+    { uid: 42, def: "guard", upgraded: true },
+  ];
+  const render = (kind: "draw" | "discard", pile = cards) =>
+    renderToStaticMarkup(
+      <CardPile kind={kind} cards={pile} onClick={() => {}} />,
+    );
+  const draw = render("draw");
+  expect(draw).toBe(render("draw", [...cards].reverse()));
+  expect(draw).toContain('aria-label="Draw pile, 2 cards, order hidden"');
+  expect(draw).not.toContain("data-top-card");
+  expect(draw).not.toContain("card-pairs-");
+  const discard = render("discard");
+  expect(discard).toContain('data-top-card="42"');
+  expect(discard).not.toContain('data-top-card="41"');
+  expect(discard).toContain("Shelter +");
+  expect(discard).toContain("Gain 10 block.");
+  expect(discard).toContain("card-pairs-02.webp");
+  expect(discard).toContain("background-position:100% 0%");
+  expect(discard.match(/<button/g)).toHaveLength(1);
+  expect(render("discard", [...cards].reverse())).toContain(
+    'data-top-card="41"',
+  );
+  for (const kind of ["draw", "discard"] as const) {
+    const empty = render(kind, []);
+    expect(empty).toContain('data-empty="true"');
+    expect(empty).not.toContain('class="card-back"');
+    expect(empty).not.toContain('class="pile-face"');
+    expect(empty).not.toContain('class="pile-layer"');
+    expect(render(kind, cards.slice(0, 1))).not.toContain('class="pile-layer"');
+    expect(render(kind).match(/class="pile-layer"/g)).toHaveLength(1);
+    const full = render(
+      kind,
+      Array.from({ length: 30 }, (_, uid) => ({
+        uid,
+        def: "guard",
+        upgraded: false,
+      })),
+    );
+    expect(full.match(/class="pile-layer"/g)).toHaveLength(4);
+    expect(full).toContain("<b>30</b>");
   }
 });

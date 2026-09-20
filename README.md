@@ -34,9 +34,13 @@ The preview fits the viewport and uses the native browser Popover API.
 
 Cards use the selected **Wayfarer** design: stitched leather, quiet parchment,
 wax energy seals and mounted paintings. All names, costs, rules and keywords remain
-live text. The common bookcloth back marks the face-down draw pile, with a subdued
-empty state; clicking it still inspects the pile with order hidden. Upgraded art
-and the title's `+` remain distinct. Hand art popovers are suspended during target
+live text. The draw pile is a face-down bookcloth stack; the discard pile is a
+loose face-up stack showing the most recently discarded card, including upgrades.
+Layered edges suggest thickness, capped at four extra layers while counts stay
+exact. Empty piles show faint outlines rather than cards. Click either stack to
+inspect it; draw order stays hidden. Played-card flights land on the discard stack
+or the separate Exhausted control, with motion disabled in reduced-motion mode.
+Upgraded art and the title's `+` remain distinct. Hand art popovers are suspended during target
 selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.

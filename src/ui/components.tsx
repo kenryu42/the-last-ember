@@ -105,6 +105,75 @@ export function Art({
     </span>
   );
 }
+function cardArtStyle(card: Card) {
+  const def = cardDef(card.def);
+  return {
+    backgroundImage: `url(/assets/card-pairs-${String(Math.floor(def.art / 2) + 1).padStart(2, "0")}.webp)`,
+    backgroundSize: "200% 200%",
+    backgroundPosition: `${card.upgraded ? 100 : 0}% ${(def.art % 2) * 100}%`,
+  };
+}
+
+export function CardPile({
+  kind,
+  cards,
+  onClick,
+}: {
+  kind: "draw" | "discard";
+  cards: Card[];
+  onClick: () => void;
+}) {
+  const top = kind === "discard" ? cards.at(-1) : undefined;
+  const def = top ? cardDef(top.def) : undefined;
+  const layers = Math.min(4, Math.max(0, cards.length - 1));
+  const label = kind === "draw" ? "Draw" : "Discard";
+  return (
+    <button
+      type="button"
+      className="pile"
+      data-pile={kind}
+      onClick={onClick}
+      aria-label={`${label} pile, ${cards.length} cards${kind === "draw" ? ", order hidden" : ""}`}
+    >
+      <span
+        className="pile-stack"
+        aria-hidden="true"
+        data-empty={!cards.length}
+      >
+        {Array.from({ length: layers }, (_, index) => (
+          <span
+            key={index}
+            className="pile-layer"
+            style={{
+              transform: `translate(${(layers - index) * 1.5}px, ${(layers - index) * 2}px) rotate(${kind === "discard" ? (index % 2 ? -4 : 5) : -2}deg)`,
+            }}
+          />
+        ))}
+        {cards.length > 0 &&
+          (kind === "draw" ? (
+            <span className="card-back" />
+          ) : top && def ? (
+            <span className="pile-face" data-top-card={top.uid}>
+              <span className="pile-face-name">
+                {def.name}
+                {top.upgraded ? " +" : ""}
+              </span>
+              <span className="full-card-art" style={cardArtStyle(top)} />
+              <span className="pile-face-rules">
+                {def.effects.map((effect, index) => (
+                  <span key={index}>{effectText(effect, top.upgraded)}</span>
+                ))}
+              </span>
+            </span>
+          ) : null)}
+      </span>
+      <span>
+        {label} <b>{cards.length}</b>
+      </span>
+    </button>
+  );
+}
+
 export function CardView({
   card,
   onClick,
@@ -140,11 +209,7 @@ export function CardView({
     !card.upgraded &&
     !videoFailed &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const artStyle = {
-    backgroundImage: `url(/assets/card-pairs-${String(Math.floor(def.art / 2) + 1).padStart(2, "0")}.webp)`,
-    backgroundSize: "200% 200%",
-    backgroundPosition: `${card.upgraded ? 100 : 0}% ${(def.art % 2) * 100}%`,
-  };
+  const artStyle = cardArtStyle(card);
   function keepArt() {
     if (closing.current) clearTimeout(closing.current);
     if (allowArtPreview) {
