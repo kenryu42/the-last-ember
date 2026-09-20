@@ -110,8 +110,9 @@ Your starting deck contains:
       Light the beacon
 ```
 
-You visit **six stops per act, 18 in total**. Choose one reachable stop in each
-successive map column. You cannot backtrack.
+You visit **six stops per act, 18 in total**. At each illustrated crossroads,
+choose the left path, go straight ahead, or take the right path. You discover the
+encounter only after choosing. There is no revealed route map, and you cannot backtrack.
 
 Every act begins with a battle, guarantees a camp, and ends with its guardian. The
 intervening roads offer different combinations of encounters.
@@ -125,8 +126,9 @@ intervening roads offer different combinations of encounters.
 | Merchant | Spend gold on cards, a relic, healing, or removal |
 | Guardian | Defeat the act boss to advance or finish the journey |
 
-Newly generated roads normally offer two onward connections until the final
-approach to the guardian. Follow the connections shown on your map.
+Every crossroads offers three paths, including the final approach. The final
+three paths converge on the Act's guardian. Each stop has its own illustration:
+Briarwood forest, the flooded ruins of Avel, then the high mountain watch.
 
 **Health persists between encounters.** Finishing an ordinary battle does not
 automatically restore it.

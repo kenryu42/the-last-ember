@@ -179,10 +179,15 @@ export function parseSave(text: string | null): Loaded {
           s.enemies.some((e) => e.hp > e.maxHp) ||
           s.hand.length > 10)) ||
       run.deck.some((c) => c.uid >= run.nextId) ||
-      !run.route.length ||
+      run.route.length !== 18 ||
       new Set(run.route.map((n) => n.id)).size !== run.route.length ||
+      new Set(run.route.map((n) => `${n.row}-${n.lane}`)).size !== 18 ||
       run.route.some((n) => (n.row === 5) !== (n.kind === "boss")) ||
-      run.route.some((n) => n.row < 5 && n.links.length === 0) ||
+      run.route.some((n) =>
+        n.row === 5
+          ? n.links.length !== 0
+          : n.links.length !== 3 || new Set(n.links).size !== 3,
+      ) ||
       run.route.some((n) =>
         n.links.some(
           (link) =>

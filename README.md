@@ -90,12 +90,15 @@ formations, and three bosses with telegraphed phase changes. Victory lights the
 beacon; defeat remembers the fellowship's attempt. Results and custom seeds support
 replay without permanent stat grinding or unlock gates.
 
-New routes give each road two distinct next-stop choices: upper → upper/middle,
-middle → upper/lower, lower → middle/lower. No road has another road's choices
-plus a free third option. The final column still leads directly to the guardian.
-Saved routes retain their stored connections; newly generated acts use this topology.
-Node contents and route RNG consumption are unchanged. Earlier journey and recovery
-measurements below describe their historical topology, not current seeded outcomes.
+The adventure shows only the current crossroads, with three choices: left,
+straight ahead, and right. Encounters are hidden until a path is chosen; no future
+route or encounter icons are displayed. Each of the 18 stops has a unique local
+illustration and location description: Briarwood forest, the flooded ruins of
+Avel, and the alpine high watch. All three final approaches reach the Act's guardian.
+Encounter pools and route RNG consumption are unchanged, but the new connections
+can change seeded journey outcomes. Earlier measurements below describe their
+historical topology. Current saves require three paths per crossroads; old
+development routes are not migrated. See `ART_PROVENANCE.md` for the new artwork.
 
 **Progress saves after every committed action.** Continue restores the exact draw
 order, rewards, stock, and RNG state. Settings → Export journey makes a portable

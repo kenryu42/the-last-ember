@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { generateRoute, newRun } from "../src/game/engine";
+import { generateRoute, newRun, reachable, resolve } from "../src/game/engine";
 import type { RouteNode } from "../src/game/model";
 import {
   createPlaytestRun,
@@ -8,7 +8,7 @@ import {
 } from "../src/game/playtest-fixtures";
 import { parseSave } from "../src/game/storage";
 
-test("each road trades one future option; every full path visits camp and boss", () => {
+test("every crossroads offers three paths; every full journey visits camp and guardian", () => {
   for (const seed of [
     "lantern",
     "briar",
@@ -21,19 +21,19 @@ test("each road trades one future option; every full path visits camp and boss",
     for (const act of [0, 1, 2]) {
       run.act = act;
       const route = generateRoute(run);
-      for (let row = 0; row < 4; row++) {
+      run.route = route;
+      for (let row = 0; row < 5; row++) {
         const lanes = route.filter((n) => n.row === row);
-        expect(lanes.map((n) => n.links)).toEqual([
-          [`${act}-${row + 1}-0`, `${act}-${row + 1}-1`],
-          [`${act}-${row + 1}-0`, `${act}-${row + 1}-2`],
-          [`${act}-${row + 1}-1`, `${act}-${row + 1}-2`],
-        ]);
-        for (const a of lanes)
-          for (const b of lanes) {
-            if (a === b) continue;
-            expect(a.links.some((id) => !b.links.includes(id))).toBe(true);
-          }
-        expect(new Set(lanes.flatMap((n) => n.links)).size).toBe(3);
+        for (const node of lanes) {
+          expect(node.links).toEqual(
+            [0, 1, 2].map((lane) => `${act}-${row + 1}-${lane}`),
+          );
+          run.row = row;
+          run.location = node.id;
+          expect(
+            route.filter((next) => reachable(run, next)).map((next) => next.id),
+          ).toEqual(node.links);
+        }
       }
       const paths: RouteNode[][] = [];
       function visit(node: RouteNode, prefix: RouteNode[]) {
@@ -51,16 +51,14 @@ test("each road trades one future option; every full path visits camp and boss",
           visit(next, path);
         }
       }
-      for (const node of route.filter((n) => n.row === 4))
-        expect(node.links).toEqual([`${act}-5-1`]);
       for (const start of route.filter((n) => n.row === 0)) visit(start, []);
-      expect(paths).toHaveLength(48);
+      expect(paths).toHaveLength(729);
     }
   }
 });
 
-test("route contents and RNG, and all 18 benchmark starts, retain their pre-topology fingerprints", () => {
-  // Captured on the transferred baseline before changing links. Only links are omitted.
+test("encounter contents and RNG remain unchanged by the crossroads presentation", () => {
+  // Compare existing encounters, excluding the two additional guardian approaches and links.
   const fingerprints = [
     [
       "lantern",
@@ -83,7 +81,9 @@ test("route contents and RNG, and all 18 benchmark starts, retain their pre-topo
       const route = generateRoute(run);
       states.push({
         rng: run.rng,
-        nodes: route.map(({ links, ...node }) => node),
+        nodes: route
+          .filter((node) => node.row !== 5 || node.lane === 1)
+          .map(({ links, ...node }) => node),
       });
     }
     expect(
@@ -105,7 +105,9 @@ test("route contents and RNG, and all 18 benchmark starts, retain their pre-topo
         const { dreadRules, actBearer, ...state } = run;
         starts.push({
           ...state,
-          route: run.route.map(({ links, ...node }) => node),
+          route: run.route
+            .filter((node) => node.row !== 5 || node.lane === 1)
+            .map(({ links, ...node }) => node),
         });
       }
   expect(
@@ -113,11 +115,39 @@ test("route contents and RNG, and all 18 benchmark starts, retain their pre-topo
   ).toBe("22f009a371c97336863975846eb19f7271874560320268f3b95f98560ccee619");
 });
 
-test("only current roads load; obsolete three-exit roads are rejected", () => {
+test("current three-path roads round-trip and reject missing, duplicate or backward exits", () => {
   const run = newRun("lantern");
   expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
   const node = run.route.find((node) => node.row === 0 && node.lane === 1);
   if (!node) throw new Error("Missing road");
-  node.links = ["0-1-0", "0-1-1", "0-1-2"];
-  expect(parseSave(JSON.stringify(run)).kind).toBe("error");
+  for (const links of [
+    ["0-1-0", "0-1-1"],
+    ["0-1-0", "0-1-1", "0-1-1"],
+    ["0-1-0", "0-1-1", "0-0-2"],
+  ]) {
+    node.links = links;
+    expect(parseSave(JSON.stringify(run)).kind).toBe("error");
+  }
+});
+
+test("each physical path commits its own encounter and cannot backtrack or skip ahead", () => {
+  const run = newRun("crossroads-choices");
+  run.row = 0;
+  run.location = "0-0-1";
+  run.visited = [run.location];
+  const options = run.route.filter((node) => node.row === 1);
+  expect(new Set(options.map((node) => node.kind)).size).toBe(3);
+  for (const node of options) {
+    const result = resolve(run, { type: "travel", node: node.id });
+    expect(result.error).toBeNull();
+    expect(result.run.location).toBe(node.id);
+    expect(result.run.scene.kind).toBe(
+      node.kind === "battle" || node.kind === "elite" || node.kind === "boss"
+        ? "combat"
+        : node.kind,
+    );
+    expect(parseSave(JSON.stringify(result.run)).kind).toBe("valid");
+  }
+  for (const node of ["0-0-0", "0-2-0", "missing"])
+    expect(resolve(run, { type: "travel", node }).error).not.toBeNull();
 });

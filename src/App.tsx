@@ -17,7 +17,7 @@ import type { Settings } from "./game/storage";
 import { configureAudio, setSoundscape, sound, wakeAudio } from "./ui/audio";
 import { CombatEffects, attackTiming, powerfulCard } from "./ui/combat-effects";
 import { Art, CardView, Icon, Modal, Rules } from "./ui/components";
-import { CombatBoard, JourneyMap, StopScene } from "./ui/scenes";
+import { CombatBoard, JourneyCrossroads, StopScene } from "./ui/scenes";
 import type { Inspect } from "./ui/scenes";
 import "./ui/style.css";
 
@@ -405,7 +405,8 @@ export function App() {
         shown && (
           <>
             {shown.scene.kind === "map" && (
-              <JourneyMap
+              <JourneyCrossroads
+                key={`${shown.act}-${shown.row}`}
                 run={shown}
                 dispatch={(action) => void dispatch(action)}
               />
@@ -523,7 +524,7 @@ export function App() {
           <p>
             {
               [
-                "You share health, a deck, and three energy. Follow a lit road node. A sword begins a battle; a question mark is a story.",
+                "You share health, a deck, and three energy. At each crossroads, choose left, straight ahead, or right. You discover what waits only after choosing a path.",
                 "Choose who carries the Ember. Strong magic raises Dread. Every turn, 4–7 empowers the front enemy; 8–10 empowers all enemies, then falls by 4. Lower Dread before ending to avoid the response.",
                 "Click a card. Choose an enemy for attacks; the last living enemy is targeted automatically. Guards play immediately. Intentions show what happens if you end now.",
                 "Play what you need, then End turn. Your remaining hand is discarded and you draw five. Block protects now, then clears at your next turn.",

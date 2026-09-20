@@ -117,3 +117,49 @@ The face was then encoded as lossless WebP so all pixels outside that patch rema
 identical; ImageMagick's masked absolute-error comparison returned zero. The back
 is unchanged. The corrected binding was inspected on the rendered Steady blade
 card, including its material match and lack of a visible patch seam.
+
+## Adventure crossroads, 2026-09-20
+
+Eighteen original full-frame illustrations were generated with Amp Painter in
+[the crossroads UI thread](https://ampcode.com/threads/T-01a0ba19-fbf9-77b5-bb1c-0f7b2e11ff4f).
+Each stop has its own image, not a crop or color variant of another stop. The
+existing forest, ruins and mountain art supplied style references for the forest,
+the first three Avel scenes and the first mountain scene. Remaining compositions
+were generated from descriptions to vary the locations. Mountain 3 received one
+localized revision to make the left trail's foreground connection clearer.
+
+All production files are 1536 × 1024 opaque WebP, encoded with ImageMagick at quality
+82 with metadata stripped. They total approximately 7.3 MiB and load one crossroads
+at a time from local assets. Source PNGs were downloaded using `amp files get`.
+Every image was inspected in contact sheets; ambiguous mountain paths were also
+inspected at full size, and the revised path was checked again. The rendered UI
+was inspected on desktop and mobile. The first three Avel scenes share a skyline,
+but have distinct causeway, plaza and bridge foregrounds. These are decorative
+landscapes, not encounter previews. Generated architecture and geology are stylized.
+
+Paths below are under `public/assets/journey/`.
+
+| File | Location | Painter source |
+| --- | --- | --- |
+| `forest-1.webp` | The fern gate | [PNG](https://ampcode.com/user-content/attachments/d50096b5a7cd4347831ee872286f26f0f460bd3ffacd62be5833668f7ec36263-file.png) |
+| `forest-2.webp` | The silver brook | [PNG](https://ampcode.com/user-content/attachments/0ae60caf2bd5c51400144407ef6f6b57cfc5109fd8bf432266c083e531a0111f-file.png) |
+| `forest-3.webp` | The fallen giant | [PNG](https://ampcode.com/user-content/attachments/f5a8c87a1e426e8cc195164dc46e599c8c9e4776bc05ce7ae658c82e5b37ef4d-file.png) |
+| `forest-4.webp` | The white stones | [PNG](https://ampcode.com/user-content/attachments/6c2168081f96e618b3b5443adac3aaadeac29a2437901fad44a7809aefc79df9-file.png) |
+| `forest-5.webp` | The rain hollow | [PNG](https://ampcode.com/user-content/attachments/69b36c4fa081ea7e485b52a28e3e1d045583e49f4a3dd2591ca868f65bd41856-file.png) |
+| `forest-6.webp` | The elder boughs | [PNG](https://ampcode.com/user-content/attachments/1a7ec05cad010ab8d34d84af9c7d5b546bd698ff79d20c0d33822dd3f90454d2-file.png) |
+| `ruins-1.webp` | The reed causeway | [PNG](https://ampcode.com/user-content/attachments/24f129a8032781354f466a394feeac67a27e706ab915c75f41bed20a1f5fb278-file.png) |
+| `ruins-2.webp` | The sunken square | [PNG](https://ampcode.com/user-content/attachments/9249def71fe7a2edc55bc22c39516a1473b5ea50829b2dad45c869ce5bc68117-file.png) |
+| `ruins-3.webp` | The willow bridges | [PNG](https://ampcode.com/user-content/attachments/12dee9bf0f310752140f7fb35416f44e7d0ecacaaf3a0d00e74968a01a494581-file.png) |
+| `ruins-4.webp` | The broken aqueduct | [PNG](https://ampcode.com/user-content/attachments/53da3390a233419df494664fc12024ff5d4e98095df677afaa32f222e4f45ea7-file.png) |
+| `ruins-5.webp` | The drowned garden | [PNG](https://ampcode.com/user-content/attachments/185555ede866ee082a35783e38532efef4d6b011f458f3c0a303e2d03174a412-file.png) |
+| `ruins-6.webp` | The quiet ramparts | [PNG](https://ampcode.com/user-content/attachments/1c808fb9364c055ed566a23bb5746463d868b80f53da911aa0e3fb28b267fede-file.png) |
+| `mountain-1.webp` | The last pines | [PNG](https://ampcode.com/user-content/attachments/f72e309e4beaa395899ccfdc1ddd29c1feddf5254e60d2263e63f0eafd0bfd8e-file.png) |
+| `mountain-2.webp` | The glass tarn | [PNG](https://ampcode.com/user-content/attachments/94b3c483312ac38ce1605386e2f62ee79206cc60926ccc6ef8c04d1e119e5482-file.png) |
+| `mountain-3.webp` | The wind-carved pass | [Revised PNG](https://ampcode.com/user-content/attachments/7e5eddaa9dd17bc33debe2a2db3722708a1c0ea69ab1dae3d2b012d62a876dd2-file.png) |
+| `mountain-4.webp` | The blue crevasse | [PNG](https://ampcode.com/user-content/attachments/f45ac22c2f5c8c587be97d6fdb0c8393fe4549bc56f9fbd8971bc114e2daed22-file.png) |
+| `mountain-5.webp` | The cloud stair | [PNG](https://ampcode.com/user-content/attachments/1b716d67b9ec353f4928f7b97f5aeb358df8e5bfc8b77f997a37bc946e724251-file.png) |
+| `mountain-6.webp` | The pale summit | [PNG](https://ampcode.com/user-content/attachments/a1349fc94d8c39a665edd3dccd3b7dfec84047e8a60346e33d89e739b89448e3-file.png) |
+
+The superseded mountain-3 source is [here](https://ampcode.com/user-content/attachments/6bbdaf318b3737060aa9229c4f569f1efe8f11a19d3a2d13f521f01176af87b6-file.png).
+The [layout comparison](https://ampcode.com/user-content/attachments/93c224a2e5b3e0be654e3d75e89f15b979c857e0dc5397122d7a64eaa83b0a25-file.png)
+was a design reference only; it is not a shipped asset or verification screenshot.

@@ -83,7 +83,7 @@ const nodeSchema = z.object({
   row: z.number().int().min(0).max(5),
   lane: z.number().int().min(0).max(2),
   kind: nodeKindSchema,
-  links: z.array(z.string()).max(2),
+  links: z.array(z.string()).max(3),
 });
 export type RouteNode = z.infer<typeof nodeSchema>;
 const combatSchema = z.object({

@@ -24,7 +24,7 @@ import { flameBranchSchema, heroSchema } from "../game/model";
 import { Art, CardView, Icon, Modal } from "./components";
 
 export type Inspect = { title: string; cards: Card[] } | null;
-export function JourneyMap({
+export function JourneyCrossroads({
   run,
   dispatch,
 }: {
@@ -32,105 +32,62 @@ export function JourneyMap({
   dispatch: (action: Action) => void;
 }) {
   const act = ACTS[run.act];
+  const location = act?.crossroads[run.row + 1];
+  const paths = run.route
+    .filter((node) => reachable(run, node))
+    .sort((a, b) => a.lane - b.lane);
   return (
-    <section className="journey-layout scene-enter">
-      <div className="journey-story">
-        <p className="eyebrow">
-          Act {["I", "II", "III"][run.act]} · {act?.place}
+    <section
+      className="crossroads scene-enter"
+      aria-labelledby="crossroads-title"
+    >
+      <img
+        className="crossroads-landscape"
+        src={`/assets/journey/${act?.file}-${run.row + 2}.webp`}
+        alt={`${location?.name}: three paths through ${act?.place}.`}
+        fetchPriority="high"
+      />
+      <div className="crossroads-shade" aria-hidden="true" />
+      <header className="crossroads-heading">
+        <div>
+          <p className="eyebrow">
+            Act {["I", "II", "III"][run.act]} · {act?.place}
+          </p>
+          <h1 id="crossroads-title">{location?.name}</h1>
+          <p className="story-copy">{location?.description}</p>
+        </div>
+        <p className="crossroads-progress">Crossroads {run.row + 2} of 6</p>
+      </header>
+      <div className="crossroads-decision">
+        <p className="crossroads-prompt">Which way will you go?</p>
+        <p className="crossroads-hint" id="crossroads-hint">
+          What lies beyond is yours to discover.
         </p>
-        <h1>{act?.name}</h1>
-        <p className="story-copy">{act?.intro}</p>
-        <div className="route-help">
-          <span className="small-rule" />
-          <p>
-            One road. Three companions.
-            <br />
-            Choose your next foothold.
-          </p>
-          <p className="muted">
-            Follow the lit connections from left to right. You visit one stop
-            per column. The crown marks the act’s guardian.
-          </p>
-        </div>
-        <div className="map-legend">
-          {["battle", "elite", "event", "camp", "shop", "boss"].map((kind) => (
-            <span key={kind}>
-              <Icon name={kind} size={17} />
-              {kind === "shop"
-                ? "Merchant"
-                : kind[0]?.toUpperCase() + kind.slice(1)}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="route-panel">
-        <div className="route-caption">
-          <span>THE ROAD TO THE BEACON</span>
-          <span>{run.row + 1} / 6 stops</span>
-        </div>
-        <div className="route-scroll">
-          <div className="route-map">
-            <svg
-              className="route-lines"
-              viewBox="0 0 660 360"
-              preserveAspectRatio="none"
-              aria-hidden="true"
+        <nav className="crossroads-paths" aria-label="Choose a path">
+          {paths.map((node) => (
+            <button
+              key={node.id}
+              data-node={node.id}
+              className="crossroads-path"
+              aria-describedby="crossroads-hint"
+              onClick={() => dispatch({ type: "travel", node: node.id })}
             >
-              {run.route.flatMap((node) =>
-                node.links.map((link) => {
-                  const next = run.route.find((n) => n.id === link);
-                  return next ? (
-                    <line
-                      key={`${node.id}-${link}`}
-                      x1={55 + node.row * 110}
-                      y1={60 + node.lane * 120}
-                      x2={55 + next.row * 110}
-                      y2={60 + next.lane * 120}
-                      className={
-                        run.visited.includes(node.id) &&
-                        (reachable(run, next) || run.visited.includes(next.id))
-                          ? "lit"
-                          : ""
-                      }
-                    />
-                  ) : null;
-                }),
-              )}
-            </svg>
-            {run.route.map((node) => (
-              <button
-                key={node.id}
-                data-node={node.id}
-                data-kind={node.kind}
-                disabled={!reachable(run, node)}
-                className={`route-node ${reachable(run, node) ? "reachable" : ""} ${run.visited.includes(node.id) ? "visited" : ""} ${node.row <= run.row && !run.visited.includes(node.id) ? "rejected" : ""} ${node.kind === "boss" ? "boss-node" : ""}`}
-                style={{
-                  left: `${((node.row + 0.5) / 6) * 100}%`,
-                  top: `${((node.lane + 0.5) / 3) * 100}%`,
-                }}
-                onClick={() => dispatch({ type: "travel", node: node.id })}
-                aria-label={`${node.kind === "shop" ? "Merchant" : node.kind}, stop ${node.row + 1}, path ${node.lane + 1}${run.visited.includes(node.id) ? ", visited" : ""}`}
-              >
-                <span>
-                  <Icon name={node.kind} size={26} />
-                </span>
-                <small>
-                  {run.visited.includes(node.id)
-                    ? "Visited"
-                    : node.kind === "shop"
-                      ? "Merchant"
-                      : node.kind === "boss"
-                        ? "Guardian"
-                        : node.kind}
-                </small>
-              </button>
-            ))}
-          </div>
-        </div>
-        <p className="map-note">
-          <Icon name="camp" size={18} /> A camp waits halfway. Heal, or
-          strengthen a card.
-        </p>
+              <span className="path-bearing" aria-hidden="true">
+                {["↖", "↑", "↗"][node.lane]}
+              </span>
+              <span>
+                {
+                  [
+                    "Take the left path",
+                    "Go straight ahead",
+                    "Take the right path",
+                  ][node.lane]
+                }
+              </span>
+              <small>Venture onward</small>
+            </button>
+          ))}
+        </nav>
       </div>
     </section>
   );

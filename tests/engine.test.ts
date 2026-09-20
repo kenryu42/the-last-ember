@@ -490,7 +490,7 @@ describe("the road, purchases, and saves", () => {
   test("routes are connected and guarantee a camp on every legal path", () => {
     for (let i = 0; i < 50; i++) {
       const run = newRun(`route-${i}`);
-      expect(run.route).toHaveLength(16);
+      expect(run.route).toHaveLength(18);
       expect(
         run.route.filter((n) => n.row === 2).every((n) => n.kind === "camp"),
       ).toBe(true);

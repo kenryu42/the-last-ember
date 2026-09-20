@@ -265,7 +265,7 @@ try {
   );
   await settle();
   assert(
-    await browser("eval", "!!document.querySelector('.route-map')"),
+    await browser("eval", "!!document.querySelector('.crossroads')"),
     "Normal run was not restored",
   );
   assert(

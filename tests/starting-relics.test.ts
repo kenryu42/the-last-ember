@@ -163,9 +163,9 @@ test("starting relic save round-trip and public CLI simulation", () => {
 
 test("build-aware acquisition finds existing concealment without changing prior decisions", () => {
   const prototype = { kind: "escape", target: 4, ember: true } as const;
-  // This seed offers Quiet as snowfall under the current Act-locked rules.
+  // This seed offers Quiet as snowfall on the three-path route.
   const control = simulateJourney(
-    "identity-v1:5",
+    "identity-v1:18",
     "conservative",
     256,
     "static",
@@ -174,7 +174,7 @@ test("build-aware acquisition finds existing concealment without changing prior 
     "hushed-coal",
   );
   const candidate = simulateJourney(
-    "identity-v1:5",
+    "identity-v1:18",
     "conservative",
     256,
     "build-aware",

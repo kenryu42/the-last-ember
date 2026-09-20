@@ -2,10 +2,69 @@ import { expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { App, shouldAutoEndTurn } from "../src/App";
 import { CARDS } from "../src/game/content";
-import { makeCard, newRun, resolve, startCombat } from "../src/game/engine";
+import {
+  generateRoute,
+  makeCard,
+  newRun,
+  resolve,
+  startCombat,
+} from "../src/game/engine";
 import { CardView } from "../src/ui/components";
-import { CombatBoard } from "../src/ui/scenes";
+import { CombatBoard, JourneyCrossroads } from "../src/ui/scenes";
 import { attackTiming } from "../src/ui/combat-effects";
+
+test("crossroads show only three current paths without leaking encounters", async () => {
+  const run = newRun("hidden-paths");
+  const images = new Set<string>();
+  for (const act of [0, 1, 2]) {
+    run.act = act;
+    run.route = generateRoute(run);
+    for (let row = -1; row < 5; row++) {
+      run.row = row;
+      run.location = row === -1 ? null : `${act}-${row}-0`;
+      const render = () =>
+        renderToStaticMarkup(
+          <JourneyCrossroads run={run} dispatch={() => {}} />,
+        );
+      const html = render();
+      expect(
+        [...html.matchAll(/data-node="([^"]+)"/g)].map((match) => match[1]),
+      ).toEqual([0, 1, 2].map((lane) => `${act}-${row + 1}-${lane}`));
+      expect(html).not.toContain("data-kind");
+      expect(html).not.toContain("disabled");
+      expect(html).not.toContain("route-map");
+      expect(html).toContain("Take the left path");
+      expect(html).toContain("Go straight ahead");
+      expect(html).toContain("Take the right path");
+      expect(html).toContain(`Crossroads ${row + 2} of 6`);
+      const image = html.match(/src="([^"]+\.webp)"/)?.[1];
+      if (!image) throw new Error("Missing crossroads art");
+      images.add(image);
+      // A different hidden encounter must not change text, accessibility labels or markup.
+      const changed = structuredClone(run);
+      changed.route.forEach((node) => {
+        node.kind = "elite";
+      });
+      expect(
+        renderToStaticMarkup(
+          <JourneyCrossroads run={changed} dispatch={() => {}} />,
+        ),
+      ).toBe(html);
+    }
+  }
+  expect(images.size).toBe(18);
+  const hashes = new Set<string>();
+  for (const image of images) {
+    const asset = Bun.file(`public${image}`);
+    expect(await asset.exists()).toBe(true);
+    hashes.add(
+      new Bun.CryptoHasher("sha256")
+        .update(await asset.arrayBuffer())
+        .digest("hex"),
+    );
+  }
+  expect(hashes.size).toBe(18);
+});
 
 test.each([
   ["blade", false, 360, 420],

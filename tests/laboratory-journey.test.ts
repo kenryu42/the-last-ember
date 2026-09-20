@@ -39,7 +39,7 @@ test("public-only journey completes all stops and replays through canonical save
 });
 
 test("shield-aware progression changes the first eligible reward, takes one payoff, and keeps the prior trace", () => {
-  const seed = "shield-development:0";
+  const seed = "shield-development:5";
   const control = simulateJourney(seed, "strategic", 96);
   const candidate = simulateJourney(seed, "strategic", 96, "shield-aware");
   const rewards = candidate.trace.filter(

@@ -498,11 +498,13 @@ export function Rules() {
       </dl>
       <h3>The road ahead</h3>
       <p>
-        Choose one connected stop per row. Every act guarantees a camp. Rest for
-        25% of maximum health or improve one card. A boss victory restores 20%
-        before the next act. Rewards can be skipped to keep your deck focused.
-        Shops sell cards, a relic, healing, and one card removal. Gold and
-        health costs appear before you commit.
+        Choose one of three paths at each crossroads. Encounters stay hidden
+        until you choose. Each Act has six stops and its own changing landscape.
+        Every act guarantees a camp. Rest for 25% of maximum health or improve
+        one card. A boss victory restores 20% before the next act. Rewards can
+        be skipped to keep your deck focused. Shops sell cards, a relic,
+        healing, and one card removal. Gold and health costs appear before you
+        commit.
       </p>
       <p>
         Draw five each turn. When the draw pile empties, the discard is

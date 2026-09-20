@@ -99,22 +99,19 @@ export function generateRoute(run: Run): RouteNode[] {
         row,
         lane,
         kind,
-        links:
-          row === 4
-            ? [`${run.act}-5-1`]
-            : [0, 1, 2]
-                .filter((next) => next !== 2 - lane)
-                .map((next) => `${run.act}-${row + 1}-${next}`),
+        links: [0, 1, 2].map((next) => `${run.act}-${row + 1}-${next}`),
       }),
     ),
   );
-  nodes.push({
-    id: `${run.act}-5-1`,
-    row: 5,
-    lane: 1,
-    kind: "boss",
-    links: [],
-  });
+  // Three final approaches converge on the same Act guardian.
+  for (const lane of [0, 1, 2])
+    nodes.push({
+      id: `${run.act}-5-${lane}`,
+      row: 5,
+      lane,
+      kind: "boss",
+      links: [],
+    });
   return nodes;
 }
 export function newRun(
