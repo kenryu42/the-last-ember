@@ -58,11 +58,14 @@ for (const map of [false, true]) {
     expect(result.error).toBeNull();
     let presented = discardedHand(combat);
     const moves: string[] = [];
+    const deals: number[][] = [];
     for (const frame of result.frames) {
       if (frame.run.scene.kind !== "combat") continue;
       const sequence = drawSequence(presented, frame.run.scene);
       for (const step of sequence.steps) {
         moves.push(step.kind);
+        if (step.kind === "draw")
+          deals.push(step.cards.map((card) => card.uid));
         const zones = [
           ...step.combat.hand,
           ...step.combat.draw,
@@ -79,15 +82,16 @@ for (const map of [false, true]) {
       expect(final.discard).toEqual(frame.run.scene.discard);
       presented = frame.run.scene;
     }
-    expect(moves).toEqual([
-      "draw",
-      "draw",
-      "shuffle",
-      "draw",
-      "draw",
-      "draw",
-      ...(map ? ["draw"] : []),
-    ]);
+    expect(moves).toEqual(["draw", "shuffle", "draw"]);
+    expect(deals[0]).toEqual(
+      original.scene.kind === "combat"
+        ? [...original.scene.draw].reverse().map((card) => card.uid)
+        : [],
+    );
+    expect(deals.map((cards) => cards.length)).toEqual([2, map ? 4 : 3]);
+    expect(deals.flat()).toEqual(
+      presented.hand.slice(1).map((card) => card.uid),
+    );
     expect(presented.hand).toHaveLength(map ? 7 : 6);
     expect(run).toEqual(original);
   });

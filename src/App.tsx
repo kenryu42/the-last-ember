@@ -25,8 +25,8 @@ import type { Settings } from "./game/storage";
 import { configureAudio, setSoundscape, sound, wakeAudio } from "./ui/audio";
 import { CombatEffects, attackTiming, powerfulCard } from "./ui/combat-effects";
 import {
+  animateDeal,
   animateDiscard,
-  animateDraw,
   animateShuffle,
   discardedHand,
   drawSequence,
@@ -245,7 +245,7 @@ export function App() {
           for (const step of sequence.steps) {
             if (step.kind === "shuffle") await animateShuffle(speed);
             flushSync(() => setVisual({ ...frame.run, scene: step.combat }));
-            if (step.kind === "draw") await animateDraw(step.card, speed);
+            if (step.kind === "draw") await animateDeal(step.cards, speed);
           }
           presented = frame.run;
           setVisual(frame.run);
@@ -354,10 +354,12 @@ export function App() {
   const presentationStyle: CSSProperties & {
     "--combat-travel": string;
     "--combat-impact": string;
+    "--hand-settle": string;
   } = {
     backgroundImage: `url(/assets/${title ? "forest" : (ACTS[shown?.act ?? 0]?.file ?? "forest")}.webp)`,
     "--combat-travel": `${timing.travel}ms`,
     "--combat-impact": `${timing.impact}ms`,
+    "--hand-settle": `${200 / animationSpeed}ms`,
   };
   return (
     <main

@@ -46,7 +46,9 @@ locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
 
 Ending a turn sweeps unplayed cards into Discard while Retain cards stay in the
-hand. After enemy actions, new cards deal from Draw into the fan one at a time.
+hand. After enemy actions, cards deal into their final fan positions with
+overlapping 240 ms flights launched 80 ms apart at normal speed. Held cards slide
+into place once per deal group rather than shifting after every arrival.
 If Draw empties partway through a deal, Discard transfers face-down into Draw
 before the remaining cards arrive. Mid-turn draw effects use the same animation;
 the hand limit and empty piles never produce fake card flights. These animations

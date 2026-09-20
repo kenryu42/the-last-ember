@@ -16,7 +16,7 @@ export function discardedHand(combat: Combat): Combat {
 
 type DrawStep =
   | { kind: "shuffle"; combat: Combat }
-  | { kind: "draw"; combat: Combat; card: Card };
+  | { kind: "draw"; combat: Combat; cards: Card[] };
 
 export function drawSequence(before: Combat, after: Combat) {
   const held = new Set(before.hand.map((card) => card.uid));
@@ -46,7 +46,11 @@ export function drawSequence(before: Combat, after: Combat) {
       hand: [...combat.hand, card],
       draw: combat.draw.filter((candidate) => candidate.uid !== card.uid),
     };
-    steps.push({ kind: "draw", combat, card });
+    const previous = steps.at(-1);
+    if (previous?.kind === "draw") {
+      previous.cards.push(card);
+      previous.combat = combat;
+    } else steps.push({ kind: "draw", combat, cards: [card] });
   });
   return { initial, steps };
 }
@@ -146,7 +150,13 @@ export async function animateShuffle(speed: number) {
     await pileFlight(source, destination, "shuffle", speed);
 }
 
-export async function animateDraw(card: Card, speed: number) {
+export async function animateDeal(cards: Card[], speed: number) {
+  await Promise.all(
+    cards.map((card, index) => animateDraw(card, speed, index * 80)),
+  );
+}
+
+async function animateDraw(card: Card, speed: number, delay: number) {
   if (reducedMotion()) return;
   const target = document.querySelector<HTMLElement>(
     `.hand [data-card="${card.uid}"]`,
@@ -170,10 +180,16 @@ export async function animateDraw(card: Card, speed: number) {
     [
       {
         transform: `translate(${source.left - slot.left}px,${source.top - slot.top}px) scale(${source.width / target.offsetWidth}) rotate(-8deg)`,
+        opacity: 0,
       },
-      { transform },
+      {
+        transform: `translate(${source.left - slot.left}px,${source.top - slot.top}px) scale(${source.width / target.offsetWidth}) rotate(-8deg)`,
+        opacity: 1,
+        offset: 0.02,
+      },
+      { transform, opacity: 1 },
     ],
-    { duration, easing: "ease-out" },
+    { duration, delay: delay / speed, fill: "backwards", easing: "ease-out" },
   );
   const reveal = back.animate(
     [
@@ -182,7 +198,7 @@ export async function animateDraw(card: Card, speed: number) {
       { opacity: 0, offset: 0.65 },
       { opacity: 0, offset: 1 },
     ],
-    { duration, fill: "forwards" },
+    { duration, delay: delay / speed, fill: "both" },
   );
   const cancel = () => animation.cancel();
   window.addEventListener("resize", cancel, { once: true });

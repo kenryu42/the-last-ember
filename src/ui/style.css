@@ -851,13 +851,14 @@ button.primary:hover:not(:disabled) {
   position: absolute;
   z-index: var(--hand-order);
   transition:
-    left 0.2s ease-out,
-    top 0.2s ease-out;
+    left var(--hand-settle, 200ms) ease-out,
+    top var(--hand-settle, 200ms) ease-out;
 }
 .hand .hand-card .game-card {
   --card-width: inherit;
   transform-origin: top left;
   transform: translateY(var(--fan-drop)) rotate(var(--fan-angle));
+  transition-duration: var(--hand-settle, 200ms);
 }
 .hand-card .game-card[aria-disabled="true"] {
   filter: saturate(0.55);
