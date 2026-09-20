@@ -45,6 +45,13 @@ selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `ART_PROVENANCE.md`. No rules, saves or acquisition behavior changed for this design.
 
+The combat status strip shows only the Act's Ember bearer, their active ability,
+and Ready / Used this turn status beside shared Fellowship health and Block.
+Hover, focus, or tap the ability for its full wording. Aldren's optional Empower
+action expands into explicit spell-and-target choices. End turn uses a dark
+brass-edged Ember plaque; its resolving state stays readable and keeps the same
+size. Ability activation highlights respect reduced motion.
+
 Ending a turn sweeps unplayed cards into Discard while Retain cards stay in the
 hand. After enemy actions, cards deal into their final fan positions with
 overlapping 240 ms flights launched 80 ms apart at normal speed. Held cards slide

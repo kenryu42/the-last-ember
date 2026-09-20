@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { JourneyCrossroads } from "../src/ui/scenes";
+import { CombatBoard, JourneyCrossroads } from "../src/ui/scenes";
 import { cardDef } from "../src/game/content";
 import {
   makeCard,
@@ -164,6 +164,41 @@ test("Act-start screen exposes three choices, then reveals the crossroads", () =
   const crossroads = render();
   expect(crossroads).toContain('aria-label="Choose a path"');
   expect(crossroads).not.toContain("bearer-selection");
+});
+
+test("combat status shows only the bearer, shared vitals, and explicit ability states", () => {
+  for (const hero of ["Mara", "Eryn", "Aldren"] as const) {
+    const run = setup(hero, ["guard", "unseen", "flame"]);
+    const render = (busy: boolean) =>
+      renderToStaticMarkup(
+        createElement(CombatBoard, {
+          run,
+          combat: c(run),
+          dispatch: () => {},
+          selected: null,
+          select: () => {},
+          busy,
+          feedback: null,
+          stage: "impact",
+          inspect: () => {},
+          reduced: true,
+        }),
+      );
+    const ready = render(false);
+    expect(ready.match(/data-companion=/g)).toHaveLength(1);
+    expect(ready).toContain(`data-companion="${hero}"`);
+    expect(ready).toContain("Fellowship");
+    expect(ready).toContain('class="block-total"');
+    expect(ready).toContain('class="bearer-status ready"');
+    expect(ready.includes('class="empower-options"')).toBe(hero === "Aldren");
+    expect(ready).toContain('class="end-turn-seal"');
+    c(run).ember = { window: "closed", bearer: hero, used: true };
+    const used = render(true);
+    expect(used).toContain("Used this turn");
+    expect(used).not.toContain('class="empower-options"');
+    expect(used).toContain('class="end-turn" disabled=""');
+    expect(used).toContain("Resolving…");
+  }
 });
 
 test("bearer persists through encounters and passive use resets each turn and fight", () => {

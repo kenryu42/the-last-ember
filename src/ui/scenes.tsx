@@ -680,19 +680,29 @@ export function CombatBoard({
         className={`fellowship-strip ${feedback?.cue === "enemy" && stage === "impact" ? "party-hit" : ""} ${feedback?.target === "party" && stage === "impact" ? `party-${feedback.cue}` : ""}`}
       >
         <div className="companions">
-          {heroSchema.options.map((name, index) => (
-            <div className="companion" key={name} data-companion={name}>
-              <Art sheet="companions" index={index} />
-              <span>
-                {name}
-                <small>
-                  {combat.ember?.bearer === name
-                    ? `Act ${["I", "II", "III"][run.act]} bearer`
-                    : ["The guardian", "The ranger", "The emberkeeper"][index]}
-                </small>
-              </span>
-            </div>
-          ))}
+          {heroSchema.options.map(
+            (name, index) =>
+              (!combat.ember || combat.ember.bearer === name) && (
+                <div className="companion" key={name} data-companion={name}>
+                  <Art sheet="companions" index={index} />
+                  {combat.ember && (
+                    <span className="bearer-badge" aria-hidden="true">
+                      <Icon name="flame" size={14} />
+                    </span>
+                  )}
+                  <span>
+                    {name}
+                    <small>
+                      {combat.ember?.bearer === name
+                        ? `Act ${["I", "II", "III"][run.act]} · Ember bearer`
+                        : ["The guardian", "The ranger", "The emberkeeper"][
+                            index
+                          ]}
+                    </small>
+                  </span>
+                </div>
+              ),
+          )}
         </div>
         <div className="party-health">
           <span>
@@ -710,48 +720,97 @@ export function CombatBoard({
           <b>{combat.block}</b>
           <span>Block</span>
         </div>
+        {combat.ember && (
+          <div className="ember-controls">
+            <div className="bearer-ability-line">
+              <details
+                className="ability-info"
+                onPointerEnter={(event) => {
+                  if (event.pointerType === "mouse")
+                    event.currentTarget.open = true;
+                }}
+                onPointerLeave={(event) => {
+                  if (
+                    event.pointerType === "mouse" &&
+                    !event.currentTarget.querySelector(":focus-visible")
+                  )
+                    event.currentTarget.open = false;
+                }}
+                onFocus={(event) => {
+                  if (event.target.matches(":focus-visible"))
+                    event.currentTarget.open = true;
+                }}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget))
+                    event.currentTarget.open = false;
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") event.currentTarget.open = false;
+                }}
+              >
+                <summary>
+                  {combat.ember.bearer === "Mara"
+                    ? "First Block effect +3"
+                    : combat.ember.bearer === "Eryn"
+                      ? "First Dread reduction −2 more"
+                      : "Empower: +5 damage / +1 Dread"}
+                  <span aria-hidden="true" className="ability-info-mark">
+                    ?
+                  </span>
+                </summary>
+                <p className="ability-description">
+                  {combat.ember.bearer === "Mara"
+                    ? "Each turn, your first Block effect from a played card grants +3 Block."
+                    : combat.ember.bearer === "Eryn"
+                      ? "Each turn, your first Dread-lowering card lowers it by 2 more."
+                      : "Once per turn, optionally empower one Spell hit: +5 damage for +1 Dread. Choose a spell and target below to cast it empowered."}
+                </p>
+              </details>
+              <span
+                key={`${combat.turn}-${combat.ember.used}`}
+                className={`bearer-status ${combat.ember.used ? "used" : "ready"}`}
+                role="status"
+              >
+                {combat.ember.used ? "Used this turn" : "Ready"}
+              </span>
+            </div>
+            {combat.ember.bearer === "Aldren" && !combat.ember.used && (
+              <details className="empower-options">
+                <summary>Empower a Spell · optional · +1 Dread</summary>
+                {combat.hand.flatMap((card) =>
+                  combat.enemies.flatMap((enemy) => {
+                    const def = cardDef(card.def),
+                      target = needsTarget(def) ? enemy.uid : null;
+                    return empowerTargets(combat, def, target).includes(
+                      enemy.uid,
+                    )
+                      ? [
+                          <button
+                            key={`${card.uid}:${enemy.uid}`}
+                            disabled={
+                              busy || cardCost(run, combat, def) > combat.energy
+                            }
+                            onClick={() =>
+                              dispatch({
+                                type: "play",
+                                uid: card.uid,
+                                target,
+                                empower: enemy.uid,
+                              })
+                            }
+                          >
+                            {def.name} → {enemyDef(enemy.def).name} · +5 to one
+                            hit
+                          </button>,
+                        ]
+                      : [];
+                  }),
+                )}
+              </details>
+            )}
+          </div>
+        )}
       </div>
-      {combat.ember && (
-        <div className="ember-controls">
-          <p>
-            {`${combat.ember.bearer}: ${combat.ember.used ? "ability used this turn" : "ability ready"}.`}{" "}
-            Mara: first Block +3. Eryn: first Dread-lowering card −2 more.
-            Aldren: empower one Spell hit, +5 damage for +1 Dread.
-          </p>
-          {combat.ember.bearer === "Aldren" && !combat.ember.used && (
-            <details>
-              <summary>Empower a Spell · optional · +1 Dread</summary>
-              {combat.hand.flatMap((card) =>
-                combat.enemies.flatMap((enemy) => {
-                  const def = cardDef(card.def),
-                    target = needsTarget(def) ? enemy.uid : null;
-                  return empowerTargets(combat, def, target).includes(enemy.uid)
-                    ? [
-                        <button
-                          key={`${card.uid}:${enemy.uid}`}
-                          disabled={
-                            busy || cardCost(run, combat, def) > combat.energy
-                          }
-                          onClick={() =>
-                            dispatch({
-                              type: "play",
-                              uid: card.uid,
-                              target,
-                              empower: enemy.uid,
-                            })
-                          }
-                        >
-                          {def.name} → {enemyDef(enemy.def).name} · +5 to one
-                          hit
-                        </button>,
-                      ]
-                    : [];
-                }),
-              )}
-            </details>
-          )}
-        </div>
-      )}
       <div
         className={`action-message ${selected !== null ? "target-message" : ""}`}
         role="status"
@@ -816,12 +875,14 @@ export function CombatBoard({
         />
         <div className="end-pile">
           <button
-            className="primary end-turn"
+            className="end-turn"
             disabled={busy}
             onClick={() => dispatch({ type: "end" })}
           >
-            {busy ? "Resolving…" : "End turn"}
-            <Icon name="arrow" size={17} />
+            <span className="end-turn-seal" aria-hidden="true">
+              <Icon name="flame" size={22} />
+            </span>
+            <span>{busy ? "Resolving…" : "End turn"}</span>
           </button>
           <CardPile
             kind="discard"
