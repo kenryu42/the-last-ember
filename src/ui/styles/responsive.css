@@ -1,0 +1,756 @@
+@media (min-height: 850px) {
+  .battlefield {
+    min-height: 360px;
+  }
+  .enemy-unit {
+    width: 220px;
+  }
+  .enemy-art {
+    aspect-ratio: 1/1.1;
+  }
+  .combat-heading {
+    padding-top: 30px;
+  }
+  .hand-area {
+    padding-top: 10px;
+  }
+  .fellowship-strip {
+    padding: 13px 22px;
+  }
+}
+@media (max-width: 1250px) {
+  .app {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .battlefield {
+    gap: 25px;
+    grid-template-columns: 218px 1fr;
+  }
+  .dread-panel {
+    padding: 14px;
+  }
+  .enemies {
+    gap: 20px;
+  }
+  .companions {
+    gap: 18px;
+  }
+  .companion small {
+    font-size: 7px;
+  }
+  .run-resources {
+    gap: 18px;
+  }
+  .hand-area {
+    grid-template-columns: 96px minmax(0, 1fr) 112px;
+    gap: 10px;
+  }
+  .end-turn {
+    width: 105px;
+  }
+  .crossroads {
+    margin-inline: -28px;
+  }
+  .footer {
+    left: 28px;
+    right: 28px;
+  }
+  .shop-layout {
+    gap: 20px;
+  }
+  .card-choices {
+    gap: 15px;
+  }
+}
+@media (max-width: 1000px) {
+  .top-tag,
+  .nav-label {
+    display: none;
+  }
+  .brand {
+    font-size: 21px;
+  }
+  .topbar {
+    gap: 14px;
+  }
+  .topbar nav {
+    gap: 8px;
+  }
+  .run-resources {
+    gap: 12px;
+  }
+  .battlefield {
+    grid-template-columns: 190px 1fr;
+    gap: 20px;
+  }
+  .enemies {
+    gap: 14px;
+  }
+  .enemy-name {
+    font-size: 18px;
+    white-space: normal;
+  }
+  .dread-title h2 {
+    font-size: 22px;
+  }
+  .companion > span {
+    display: none;
+  }
+  .companions {
+    gap: 9px;
+  }
+  .shop-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+  .shop-services {
+    max-width: 680px;
+    flex-direction: row;
+    margin-bottom: 25px;
+  }
+  .shop-services button {
+    flex: 1;
+  }
+  .title-content {
+    padding-left: 5%;
+  }
+  .party-health {
+    min-width: 140px;
+  }
+  .fellowship-strip {
+    gap: 20px;
+  }
+  .tutorial {
+    width: 270px;
+    right: 20px;
+  }
+}
+@media (max-width: 700px) {
+  .app {
+    padding: 0 16px 50px;
+  }
+  .topbar {
+    height: 65px;
+    gap: 10px;
+  }
+  .brand span {
+    display: none;
+  }
+  .brand svg {
+    width: 25px;
+  }
+  .run-resources {
+    gap: 10px;
+    margin-left: 0;
+  }
+  .resource {
+    font-size: 12px;
+  }
+  .resource small {
+    font-size: 9px;
+  }
+  .run-resources button {
+    font-size: 11px;
+  }
+  .topbar nav > button {
+    font-size: 10px;
+    padding: 4px;
+  }
+  .topbar nav {
+    gap: 5px;
+  }
+  .footer {
+    left: 16px;
+    right: 16px;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+  }
+  .footer > span:first-child {
+    max-width: 60%;
+    overflow: hidden;
+  }
+  .combat-heading h1 {
+    font-size: 25px;
+  }
+  .combat-heading .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.4px;
+  }
+  .turn-indicator small {
+    display: none;
+  }
+  .battlefield {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .dread-panel {
+    width: 100%;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 95px 1fr 1fr;
+    gap: 7px 12px;
+    align-items: start;
+  }
+  .dread-title {
+    gap: 5px;
+  }
+  .dread-title svg {
+    width: 17px;
+  }
+  .dread-title h2 {
+    font-size: 19px;
+  }
+  .dread-title b {
+    font-size: 17px;
+  }
+  .dread-title small {
+    display: none;
+  }
+  .dread-meter {
+    grid-column: 1;
+    margin: 0;
+    gap: 2px;
+  }
+  .dread-caption {
+    display: none;
+  }
+  .threshold {
+    grid-row: 1/3;
+    border: 0;
+    padding: 0;
+    gap: 6px;
+  }
+  .threshold:nth-of-type(3) {
+    grid-column: 2;
+  }
+  .threshold:nth-of-type(4) {
+    grid-column: 3;
+  }
+  .threshold p {
+    font-size: 9px;
+  }
+  .threshold strong {
+    font-size: 8px;
+  }
+  .threshold > b {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+  .combat-log-toggle {
+    grid-column: 1/4;
+    justify-content: flex-start;
+    padding: 0;
+    font-size: 9px;
+  }
+  .enemies {
+    width: 100%;
+    gap: 15px;
+  }
+  .enemy-unit {
+    max-width: 180px;
+    min-width: 95px;
+  }
+  .intent {
+    font-size: 10px;
+    padding: 5px;
+    gap: 4px;
+  }
+  .intent small {
+    display: none;
+  }
+  .enemy-art {
+    aspect-ratio: 1/1;
+  }
+  .enemy-name {
+    font-size: 17px;
+  }
+  .enemy-status {
+    font-size: 8px;
+  }
+  .fellowship-strip {
+    padding: 9px 11px;
+    gap: 12px;
+  }
+  .companion .art {
+    width: 31px;
+    height: 31px;
+  }
+  .party-health {
+    min-width: 90px;
+    flex: 1;
+  }
+  .party-health > span {
+    font-size: 8px;
+    gap: 5px;
+  }
+  .block-total {
+    grid-template-columns: 17px 19px;
+    gap: 2px 5px;
+  }
+  .block-total svg {
+    width: 17px;
+  }
+  .hand-area {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .hand-window {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .energy-pile,
+  .end-pile {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .end-pile {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 8px;
+  }
+  .end-pile .end-turn {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+  }
+  .end-pile .pile {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .end-pile .text-button {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+  }
+  .energy-orb {
+    width: 42px;
+    height: 42px;
+  }
+  .energy-orb b {
+    font-size: 23px;
+  }
+  .energy-orb span {
+    font-size: 6px;
+  }
+  .end-turn {
+    width: 68px;
+    font-size: 10px;
+    padding: 12px 5px;
+  }
+  .end-turn svg {
+    display: none;
+  }
+  .pile {
+    --pile-width: 58px;
+    font-size: 9px;
+    padding: 5px 0;
+  }
+  .end-pile .text-button {
+    font-size: 8px;
+  }
+  .action-message {
+    font-size: 10px;
+    gap: 9px;
+  }
+  .title-content {
+    padding: 85px 0 80px 5%;
+  }
+  .title-content h1 {
+    font-size: 95px;
+  }
+  .title-prose {
+    font-size: 23px;
+  }
+  .title-actions {
+    width: 270px;
+  }
+  .top-tag {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .title-content .eyebrow {
+    font-size: 9px;
+  }
+  .stop-scene {
+    padding-top: 30px;
+  }
+  .stop-scene h1 {
+    font-size: 37px;
+  }
+  .story-copy {
+    font-size: 21px;
+  }
+  .card-choices {
+    gap: 11px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 15px 8px;
+  }
+  .shop-layout {
+    align-items: stretch;
+  }
+  .shop-layout .card-choices {
+    justify-content: flex-start;
+  }
+  .shop-services {
+    flex-direction: column;
+    max-width: none;
+  }
+  .shop-services button {
+    grid-template-columns: 25px 1fr;
+  }
+  .reward-summary {
+    gap: 10px;
+    flex-direction: column;
+  }
+  .choice-list button {
+    padding: 18px;
+  }
+  .choice-list b {
+    font-size: 22px;
+  }
+  .choice-list small {
+    font-size: 11px;
+  }
+  .modal {
+    padding: 20px;
+  }
+  .modal h2 {
+    font-size: 27px;
+  }
+  .upgrade-compare {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .upgrade-compare > svg {
+    transform: rotate(90deg);
+  }
+  .deck-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px 8px;
+  }
+  .tutorial {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
+  .ending {
+    padding-top: 40px;
+  }
+  .ending h1 {
+    font-size: 43px;
+  }
+  .ending-stats {
+    gap: 20px;
+  }
+  .ending-stats b {
+    font-size: 25px;
+  }
+  .ending-stats span {
+    font-size: 8px;
+  }
+  .error-banner {
+    width: calc(100% - 30px);
+  }
+  .crossroads {
+    margin-inline: -16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .crossroads-heading {
+    position: relative;
+    padding: 24px 16px;
+    flex-direction: column;
+    gap: 14px;
+    order: -1;
+  }
+  .crossroads-heading h1 {
+    font-size: 34px;
+  }
+  .crossroads-heading .story-copy {
+    font-size: 19px;
+  }
+  .crossroads-view {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+  .crossroads-shade {
+    display: none;
+  }
+  .path-label {
+    top: auto;
+    bottom: calc(100% + 8px);
+    font-size: 10px;
+    padding: 4px 6px;
+    opacity: 1;
+  }
+  .crossroads-path:first-child .path-label {
+    left: 0;
+  }
+  .crossroads-path:last-child .path-label {
+    right: 0;
+  }
+}
+
+@media (hover: none) {
+  .path-label {
+    opacity: 1;
+  }
+}
+
+/* Fit the whole combat board at the two desktop acceptance sizes. */
+@media (min-width: 1001px) {
+  .in-combat .combat-heading {
+    padding: 18px 0 10px;
+  }
+  .in-combat .battlefield {
+    min-height: 300px;
+  }
+  .in-combat .enemy-unit {
+    width: 185px;
+  }
+  .in-combat .enemy-art {
+    aspect-ratio: 1 / 1;
+  }
+}
+@media (min-width: 1001px) and (max-height: 800px) {
+  .in-combat {
+    padding-bottom: 32px;
+  }
+  .in-combat .topbar {
+    height: 58px;
+  }
+  .in-combat .combat-heading {
+    padding: 10px 0 6px;
+  }
+  .in-combat .combat-heading h1 {
+    font-size: 28px;
+  }
+  .in-combat .battlefield {
+    min-height: 235px;
+    padding-bottom: 8px;
+  }
+  .in-combat .enemy-unit {
+    width: 146px;
+  }
+  .in-combat .enemy-art {
+    height: 125px;
+    aspect-ratio: auto;
+  }
+  .in-combat .enemy-name {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  .in-combat .intent {
+    padding: 4px 8px;
+  }
+  .in-combat .enemy-status {
+    min-height: 18px;
+  }
+  .in-combat .dread-panel {
+    padding: 10px 14px;
+  }
+  .in-combat .dread-caption {
+    display: none;
+  }
+  .in-combat .dread-meter {
+    margin-bottom: 10px;
+  }
+  .in-combat .threshold {
+    padding: 8px 0;
+  }
+  .in-combat .fellowship-strip {
+    padding: 7px 18px;
+  }
+  .in-combat .companion .art {
+    height: 34px;
+    width: 34px;
+  }
+  .in-combat .action-message {
+    min-height: 30px;
+  }
+  .in-combat .hand-area {
+    padding: 0 0 6px;
+  }
+  .in-combat .hand {
+    padding-bottom: 4px;
+  }
+}
+.app:has(.tutorial) {
+  display: flex;
+  flex-direction: column;
+}
+.app:has(.tutorial) .topbar {
+  order: -2;
+  flex-shrink: 0;
+}
+.app:has(.tutorial) .combat-board {
+  width: 100%;
+}
+.tutorial {
+  position: relative;
+  order: -1;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+  max-width: 1000px;
+  margin: 14px auto 0;
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: 180px 1fr 130px;
+  gap: 5px 20px;
+  align-items: center;
+  box-shadow: none;
+}
+.tutorial .eyebrow {
+  grid-column: 1;
+}
+.tutorial h3 {
+  grid-column: 1;
+  margin: 0;
+  font-size: 24px;
+}
+.tutorial p {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+.tutorial .dialog-actions {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  margin: 0;
+  gap: 4px;
+}
+.floating-hit {
+  position: absolute;
+  z-index: 5;
+  top: 40%;
+  left: 0;
+  right: 0;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffe0ad;
+  text-shadow:
+    0 2px 4px #000,
+    0 0 14px #321604;
+  pointer-events: none;
+  animation: float-hit 0.45s ease-out both;
+}
+.floating-hit small {
+  display: block;
+  font:
+    10px "DM Sans",
+    sans-serif;
+  color: #d2e8ec;
+}
+.flying-card {
+  z-index: 100;
+  pointer-events: none;
+  margin: 0;
+}
+.card-deal-back {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid #aa9366;
+  border-radius: inherit;
+  background: #26312c url(/assets/wayfarer-back.webp) center / 100% 100%;
+  pointer-events: none;
+}
+.hand-card:has([data-motion="draw"]) {
+  z-index: 22;
+}
+.art {
+  position: relative;
+  overflow: hidden;
+}
+.art-image {
+  display: block;
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 384 / 341;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-repeat: no-repeat;
+}
+.art-image.companions {
+  aspect-ratio: 1 / 2;
+  top: 0;
+  transform: none;
+}
+.art-image.card-pair {
+  aspect-ratio: 3 / 2;
+}
+.game-card[data-upgraded="true"] {
+  border-color: #a77529;
+}
+.game-card[data-upgraded="true"] .card-art {
+  border-color: #a77529;
+  box-shadow: 0 0 0 1px #e8c77d70;
+}
+@keyframes float-hit {
+  from {
+    opacity: 1;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+}
+@media (max-width: 700px) {
+  .tutorial {
+    display: block;
+    padding: 14px;
+  }
+  .tutorial h3 {
+    margin: 6px 0;
+  }
+  .tutorial .dialog-actions {
+    margin-top: 8px;
+  }
+}
+
+.objective-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  background: #101d20db;
+}
+.objective-panel h2 {
+  font-size: 22px;
+}
+.objective-panel p,
+.objective-panel label,
+.ember-controls {
+  font-size: 12px;
+}
+.objective-panel p,
+.ember-controls p {
+  margin: 4px 0;
+}
+.objective-panel select {
+  display: block;
+  max-width: 100%;
+  margin-top: 4px;
+}
+.ember-controls {
+  min-width: 0;
+}
+.ember-controls button {
+  margin: 6px;
+  padding: 8px;
+}

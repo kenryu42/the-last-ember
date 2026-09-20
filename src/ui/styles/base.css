@@ -1,0 +1,150 @@
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2")
+    format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2")
+    format("woff2");
+  font-weight: 100 1000;
+  font-display: swap;
+}
+
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #e9e7dc;
+  background: #111b1c;
+  font-synthesis: none;
+  font-weight: 400;
+  --amber: #d6b77b;
+  --dim: #a7b5b1;
+  --border: #8e9d8b40;
+  --panel: #162323ed;
+  --red: #d4836e;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #1c2b2adb;
+  border-radius: 4px;
+  padding: 11px 18px;
+  transition:
+    background 0.16s,
+    border-color 0.16s,
+    transform 0.16s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+button:hover:not(:disabled) {
+  background: #33413a;
+  border-color: var(--amber);
+}
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid #f0cc80;
+  outline-offset: 4px;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+}
+h1 {
+  font-size: clamp(36px, 4.1vw, 60px);
+  line-height: 1.05;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+p {
+  line-height: 1.7;
+}
+small {
+  font-size: 12px;
+}
+svg {
+  flex-shrink: 0;
+}
+button.primary {
+  background: #bc9c61;
+  color: #142021;
+  border: 1px solid #e0c48c;
+  font-weight: 600;
+}
+button.primary:hover:not(:disabled) {
+  background: #e0c48c;
+}
+.secondary {
+  background: #162422c9;
+  border-color: #bdab7a77;
+}
+.text-button {
+  border: 0;
+  background: transparent;
+  padding: 7px 0;
+  color: #bac7bf;
+  font-size: 12px;
+}
+.text-button:hover:not(:disabled) {
+  background: transparent;
+  color: var(--amber);
+}
+.icon-button {
+  padding: 8px;
+  background: transparent;
+  border-color: transparent;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 600;
+  line-height: 1.6;
+}
+.muted {
+  color: var(--dim);
+  font-size: 13px;
+}
+.primary.full {
+  width: 100%;
+  margin-top: 24px;
+}
+.small-rule {
+  display: block;
+  width: 48px;
+  border-top: 1px solid var(--amber);
+  margin: 25px 0;
+}

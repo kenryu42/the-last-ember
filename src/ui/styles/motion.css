@@ -1,0 +1,131 @@
+.scene-enter {
+  animation: scene-enter 0.45s ease-out;
+}
+.enemy-unit.anticipate.cue-enemy {
+  animation: windup var(--combat-travel) ease-out;
+}
+.enemy-unit.impact.cue-blade .enemy-art,
+.enemy-unit.impact.cue-arrow .enemy-art,
+.enemy-unit.impact.cue-spell .enemy-art {
+  animation: recoil var(--combat-impact) ease-out;
+}
+.enemy-unit.impact.cue-enemy {
+  animation: lunge var(--combat-impact) ease-out;
+}
+.party-hit {
+  animation: party-hit var(--combat-impact) ease-out;
+}
+.party-shield {
+  animation: shield-glow var(--combat-impact) ease-out;
+}
+.party-heal {
+  animation: heal-glow var(--combat-impact) ease-out;
+}
+.dread-awakens .dread-meter {
+  animation: dread-pulse var(--combat-impact) ease-out;
+}
+@keyframes dread-pulse {
+  45% {
+    transform: scaleX(1.04);
+    filter: brightness(1.7);
+  }
+}
+@keyframes scene-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes intent-enter {
+  from {
+    opacity: 0.4;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes recoil {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(10px) rotate(-2deg);
+  }
+  65% {
+    transform: translateX(-3px) rotate(1deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes windup {
+  to {
+    transform: translateY(-5px) scale(0.98);
+  }
+}
+@keyframes lunge {
+  0% {
+    transform: translateY(-5px);
+  }
+  35% {
+    transform: translateY(9px) scale(1.03);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes party-hit {
+  30% {
+    transform: translateX(-3px);
+    box-shadow: inset 0 0 30px #bb734233;
+  }
+  70% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes shield-glow {
+  50% {
+    box-shadow: inset 0 0 20px #a4c9d84d;
+  }
+}
+@keyframes heal-glow {
+  50% {
+    box-shadow: inset 0 0 20px #a3bb735d;
+  }
+}
+[data-shake="false"] .party-hit {
+  animation: none;
+}
+[data-reduced="true"] *,
+[data-reduced="true"] *::before,
+[data-reduced="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+[data-reduced="true"] .game-card:hover,
+[data-reduced="true"] .game-card.selected {
+  transform: none;
+}
+[data-reduced="true"] .game-card.selected {
+  outline: 2px solid #f5cd86;
+}

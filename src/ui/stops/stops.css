@@ -1,0 +1,193 @@
+.stop-scene {
+  text-align: center;
+  max-width: 1150px;
+  margin: auto;
+  padding: 45px 0 30px;
+}
+.stop-scene h1 {
+  margin: 14px 0 18px;
+}
+.stop-content > .story-copy {
+  max-width: 650px;
+  margin: 0 auto 25px;
+}
+.scene-emblem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+  height: 75px;
+  border: 1px solid #c3ad7350;
+  border-radius: 50%;
+  color: var(--amber);
+  margin: 10px 0 25px;
+}
+.card-choices {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin: 28px 0;
+}
+.upgrade-compare .game-card {
+  --card-width: 230px;
+}
+.reward-summary {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  color: #d5c08f;
+  font-size: 13px;
+}
+.reward-summary > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 330px;
+}
+.reward-summary small {
+  font-size: 11px;
+  width: 100%;
+  color: #aebfab;
+}
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 32px auto;
+  gap: 14px;
+  text-align: left;
+}
+.choice-list button {
+  padding: 20px 25px;
+  justify-content: space-between;
+  background: #182b2cf0;
+}
+.choice-list button > span {
+  flex: 1;
+}
+.choice-list b {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+.choice-list small {
+  display: block;
+  color: #b1c0b1;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+.resolved-copy {
+  padding: 22px;
+  background: #172b29c9;
+  border: 1px solid var(--border);
+  margin: 30px auto;
+  max-width: 600px;
+  color: #d4c29b;
+}
+.deck-stop {
+  display: flex;
+  margin: 28px auto 0;
+}
+.shop-layout {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  align-items: center;
+}
+.shop-card .price {
+  display: block;
+  color: #d1bd89;
+  font-size: 12px;
+  margin-top: 13px;
+}
+.shop-services {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 275px;
+  min-width: 230px;
+  text-align: left;
+}
+.shop-services button {
+  display: grid;
+  grid-template-columns: 23px 1fr;
+  gap: 5px 12px;
+  padding: 13px 16px;
+  text-align: left;
+}
+.shop-services svg {
+  grid-row: span 3;
+  color: #cabb95;
+}
+.shop-services b {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+.shop-services small {
+  font-size: 10px;
+  line-height: 1.5;
+  color: #bec8b6;
+}
+.shop-services span {
+  font-size: 11px;
+  color: #d5bc7b;
+}
+.sold-card {
+  width: 190px;
+  height: 274px;
+  border: 1px dashed #aeb68a45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: Georgia, serif;
+  color: #b2bba6;
+}
+.sold-card small {
+  font-size: 10px;
+  margin-top: 12px;
+}
+.ending {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+  padding: 60px 0;
+}
+.ending > svg {
+  color: #e5c987;
+  margin-bottom: 22px;
+}
+.ending h1 {
+  margin: 20px 0 25px;
+}
+.ending .story-copy {
+  max-width: 650px;
+  margin: auto;
+}
+.ending-stats {
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  margin: 35px 0;
+}
+.ending-stats span {
+  font-size: 10px;
+  color: #bbc2b1;
+}
+.ending-stats b {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  display: block;
+  color: #e6c997;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.ending .dialog-actions {
+  justify-content: center;
+  margin-top: 30px;
+}

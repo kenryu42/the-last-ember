@@ -1,0 +1,370 @@
+.combat-board {
+  max-width: 1420px;
+  margin: 0 auto;
+}
+.combat-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0 10px;
+}
+.combat-heading h1 {
+  font-size: 33px;
+  margin-top: 5px;
+}
+.turn-indicator {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.turn-indicator b {
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: 400;
+  color: #e0cfaa;
+}
+.turn-indicator small {
+  border-left: 1px solid var(--border);
+  padding-left: 12px;
+  margin-left: 4px;
+  font-size: 10px;
+  color: #c4c9b6;
+}
+.battlefield {
+  display: grid;
+  grid-template-columns: 238px 1fr;
+  gap: 40px;
+  min-height: 300px;
+  align-items: center;
+  padding: 5px 0 16px;
+}
+.dread-panel {
+  background: #101d20db;
+  border: 1px solid #a49a7045;
+  border-radius: 5px;
+  padding: 17px 16px;
+}
+.dread-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: #d2a185;
+}
+.dread-title h2 {
+  font-size: 25px;
+  color: #e0d3bb;
+}
+.dread-title > b {
+  margin-left: auto;
+  font-size: 21px;
+  font-weight: 500;
+}
+.dread-title small {
+  font-size: 11px;
+  color: #bda38c;
+}
+.dread-meter {
+  display: flex;
+  gap: 4px;
+  margin-top: 15px;
+}
+.dread-meter span {
+  height: 7px;
+  flex: 1;
+  background: #5b665340;
+  border-radius: 1px;
+}
+.dread-meter .filled {
+  background: #d28b64;
+  box-shadow: 0 0 9px #dc7c343a;
+}
+.dread-caption {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: #b5a693;
+  margin: 9px 0 13px;
+}
+.threshold {
+  display: flex;
+  gap: 10px;
+  padding: 11px 0;
+  border-top: 1px solid #a7a28226;
+  color: #aeb5a5;
+}
+.threshold > b {
+  border: 1px solid #9e92765c;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #c9b99a;
+}
+.threshold p {
+  font-size: 10px;
+  line-height: 1.6;
+}
+.threshold strong {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.1px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  color: #d4c5a8;
+}
+.threshold.pending {
+  color: #f0b08a;
+}
+.threshold.pending strong {
+  color: #f0b08a;
+}
+.threshold.pending > b {
+  border-color: #ce8463;
+  background: #703c2b66;
+}
+.threshold.fired {
+  opacity: 0.57;
+}
+.combat-log-toggle {
+  font-size: 10px;
+  padding: 8px 0 0;
+}
+.enemies {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  align-items: center;
+  min-width: 0;
+}
+.enemy-unit {
+  width: clamp(140px, 17vw, 215px);
+  text-align: center;
+  position: relative;
+  transition:
+    opacity 0.3s,
+    filter 0.3s;
+  flex-shrink: 1;
+}
+.enemy-unit.dead {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+.intent {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 6px 12px;
+  background: #152223ed;
+  border: 1px solid #aa967551;
+  border-radius: 4px;
+  color: #e4bf98;
+  position: relative;
+  z-index: 1;
+  animation: intent-enter 0.2s ease-out;
+}
+.intent small {
+  font-size: 9px;
+  color: #bac3b0;
+  border-left: 1px solid var(--border);
+  padding-left: 6px;
+}
+.intent-guard {
+  color: #a9cad0;
+}
+.intent-howl {
+  color: #dda986;
+}
+.enemy-target {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid #a5ac9160;
+  border-radius: 90px 90px 12px 12px;
+  background: #223632;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 0 10px 35px #07121280;
+}
+.enemy-target:disabled {
+  opacity: 1;
+}
+.enemy-art {
+  width: 100%;
+  aspect-ratio: 1/1.05;
+}
+.art {
+  display: block;
+  background-repeat: no-repeat;
+  background-color: #263b3a;
+}
+.target-reticle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #122326dc;
+  font-size: 10px;
+  padding: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  color: #ead29d;
+}
+.enemy-target:hover .target-reticle,
+.enemy-target:focus-visible .target-reticle,
+.valid-target .target-reticle {
+  opacity: 1;
+}
+.enemy-target.valid-target {
+  border-color: #f4d291;
+  box-shadow:
+    0 0 0 3px #d4b56844,
+    0 0 25px #d9b86135;
+  cursor: crosshair;
+}
+.enemy-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 21px;
+  margin: 9px 0 6px;
+  white-space: nowrap;
+}
+.health-bar {
+  position: relative;
+  height: 6px;
+  background: #25382f;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid #a5ac831a;
+}
+.health-bar > span {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: #929e70;
+  transform-origin: left;
+  transition: transform 0.18s ease-out;
+}
+.enemy-health {
+  height: 15px;
+  background: #272f29;
+}
+.enemy-health > span {
+  background: #946b53;
+}
+.enemy-health > b {
+  position: relative;
+  display: block;
+  z-index: 1;
+  font-size: 9px;
+  line-height: 13px;
+  text-shadow: 0 1px 2px #000;
+  font-weight: 500;
+}
+.enemy-status {
+  min-height: 23px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding-top: 5px;
+}
+.enemy-status span {
+  display: flex;
+  align-items: center;
+  font-size: 9px;
+  color: #cbd3c2;
+  gap: 3px;
+}
+.fellowship-strip {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: #142123e6;
+  border-top: 1px solid #bac09833;
+  border-bottom: 1px solid #bac09833;
+  padding: 10px 22px;
+  border-radius: 4px;
+}
+.companions {
+  display: flex;
+  gap: 30px;
+  margin-right: auto;
+}
+.companion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 18px;
+}
+.companion .art {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid #b8b79588;
+}
+.companion small {
+  display: block;
+  font-family: "DM Sans", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.3px;
+  color: #a5b4ac;
+  margin-top: 3px;
+}
+.party-health {
+  min-width: 190px;
+}
+.party-health > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  font-size: 10px;
+  margin-bottom: 9px;
+  letter-spacing: 0.5px;
+  color: #bfccbc;
+}
+.party-health b {
+  color: #e0d6b9;
+  font-weight: 500;
+}
+.block-total {
+  display: grid;
+  grid-template-columns: 24px 25px;
+  gap: 2px 7px;
+  color: #aec3c5;
+}
+.block-total svg {
+  grid-row: span 2;
+  align-self: center;
+}
+.block-total b {
+  font-weight: 500;
+  font-size: 17px;
+}
+.block-total > span {
+  font-size: 8px;
+}
+.action-message {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: #b9c4b6;
+  font-size: 11px;
+}
+.target-message {
+  color: #f0d49b;
+}
+.target-message button {
+  font-size: 10px;
+  color: #b9bbab;
+}

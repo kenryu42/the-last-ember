@@ -1,0 +1,92 @@
+export const RELICS = [
+  {
+    id: "shieldfire",
+    name: "Shieldfire",
+    text: "At turn start, retain up to 6 remaining Block.",
+    art: 6,
+  },
+  {
+    id: "hushed-coal",
+    name: "Hushed Coal",
+    text: "Once per turn, when a card lowers Dread from 6+ to 3 or less, draw 1 and gain 1 energy.",
+    art: 11,
+  },
+  {
+    id: "black-lantern",
+    name: "Black Lantern",
+    text: "The first Spell each turn costs 1 less energy and generates 1 additional Dread.",
+    art: 8,
+  },
+  {
+    id: "kettle",
+    name: "Copper kettle",
+    text: "Restore 3 health after every victory.",
+    art: 5,
+  },
+  {
+    id: "ribbon",
+    name: "Mended ribbon",
+    text: "Maximum health +10. Restore 10 health when acquired.",
+    art: 10,
+  },
+  {
+    id: "buckler",
+    name: "Old watch badge",
+    text: "Begin every combat with 8 block.",
+    art: 1,
+  },
+  {
+    id: "lens",
+    name: "Ranger’s lens",
+    text: "Your hits deal +2 damage while Dread is 3 or less.",
+    art: 2,
+  },
+  {
+    id: "coal",
+    name: "Singing coal",
+    text: "Your hits deal +3 damage while Dread is at least 6.",
+    art: 3,
+  },
+  {
+    id: "flint",
+    name: "White flint",
+    text: "Gain 1 additional energy on the first turn of combat.",
+    art: 8,
+  },
+  {
+    id: "map",
+    name: "Unfinished map",
+    text: "Draw 1 additional card at every turn start.",
+    art: 7,
+  },
+  {
+    id: "thread",
+    name: "Silver thread",
+    text: "Every block effect grants 2 additional block.",
+    art: 6,
+  },
+  {
+    id: "bowl",
+    name: "Wooden bowl",
+    text: "Healing effects restore 3 additional health.",
+    art: 5,
+  },
+  {
+    id: "charm",
+    name: "Quiet bell",
+    text: "Dread thresholds are delayed to 5 and 9.",
+    art: 11,
+  },
+  {
+    id: "purse",
+    name: "Roadwarden’s purse",
+    text: "Earn 12 extra gold from combat victories.",
+    art: 9,
+  },
+  {
+    id: "feather",
+    name: "Grey feather",
+    text: "Begin every combat with 1 additional card.",
+    art: 4,
+  },
+];

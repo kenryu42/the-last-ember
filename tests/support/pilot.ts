@@ -1,13 +1,11 @@
+import { EVENTS } from "../../src/game/content/world";
+import { cardDef, needsTarget } from "../../src/game/content/cards";
+import { intention, thresholds } from "../../src/game/selectors/intentions";
+import { reachable } from "../../src/game/selectors/route";
+import { resolve } from "../../src/game/engine/resolve";
+import type { Action, Run } from "../../src/game/model";
 // Test-only policy. It never enters the production bundle.
 // Uses visible combat state to compare immediate card outcomes. Draw-pile order is not searched.
-import { EVENTS, cardDef, needsTarget } from "../../src/game/content";
-import {
-  intention,
-  reachable,
-  resolve,
-  thresholds,
-} from "../../src/game/engine";
-import type { Action, Run } from "../../src/game/model";
 
 export function combatAction(run: Run): Action {
   const s = run.scene;

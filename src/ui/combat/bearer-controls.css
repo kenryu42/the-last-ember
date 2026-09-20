@@ -1,0 +1,217 @@
+.has-ember .fellowship-strip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(140px, 230px) auto;
+  gap: 16px;
+}
+.has-ember .companions {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+.has-ember .companion {
+  position: relative;
+}
+.has-ember .companion .art {
+  display: block;
+  width: 44px;
+  height: 44px;
+}
+.has-ember .party-health {
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
+}
+.has-ember .block-total {
+  grid-column: 4;
+  grid-row: 1;
+}
+.has-ember .ember-controls {
+  grid-column: 2;
+  grid-row: 1;
+}
+.bearer-badge {
+  position: absolute;
+  left: 29px;
+  top: -4px;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border: 1px solid #ba9755;
+  border-radius: 50%;
+  background: #182321;
+  color: #efbc68;
+}
+.bearer-ability-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.ability-info {
+  position: relative;
+}
+.ability-info summary {
+  cursor: pointer;
+  list-style: none;
+  color: #e5d9bb;
+  line-height: 1.5;
+}
+.ability-info summary::-webkit-details-marker {
+  display: none;
+}
+.ability-info-mark {
+  margin-left: 7px;
+  color: #c1ac7f;
+  border-bottom: 1px dotted currentColor;
+}
+.ability-info .ability-description {
+  position: absolute;
+  z-index: 40;
+  inset: calc(100% + 8px) auto auto 0;
+  width: min(290px, 75vw);
+  padding: 12px;
+  margin: 0;
+  border: 1px solid #85724a;
+  border-radius: 4px;
+  background: #142123;
+  color: #e8e1cd;
+  box-shadow: 0 8px 24px #0008;
+  line-height: 1.6;
+}
+.bearer-status {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 4px 9px;
+  border: 1px solid #9b9f6570;
+  border-radius: 20px;
+  font-size: 10px;
+  color: #d6dfa7;
+  background: #27362b;
+}
+.bearer-status.used {
+  color: #b9c3b8;
+  background: #172426;
+  border-color: #72847a60;
+  animation: bearer-activation 650ms ease-out;
+}
+@keyframes bearer-activation {
+  from {
+    box-shadow:
+      0 0 0 3px #e8bf7770,
+      0 0 18px #e8bf7740;
+    color: #ffe3a7;
+  }
+  to {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.empower-options {
+  margin-top: 8px;
+}
+.empower-options summary {
+  cursor: pointer;
+  color: #e9c784;
+}
+.empower-options[open] {
+  padding: 8px;
+  border: 1px solid #85724a70;
+  border-radius: 4px;
+}
+button.end-turn {
+  position: relative;
+  width: 118px;
+  min-height: 56px;
+  padding: 10px 7px;
+  gap: 6px;
+  border: 1px solid #aa8b51;
+  border-radius: 10px 3px;
+  background:
+    radial-gradient(ellipse at 16% 50%, #96602130, transparent 60%),
+    linear-gradient(135deg, #28322e, #101b1d 65%);
+  box-shadow:
+    inset 0 0 0 3px #0c1719,
+    inset 0 0 0 4px #a58a4e55,
+    0 3px 0 #080f10,
+    0 5px 12px #0005;
+  color: #eee0bd;
+  font:
+    600 17px "Cormorant Garamond",
+    Georgia,
+    serif;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px #000;
+}
+button.end-turn:hover:not(:disabled),
+button.end-turn:focus-visible {
+  background:
+    radial-gradient(ellipse at 16% 50%, #c37a2945, transparent 65%),
+    linear-gradient(135deg, #334035, #152125 65%);
+  border-color: #edc784;
+  color: #fff0c9;
+}
+button.end-turn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 0 0 3px #0c1719,
+    inset 0 0 0 4px #a58a4e55;
+}
+button.end-turn:disabled {
+  opacity: 1;
+  color: #bfc3b6;
+  border-color: #716951;
+  background: #172225;
+}
+.end-turn-seal {
+  display: inline-flex;
+  color: #f0b760;
+  filter: drop-shadow(0 0 4px #d8863270);
+}
+button.end-turn .end-turn-seal svg {
+  display: block;
+  width: 19px;
+  height: 23px;
+}
+.end-turn:disabled .end-turn-seal {
+  color: #8e815e;
+  filter: none;
+}
+.has-ember .companion > span {
+  display: block;
+}
+@media (max-width: 700px) {
+  .has-ember .fellowship-strip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: 14px 12px;
+  }
+  .has-ember .companions {
+    width: auto;
+    justify-content: flex-start;
+  }
+  .has-ember .companion {
+    gap: 8px;
+    font-size: 19px;
+  }
+  .has-ember .companion small {
+    font-size: 8px;
+  }
+  .has-ember .party-health {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .has-ember .block-total {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+  .ability-info .ability-description {
+    left: auto;
+    right: 0;
+  }
+  .has-ember .dread-panel {
+    display: block;
+  }
+  .has-ember .dread-caption {
+    display: block;
+  }
+}

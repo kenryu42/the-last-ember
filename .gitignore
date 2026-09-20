@@ -9,3 +9,8 @@ coverage/
 .amp/portals/
 .amp/in/
 .amp/qa-build.tar.gz
+
+# Disposable local verification and experiment output
+artifacts/
+.playwright-cli/
+__pycache__/

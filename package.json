@@ -9,7 +9,9 @@
     "build": "bun run typecheck && bun --bun vite build",
     "preview": "bun --bun vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "check:boundaries": "bun scripts/check-boundaries.ts",
+    "check": "bun run check:boundaries && bun run typecheck && bun test"
   },
   "dependencies": {
     "@fontsource-variable/cormorant-garamond": "^5.3.0",

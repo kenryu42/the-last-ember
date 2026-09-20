@@ -1,0 +1,159 @@
+.app {
+  min-height: 100svh;
+  background-size: cover;
+  background-position: center;
+  isolation: isolate;
+  position: relative;
+  padding: 0 44px 46px;
+}
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, #101d20ed 0%, #101d2070 65%, #101d2040),
+    linear-gradient(0deg, #10191bf5 0%, #12202528 55%, #11202370 100%);
+  pointer-events: none;
+}
+.topbar {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #afc0b528;
+  gap: 22px;
+}
+.brand {
+  border: 0;
+  background: transparent !important;
+  padding: 0;
+  gap: 11px;
+  color: var(--amber);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 24px;
+  white-space: nowrap;
+}
+.top-tag {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #c4c9ba;
+}
+.topbar nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.topbar nav > button {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  font-size: 12px;
+  color: #ccd0c5;
+}
+.run-resources {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+.resource {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+}
+.resource small {
+  color: var(--dim);
+}
+.health {
+  color: #ddb7a2;
+}
+.gold {
+  color: #d8c18e;
+}
+.run-resources button {
+  border: 0;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 13px;
+  gap: 7px;
+}
+.footer {
+  position: absolute;
+  bottom: 17px;
+  left: 44px;
+  right: 44px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #a4b2a8;
+}
+.footer > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.save-dot {
+  width: 5px;
+  height: 5px;
+  background: #9eae81;
+  border-radius: 50%;
+}
+.save-dot.failed {
+  background: #ed927a;
+}
+.title-content {
+  padding: clamp(65px, 11vh, 135px) 0 70px 7%;
+  max-width: 740px;
+}
+.title-content h1 {
+  font-size: clamp(85px, 9.5vw, 145px);
+  line-height: 0.8;
+  letter-spacing: -3px;
+  margin: 32px 0;
+}
+.title-content h1 em {
+  font-style: normal;
+  color: #dfc795;
+}
+.title-rule {
+  display: block;
+  width: 70px;
+  border-top: 1px solid #bdad80;
+  margin: 35px 0 25px;
+}
+.title-prose {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 24px;
+  color: #ced2c5;
+  line-height: 1.45;
+}
+.title-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 290px;
+  gap: 13px;
+  margin-top: 32px;
+}
+.title-actions .primary {
+  flex-wrap: wrap;
+  padding: 15px 20px;
+}
+.title-actions small {
+  width: 100%;
+  font-size: 10px;
+  font-weight: 400;
+}
+.title-footnote {
+  font-size: 10px;
+  color: #a9b3a6;
+  margin-top: 32px;
+}
+.title-screen .atmosphere {
+  background:
+    linear-gradient(90deg, #101d20ef, #101d2090 39%, #101d2010 85%),
+    linear-gradient(0deg, #111d20c0, transparent 40%);
+}

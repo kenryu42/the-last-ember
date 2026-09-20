@@ -1,0 +1,274 @@
+.hand-area {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 128px;
+  gap: 15px;
+  align-items: center;
+  padding: 5px 0 20px;
+}
+.hand-window {
+  min-width: 0;
+  position: relative;
+}
+.hand-touch-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: sticky;
+  bottom: 12px;
+  z-index: 30;
+  padding: 8px;
+  border: 1px solid #786043;
+  border-radius: 8px;
+  background: #14221ff5;
+  font-size: 12px;
+  color: #e7d6a9;
+}
+.hand-touch-action button {
+  min-height: 44px;
+}
+.hand {
+  position: relative;
+  min-width: 0;
+  isolation: isolate;
+}
+.hand-card {
+  position: absolute;
+  z-index: var(--hand-order);
+  transition:
+    left var(--hand-settle, 200ms) ease-out,
+    top var(--hand-settle, 200ms) ease-out;
+}
+.hand .hand-card .game-card {
+  --card-width: inherit;
+  transform-origin: top left;
+  transform: translateY(var(--fan-drop)) rotate(var(--fan-angle));
+  transition-duration: var(--hand-settle, 200ms);
+}
+.hand-card .game-card[aria-disabled="true"] {
+  filter: saturate(0.55);
+  cursor: not-allowed;
+}
+.hand-card:has(:focus-visible),
+.hand-card.inspected,
+.hand-card.targeting {
+  z-index: 20;
+}
+.hand .hand-card:has(:focus-visible) .game-card,
+.hand .hand-card.inspected .game-card,
+.hand .hand-card.targeting .game-card {
+  transform: translate(var(--inspect-shift), -100px) scale(var(--inspect-scale));
+  border-color: #efcc83;
+  box-shadow:
+    0 0 0 2px #edc4786b,
+    0 12px 26px #051014b0;
+}
+@media (hover: hover) {
+  .hand-card:hover {
+    z-index: 21;
+  }
+  .hand .hand-card:hover .game-card {
+    transform: translate(var(--inspect-shift), -100px)
+      scale(var(--inspect-scale));
+    border-color: #efcc83;
+    box-shadow:
+      0 0 0 2px #edc4786b,
+      0 12px 26px #051014b0;
+  }
+}
+.game-card {
+  --card-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  padding: calc(var(--card-width) * 9 / 230) calc(var(--card-width) * 10 / 230);
+  width: var(--card-width);
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+  flex-shrink: 0;
+  height: auto;
+  aspect-ratio: 230 / 326;
+  position: relative;
+  overflow: visible;
+  background: #eee0bf url(/assets/wayfarer-face.webp) center / 100% 100%;
+  color: #30281d;
+  border: 1px solid #786043;
+  border-radius: 7px;
+  box-shadow:
+    0 2px 0 #30271e,
+    0 4px 0 -1px #a18b66,
+    0 7px 14px #07131085;
+  text-align: left;
+  transition:
+    transform 0.16s ease-out,
+    border-color 0.16s;
+  animation: card-enter 0.28s ease-out;
+  font-family: "DM Sans", sans-serif;
+}
+.game-card:hover:not(:disabled),
+.game-card:focus-visible {
+  background: #eee0bf url(/assets/wayfarer-face.webp) center / 100% 100%;
+  transform: translateY(-14px);
+  z-index: 3;
+  box-shadow: 0 10px 23px #051014b0;
+  border-color: #efcc83;
+}
+.game-card:disabled {
+  opacity: 0.61;
+  filter: saturate(0.6);
+}
+.game-card.selected {
+  transform: translateY(-18px);
+  border-color: #f3d187;
+  box-shadow:
+    0 0 0 3px #edc4786b,
+    0 5px 25px #080e0c;
+}
+.card-heading {
+  height: calc(var(--card-width) * 48 / 230);
+  padding-inline: calc(var(--card-width) * 6 / 230);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.08;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: calc(var(--card-width) * 18 / 230);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.cost {
+  width: calc(var(--card-width) * 26 / 230);
+  height: calc(var(--card-width) * 26 / 230);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 25%, #ac674b, #743928 65%, #492a21);
+  border: 1px solid #5e3528;
+  box-shadow:
+    inset 0 0 0 2px #d2996860,
+    0 1px 2px #3b241b90;
+  color: #fff0cf;
+  border-radius: 50%;
+  font-family: Georgia, serif;
+  font-size: calc(var(--card-width) * 17 / 230);
+}
+.card-art-popover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #bda36b;
+  border-radius: 8px;
+  background: #172621;
+  color: #f3e6bc;
+  overflow: hidden;
+  box-shadow: 0 12px 40px #0009;
+}
+.full-card-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background-repeat: no-repeat;
+}
+.card-art-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.card-video-sound {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+}
+.card-video-sound:hover:not(:disabled) {
+  background: transparent;
+}
+.card-video-sound:focus-visible {
+  outline: 2px solid #f3e6bc;
+  outline-offset: 2px;
+}
+.art-caption {
+  display: block;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 20px;
+}
+.card-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
+  border-radius: 1px;
+  border: 1px solid #756043;
+  clip-path: polygon(
+    5px 0,
+    calc(100% - 5px) 0,
+    100% 5px,
+    100% calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    5px 100%,
+    0 calc(100% - 5px),
+    0 5px
+  );
+}
+.card-owner {
+  font-size: 8px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #927a4c70;
+  line-height: calc(var(--card-width) * 22 / 230);
+  color: #53432d;
+  text-align: center;
+}
+.card-owner > span {
+  opacity: 0.8;
+}
+.card-rules {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 3px;
+  padding: 5px 2px;
+  font-size: calc(var(--card-width) * 13 / 230);
+  line-height: 1.45;
+  letter-spacing: -0.15px;
+}
+.card-keywords {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  color: #644623;
+  margin-top: auto;
+  padding: 5px 0 0;
+}
+.card-keywords svg {
+  flex-shrink: 0;
+  color: #925332;
+}
+.upgrade-mark {
+  color: #49784a;
+}
+.upgrade-preview {
+  border-color: #8aac65;
+}
