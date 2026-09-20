@@ -198,6 +198,7 @@ export function CardView({
   const def = cardDef(card.def);
   const button = useRef<HTMLButtonElement>(null);
   const artwork = useRef<HTMLDivElement>(null);
+  const opening = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closing = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showArt, setShowArt] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -210,7 +211,12 @@ export function CardView({
     !videoFailed &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const artStyle = cardArtStyle(card);
+  function cancelOpening() {
+    if (opening.current !== null) clearTimeout(opening.current);
+    opening.current = null;
+  }
   function keepArt() {
+    cancelOpening();
     if (closing.current) clearTimeout(closing.current);
     if (allowArtPreview) {
       if (!showArt) setVideoMuted(!loadVideoSound());
@@ -218,15 +224,30 @@ export function CardView({
     }
   }
   function leaveArt() {
+    cancelOpening();
     if (closing.current) clearTimeout(closing.current);
     closing.current = setTimeout(() => setShowArt(false), 150);
   }
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    cancelOpening();
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") cancelOpening();
+    };
+    window.addEventListener("keydown", escape, true);
+    window.addEventListener("scroll", cancelOpening, true);
+    window.addEventListener("resize", cancelOpening);
+    window.addEventListener("blur", cancelOpening);
+    document.addEventListener("visibilitychange", cancelOpening);
+    return () => {
+      cancelOpening();
       if (closing.current) clearTimeout(closing.current);
-    },
-    [],
-  );
+      window.removeEventListener("keydown", escape, true);
+      window.removeEventListener("scroll", cancelOpening, true);
+      window.removeEventListener("resize", cancelOpening);
+      window.removeEventListener("blur", cancelOpening);
+      document.removeEventListener("visibilitychange", cancelOpening);
+    };
+  }, [allowArtPreview]);
   useEffect(() => {
     if (!allowArtPreview) {
       setShowArt(false);
@@ -312,6 +333,7 @@ export function CardView({
             setShowArt(false);
         }}
         onClick={() => {
+          cancelOpening();
           setShowArt(false);
           onClick?.();
         }}
@@ -334,7 +356,10 @@ export function CardView({
           aria-hidden="true"
           className="art card-art"
           onPointerEnter={(event) => {
-            if (event.pointerType === "mouse") keepArt();
+            if (event.pointerType !== "mouse" || !allowArtPreview) return;
+            cancelOpening();
+            if (showArt) keepArt();
+            else opening.current = setTimeout(keepArt, 2000);
           }}
           onPointerLeave={leaveArt}
         >
