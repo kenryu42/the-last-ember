@@ -134,7 +134,19 @@ export function CombatEffects({
           style={style}
         >
           <div className="fx-at-target">
-            {frame.cue === "shield" || blocked ? (
+            {frame.cue === "dread" ? (
+              <svg className="fx-dread-skull" viewBox="0 0 96 112">
+                <path
+                  className="fx-skull-bone"
+                  d="M48 7C24 7 10 23 10 45c0 15 6 24 17 30l2 23q19 12 38 0l2-23c11-6 17-15 17-30C86 23 72 7 48 7Z"
+                />
+                <path
+                  className="fx-skull-hollow"
+                  d="M20 43q10-6 21 4l-3 16q-18 6-18-20Zm56 0q-10-6-21 4l3 16q18 6 18-20ZM48 61l-8 16h16Z"
+                />
+                <path className="fx-skull-teeth" d="M29 84q19 7 38 0M38 86v14m10-12v15m10-17v14" />
+              </svg>
+            ) : frame.cue === "shield" || blocked ? (
               <svg className="fx-shield-shape" viewBox="0 0 200 220">
                 <path d="M100 16 170 46V113Q162 171 100 206Q38 171 30 113V46Z" />
                 <path d="M100 43V177M53 78H147" />
@@ -144,17 +156,21 @@ export function CombatEffects({
             ) : (
               <div className="fx-burst" />
             )}
-            <div className="fx-shockwave" />
-            {Array.from({ length: powerful ? 12 : 8 }, (_, i) => (
-              <span
-                className="fx-spark"
-                key={i}
-                style={{
-                  rotate: `${i * 137.5}deg`,
-                  animationDelay: `${((i % 3) * 18) / speed}ms`,
-                }}
-              />
-            ))}
+            {frame.cue !== "dread" && (
+              <>
+                <div className="fx-shockwave" />
+                {Array.from({ length: powerful ? 12 : 8 }, (_, i) => (
+                  <span
+                    className="fx-spark"
+                    key={i}
+                    style={{
+                      rotate: `${i * 137.5}deg`,
+                      animationDelay: `${((i % 3) * 18) / speed}ms`,
+                    }}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </div>,
         document.body,

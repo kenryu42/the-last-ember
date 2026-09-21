@@ -75,11 +75,45 @@
   background: radial-gradient(ellipse, #f7e5a080, #a6c48940, transparent 65%);
   animation: fx-bloom var(--impact) ease-out both;
 }
-.fx-dread {
-  color: #e78d63;
+.fx-dread-skull {
+  position: absolute;
+  width: 76px;
+  height: 88px;
+  left: -38px;
+  top: -44px;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px #c74737b0);
+  animation: fx-skull-rise var(--impact) ease-out both;
 }
-.fx-dread .fx-shockwave {
-  border-style: dashed;
+.fx-skull-bone {
+  fill: #e4d1a5;
+  stroke: #6e352b;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+.fx-skull-hollow {
+  fill: #321c21;
+}
+.fx-skull-teeth {
+  fill: none;
+  stroke: #6e352b;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+@keyframes fx-skull-rise {
+  0% {
+    transform: translateY(8px) scale(0.65);
+    opacity: 0;
+  }
+  25%,
+  60% {
+    transform: translateY(-8px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-24px) scale(1.06);
+    opacity: 0;
+  }
 }
 @keyframes fx-bloom {
   0% {
