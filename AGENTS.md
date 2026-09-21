@@ -24,6 +24,13 @@ import order in `ui/styles/style.css`.
 Run `bun run check` and `bun run build` after code changes. See
 [architecture](docs/development/architecture.md) for details.
 
+Add or edit image originals in `artwork/source/`, mirroring paths under
+`public/assets/`. Starting `bun run dev` or `bun run build` exports changed
+sources as WebP automatically. Do not edit generated images in `public/assets/`
+or hand-edit `artwork/exports.json`. Commit sources, exports and the generated
+registry together. `bun run check:images` rejects missing, stale or unmanaged
+images. See [image workflow](docs/art/image-workflow.md) for exceptions and setup.
+
 # Pre-release compatibility policy
 
 The Last Ember has not been released. Breaking changes are acceptable.

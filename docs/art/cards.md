@@ -1,5 +1,8 @@
 # Card base and upgrade artwork
 
+See [card-art compression](image-optimization.md) for current export settings, size measurements and recovery of the original sheets.
+For new artwork, follow the [automatic image workflow](image-workflow.md).
+
 This art-only pass supplies 32 matched base/upgraded pairs, 64 original illustrations, in 16 locally bundled WebP sheets. Amp Painter generated one image per call. No third-party artwork was downloaded. The existing companion portraits and card art were references for the same project's character identities and romantic wilderness style. This records generation sources, not a legal claim of copyright exclusivity.
 
 The original production history below is preserved. The **Upgrade-strength revision** section at the end records the current replacements and supersedes the original upgraded cells for those cards.

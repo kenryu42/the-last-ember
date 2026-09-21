@@ -1,0 +1,387 @@
+{
+  "bearer-aldren.webp": {
+    "sourceHash": "2a5319e69af4645aba93016652acb7ce18181347654b34abaa6e788bf8931640",
+    "outputHash": "2a5319e69af4645aba93016652acb7ce18181347654b34abaa6e788bf8931640",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "bearer-eryn.webp": {
+    "sourceHash": "4cef40992c561dc1f4d39b388a211ab946c19d98415ff41dfeea3b3a31c09007",
+    "outputHash": "4cef40992c561dc1f4d39b388a211ab946c19d98415ff41dfeea3b3a31c09007",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "bearer-mara.webp": {
+    "sourceHash": "e65dbcb42301045b3389db27ba202c8b30165b1ad37e96c7796d8a26d74b6be4",
+    "outputHash": "e65dbcb42301045b3389db27ba202c8b30165b1ad37e96c7796d8a26d74b6be4",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-01.webp": {
+    "sourceHash": "23b07cfb7c0f290554df64c9f772a94eba6bddd00e40fdf08cfdfdd38831c336",
+    "outputHash": "552c520a97bb03d02738c89dc066aaa8a37bf53e895c85db73a3002bd6f011f1",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-02.webp": {
+    "sourceHash": "36d047b2a75af9334981c69acf6ba10aca36eea0459498872bdbce10a4fd20e1",
+    "outputHash": "31b35314c49ad37e8ee1a79a1904493aed0b636734ee1d83e98c341e0cb6e7df",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-03.webp": {
+    "sourceHash": "f78369470051cb769d55809e3d25da967bf8dd1a65d5b13e4c902bb66ddb6013",
+    "outputHash": "7033e2c4c13def40d24ec8405a60d54c81f90a8fd141a62f8ca3679f1c54c87b",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-04.webp": {
+    "sourceHash": "6f0afd048d13b43ba5dcf05144f6c99937a1793a9352e9603a09c8b0f4894418",
+    "outputHash": "6f0afd048d13b43ba5dcf05144f6c99937a1793a9352e9603a09c8b0f4894418",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-05.webp": {
+    "sourceHash": "99cf10a8b7031bb6b75847d2c4d62de7d04afa0d8fb01589c8d33aaa1e967e92",
+    "outputHash": "99cf10a8b7031bb6b75847d2c4d62de7d04afa0d8fb01589c8d33aaa1e967e92",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-06.webp": {
+    "sourceHash": "50a12388ee8904c2be5290ba8f421f09f33f7fcd292a81ba5b5f74ad66f5ef3a",
+    "outputHash": "33abaddcb1a3f68f08b626bc920b49d7804748ced3cbc4fd0cff423a8ebe0b0c",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-07.webp": {
+    "sourceHash": "42522fd9b781f404c199bfe82388e203e7c34abec928075b6f4b518b06ce64b1",
+    "outputHash": "08ac86b52532e7d98c21df65d9296fbe413d30dbd9f246efa214b0aff6ec422a",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-08.webp": {
+    "sourceHash": "a48f14ab111f5ed63cbe8d7a4cbae0b068ae9f82c58f43d1dbe7a01695cb203f",
+    "outputHash": "c84612b547dad02dc0b4f8385b636d1619e2654279930f3c411ac2c7a914d69c",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-09.webp": {
+    "sourceHash": "ad6a04737a6caafa5e82a012b90e47fc0780d29b377979f86c4a085bb3a4cd13",
+    "outputHash": "e999b392c501df5dac33f3852eef6cb202bf24bee115d543bcc7f54529932e08",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-10.webp": {
+    "sourceHash": "1e6b68c996de42437a5e6ce8f294f8a9843d2be8fcbd38871f76f0cdb8859a3d",
+    "outputHash": "12b8a715566ce02ad0e20135f7218dd47ce5658d967321cfbbe2b6d46b4328f0",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-11.webp": {
+    "sourceHash": "e5806fb29ecc57dd35696eff743cdb95b5b2567929e6b076af763c095838a47b",
+    "outputHash": "e5806fb29ecc57dd35696eff743cdb95b5b2567929e6b076af763c095838a47b",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-12.webp": {
+    "sourceHash": "64e1e7bad8778a213a3c2c991096b4f16157b2ad564555bd3ddc9766314f5b8f",
+    "outputHash": "aad80ae413a90d1636c8fe85f12091262c0e8aca80f9a879fe689ed1f5c0bd7c",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-13.webp": {
+    "sourceHash": "e0a6c7373290ba482be213e6592c7ee7e9ac0f7cca0a0c781aa59e0a67f8a18b",
+    "outputHash": "1df19a63ea684717a69c611afbe6949af06854d7505cf21c71ec0e641e014942",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-14.webp": {
+    "sourceHash": "ecd32a8621bc34df4e6174a1ab5ba7155d7d0302afd2c6f460be83f457dda632",
+    "outputHash": "c6fd70c4c9a8731125532e80fbc1ed6309e32995439c91ab223489c9747893bb",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-15.webp": {
+    "sourceHash": "2ec404553debb7a9d96d9e90b42a6fc3cefe860975e77d725454f5c300fdf6c7",
+    "outputHash": "d24368cbfd8e1d2cd49e64282ce0c5a0f4a4a9590c48aa262888ab13a003c7c6",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "card-pairs-16.webp": {
+    "sourceHash": "d2cf058f7eef7ba2f2145ded9325d7e876fa0c3501b5507fd36228b3fe5878e5",
+    "outputHash": "d2cf058f7eef7ba2f2145ded9325d7e876fa0c3501b5507fd36228b3fe5878e5",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "cards.webp": {
+    "sourceHash": "74e1b3cd34ff2ce990127c4e6935eaff93469a0d771d7c9eafe596e459e40be5",
+    "outputHash": "74e1b3cd34ff2ce990127c4e6935eaff93469a0d771d7c9eafe596e459e40be5",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "companions.webp": {
+    "sourceHash": "7118d7c41b737ea8cae00b6273696287e08c41f9721dbe9478de018c5e1f61eb",
+    "outputHash": "7118d7c41b737ea8cae00b6273696287e08c41f9721dbe9478de018c5e1f61eb",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/charcoal.webp": {
+    "sourceHash": "3a07871953268add4df5d6d7e5b4c0fc68123639ad4457738de95b382288e889",
+    "outputHash": "3a07871953268add4df5d6d7e5b4c0fc68123639ad4457738de95b382288e889",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/crossing.webp": {
+    "sourceHash": "b34fe5cdaa4381772859c7c6cabd95584b548a6e294c4a12e9734946b9557069",
+    "outputHash": "b34fe5cdaa4381772859c7c6cabd95584b548a6e294c4a12e9734946b9557069",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/grave.webp": {
+    "sourceHash": "bd9fe7e3c1b0ba44faaa0b077c12c12d8e43a4a57633d37fb8f5eb33827e2250",
+    "outputHash": "bd9fe7e3c1b0ba44faaa0b077c12c12d8e43a4a57633d37fb8f5eb33827e2250",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/names.webp": {
+    "sourceHash": "01be1a54f7d8cce673b66826faa3b041b6629bfe0b322e8c0586e136bd555bbf",
+    "outputHash": "01be1a54f7d8cce673b66826faa3b041b6629bfe0b322e8c0586e136bd555bbf",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/summer.webp": {
+    "sourceHash": "b58e231d9de47b3f1a29f969ddbb3dba5783343b7972097d5425a1e5b076a38d",
+    "outputHash": "b58e231d9de47b3f1a29f969ddbb3dba5783343b7972097d5425a1e5b076a38d",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/tollhouse.webp": {
+    "sourceHash": "5d311f1d3ec2f6e733fe5b279bc9839b08b66b50c058894869fac41a97eff526",
+    "outputHash": "5d311f1d3ec2f6e733fe5b279bc9839b08b66b50c058894869fac41a97eff526",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/well.webp": {
+    "sourceHash": "e7f0f9a2e49a4f4f3fd20347c5984fa417ae28eee3e2a784dd13cc5b446328aa",
+    "outputHash": "e7f0f9a2e49a4f4f3fd20347c5984fa417ae28eee3e2a784dd13cc5b446328aa",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/events/window.webp": {
+    "sourceHash": "d2f95185f7ac60a6700c289e08f177df3fe14973b07989c6f4a9d78c4293ac6f",
+    "outputHash": "d2f95185f7ac60a6700c289e08f177df3fe14973b07989c6f4a9d78c4293ac6f",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/camp.webp": {
+    "sourceHash": "98a881957c31cb74e74dc842ae2661a217dac24608e9983c498d24464961c325",
+    "outputHash": "98a881957c31cb74e74dc842ae2661a217dac24608e9983c498d24464961c325",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/crow-wolf.webp": {
+    "sourceHash": "e8bfd1975dd7651a037c68ec524fa7cb1c6e40bb47c65353cc3948530124583c",
+    "outputHash": "e8bfd1975dd7651a037c68ec524fa7cb1c6e40bb47c65353cc3948530124583c",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/raider.webp": {
+    "sourceHash": "16ba8a4ba069fcd7cf4187ba04c270a7575a6421b6d6c661f82966e2b7f35274",
+    "outputHash": "16ba8a4ba069fcd7cf4187ba04c270a7575a6421b6d6c661f82966e2b7f35274",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/roots.webp": {
+    "sourceHash": "9ee42a1136231d86efe5f3eb018760bffd775ed422da8420349e064c8e762890",
+    "outputHash": "9ee42a1136231d86efe5f3eb018760bffd775ed422da8420349e064c8e762890",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/shop.webp": {
+    "sourceHash": "46cc8eda32400521264dd97c56a5e6e96a4c9b47bd90860797314f10d564b543",
+    "outputHash": "46cc8eda32400521264dd97c56a5e6e96a4c9b47bd90860797314f10d564b543",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/stag-wolf.webp": {
+    "sourceHash": "467e2a2b4aade1f671f6a6aaabcc22c09f5fdc07de0ec41d60627273484f5b22",
+    "outputHash": "467e2a2b4aade1f671f6a6aaabcc22c09f5fdc07de0ec41d60627273484f5b22",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/stag.webp": {
+    "sourceHash": "6fec58aeab9707c1c3d7ae6c9f977620a2b1d8e1de79a6cb0798d2df44ddc37a",
+    "outputHash": "6fec58aeab9707c1c3d7ae6c9f977620a2b1d8e1de79a6cb0798d2df44ddc37a",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/forest/wolf-wolf.webp": {
+    "sourceHash": "b892042507b2b98e8c0a662a00c9698d7ea062e265c670699f7ddf704c75e344",
+    "outputHash": "b892042507b2b98e8c0a662a00c9698d7ea062e265c670699f7ddf704c75e344",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/camp.webp": {
+    "sourceHash": "21b791b16f30696effb13c58651b329cfcaeb61812d7b3f8b5e1f5e1ddbf7515",
+    "outputHash": "21b791b16f30696effb13c58651b329cfcaeb61812d7b3f8b5e1f5e1ddbf7515",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/crow-wraith-wraith.webp": {
+    "sourceHash": "8abef9f41e11ef983910a34bfa341f56712a7ff6f88ef3d9e0dff23c17940dfc",
+    "outputHash": "8abef9f41e11ef983910a34bfa341f56712a7ff6f88ef3d9e0dff23c17940dfc",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/crow-wraith.webp": {
+    "sourceHash": "3f4d79885933b6e6f0c06fa21af45498abff1d13636a5610feb25cab20704efd",
+    "outputHash": "3f4d79885933b6e6f0c06fa21af45498abff1d13636a5610feb25cab20704efd",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/hollow.webp": {
+    "sourceHash": "419a019243c3cbf6caa48b39f91a84cb0d41da31d9c83b0f656090f377ac4d56",
+    "outputHash": "419a019243c3cbf6caa48b39f91a84cb0d41da31d9c83b0f656090f377ac4d56",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/sentinel-shade.webp": {
+    "sourceHash": "9a10e7bf1bfb120989a66ab8abd7b46cb5b3edee54bfbf4e58e6db957595a6a2",
+    "outputHash": "9a10e7bf1bfb120989a66ab8abd7b46cb5b3edee54bfbf4e58e6db957595a6a2",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/shop.webp": {
+    "sourceHash": "f0e4b6e360467c86603246641784ee45c11c2b4737d261ab5ccdc2d2a748e91a",
+    "outputHash": "f0e4b6e360467c86603246641784ee45c11c2b4737d261ab5ccdc2d2a748e91a",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/mountain/soldier-wraith.webp": {
+    "sourceHash": "5feb94d7a6a7e73090b8f983a09ed295ecb62e2f23b9f6c0bd2a8c722d09e811",
+    "outputHash": "5feb94d7a6a7e73090b8f983a09ed295ecb62e2f23b9f6c0bd2a8c722d09e811",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/camp.webp": {
+    "sourceHash": "c9ee223c1de20ced61b61c274400423d697a461ab5e1a38084a8d1d9cb4e1c4c",
+    "outputHash": "c9ee223c1de20ced61b61c274400423d697a461ab5e1a38084a8d1d9cb4e1c4c",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/crow-raider.webp": {
+    "sourceHash": "407c45151a74fc7b022afc6bb5295f66e03c4feaf32b50d17e088cded26cfd56",
+    "outputHash": "407c45151a74fc7b022afc6bb5295f66e03c4feaf32b50d17e088cded26cfd56",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/crow-wolf.webp": {
+    "sourceHash": "16e73761ab289c9ef77e160bdb45e1ab0f7735e2f8936484cbba5f7e90973f3e",
+    "outputHash": "16e73761ab289c9ef77e160bdb45e1ab0f7735e2f8936484cbba5f7e90973f3e",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/marshal.webp": {
+    "sourceHash": "067da27d1c16aa8e2809ec75e7bad83e261954501ad8ab2c1626bdf6cb0555f2",
+    "outputHash": "067da27d1c16aa8e2809ec75e7bad83e261954501ad8ab2c1626bdf6cb0555f2",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/sentinel-soldier.webp": {
+    "sourceHash": "2f24ea641988b3ad02b45b76d30f25267fd90b28ee1d04f865595e4e2dca3b2d",
+    "outputHash": "2f24ea641988b3ad02b45b76d30f25267fd90b28ee1d04f865595e4e2dca3b2d",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/sentinel.webp": {
+    "sourceHash": "dcd4a5a972fa9a70cf3ca9a0f32902b24049d27fb5b353728134eb443c4e07ea",
+    "outputHash": "dcd4a5a972fa9a70cf3ca9a0f32902b24049d27fb5b353728134eb443c4e07ea",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/shade-shade.webp": {
+    "sourceHash": "b3ee6c335814e939c2e3518cbe8dd2afea598b4c43c8cdc659a4befa4f1ec956",
+    "outputHash": "b3ee6c335814e939c2e3518cbe8dd2afea598b4c43c8cdc659a4befa4f1ec956",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/shade-soldier.webp": {
+    "sourceHash": "44131947d7492c7b980e48be104ea3f836d6f142bc5129a9536da0d8701827df",
+    "outputHash": "44131947d7492c7b980e48be104ea3f836d6f142bc5129a9536da0d8701827df",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "encounters/ruins/shop.webp": {
+    "sourceHash": "1b1a6b454b47d1c6003d1dc4d22c7635d7a5d359fc7f70a6795b14289b61b3ba",
+    "outputHash": "1b1a6b454b47d1c6003d1dc4d22c7635d7a5d359fc7f70a6795b14289b61b3ba",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "enemies.webp": {
+    "sourceHash": "06cc8fc696a20ffc290684fdbc590f97e1e1e3f1c3caf3ea1d455bb050569057",
+    "outputHash": "06cc8fc696a20ffc290684fdbc590f97e1e1e3f1c3caf3ea1d455bb050569057",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "forest.webp": {
+    "sourceHash": "7139bbc251bc02dbc443f783479650d252ce211938ac0a62188f1750f4e67877",
+    "outputHash": "7139bbc251bc02dbc443f783479650d252ce211938ac0a62188f1750f4e67877",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-1.webp": {
+    "sourceHash": "8bd2126a41161153668363881f7fa6ae1d14b5717c721c2bfc48d0a8b9143243",
+    "outputHash": "8bd2126a41161153668363881f7fa6ae1d14b5717c721c2bfc48d0a8b9143243",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-2.webp": {
+    "sourceHash": "ffadfc299e5062cee1d3c091320bb2c9a3f8c6d7ac00cec340423a33e99f7697",
+    "outputHash": "ffadfc299e5062cee1d3c091320bb2c9a3f8c6d7ac00cec340423a33e99f7697",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-3.webp": {
+    "sourceHash": "3e31e0d2e65d6bf4b372b5a98d92680bfcf31d24148dfc3fef50e2777299c15f",
+    "outputHash": "3e31e0d2e65d6bf4b372b5a98d92680bfcf31d24148dfc3fef50e2777299c15f",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-4.webp": {
+    "sourceHash": "c45468be4985d1d440ee6367dc77efb3ba1c0cb2c7a0c1dafa26d15b8452636d",
+    "outputHash": "c45468be4985d1d440ee6367dc77efb3ba1c0cb2c7a0c1dafa26d15b8452636d",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-5.webp": {
+    "sourceHash": "f0cf6b09bdb005345270a2a75bf89cb4c7233ecca8a31ebf1ffb7c590740ffb7",
+    "outputHash": "f0cf6b09bdb005345270a2a75bf89cb4c7233ecca8a31ebf1ffb7c590740ffb7",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/forest-6.webp": {
+    "sourceHash": "cde4f3a3ebe42084aa073c0211bd380db6c6bcf39c842def84c904b1ab5fe575",
+    "outputHash": "cde4f3a3ebe42084aa073c0211bd380db6c6bcf39c842def84c904b1ab5fe575",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-1.webp": {
+    "sourceHash": "d913cc2a933521e4a4d46c4bce27835668aa8dbddb9a25eb99e161b875bd8ed1",
+    "outputHash": "d913cc2a933521e4a4d46c4bce27835668aa8dbddb9a25eb99e161b875bd8ed1",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-2.webp": {
+    "sourceHash": "7219b39271f394ee5c8aaf75d847df1d36dcd4b4092d2800509acfc344a2c5f8",
+    "outputHash": "7219b39271f394ee5c8aaf75d847df1d36dcd4b4092d2800509acfc344a2c5f8",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-3.webp": {
+    "sourceHash": "c4b6b732bcf82c0db2fdb0c45df79e8691e787a8ff5c86e7a31ad26754848a12",
+    "outputHash": "c4b6b732bcf82c0db2fdb0c45df79e8691e787a8ff5c86e7a31ad26754848a12",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-4.webp": {
+    "sourceHash": "a7d5808fad40db7c7618371cb9f5b3d32d0337296172f57331e3e7215707b6fa",
+    "outputHash": "a7d5808fad40db7c7618371cb9f5b3d32d0337296172f57331e3e7215707b6fa",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-5.webp": {
+    "sourceHash": "cf9c08b8c6c13d767a4da3f5e3210cc92fe8d4b8ed082f96fc9f339867fd2fec",
+    "outputHash": "cf9c08b8c6c13d767a4da3f5e3210cc92fe8d4b8ed082f96fc9f339867fd2fec",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/mountain-6.webp": {
+    "sourceHash": "bc1f8b500c1fa8edcb6dedace49bb4ebb292e58a90916142c4c761a2be660967",
+    "outputHash": "bc1f8b500c1fa8edcb6dedace49bb4ebb292e58a90916142c4c761a2be660967",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-1.webp": {
+    "sourceHash": "c800ed19ca514d8146435c0f2c4e83d8f41d09bd0a9fb32bbcefb573cbda47e6",
+    "outputHash": "c800ed19ca514d8146435c0f2c4e83d8f41d09bd0a9fb32bbcefb573cbda47e6",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-2.webp": {
+    "sourceHash": "37fd2c5aa5855e513649ecbe62f876fa5e6982b3cd58f8a756a5906b1bb8e610",
+    "outputHash": "37fd2c5aa5855e513649ecbe62f876fa5e6982b3cd58f8a756a5906b1bb8e610",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-3.webp": {
+    "sourceHash": "71ced1e00b40ce3844eff2f32e64ed331fdef04b24b58ca0db0e553172864a66",
+    "outputHash": "71ced1e00b40ce3844eff2f32e64ed331fdef04b24b58ca0db0e553172864a66",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-4.webp": {
+    "sourceHash": "7cc0cc867fba2895f1e205357d763d2597e287c10528165a207078b2ce5a2dbb",
+    "outputHash": "7cc0cc867fba2895f1e205357d763d2597e287c10528165a207078b2ce5a2dbb",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-5.webp": {
+    "sourceHash": "3265e1410af0ff503e9246561b2bc258d55a1dcb09abfa716939db2c3bce009b",
+    "outputHash": "3265e1410af0ff503e9246561b2bc258d55a1dcb09abfa716939db2c3bce009b",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "journey/ruins-6.webp": {
+    "sourceHash": "4be17278d687764c1297ec2b73c3ce1f16fe74542402321f6b8db1004f176ece",
+    "outputHash": "4be17278d687764c1297ec2b73c3ce1f16fe74542402321f6b8db1004f176ece",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "mountain.webp": {
+    "sourceHash": "e967ae4c6bc5be9b98f90f16cf760cd10e202a54c22cda2a4bcc3eec56e40f13",
+    "outputHash": "e967ae4c6bc5be9b98f90f16cf760cd10e202a54c22cda2a4bcc3eec56e40f13",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "ruins.webp": {
+    "sourceHash": "84c09dc53c749c769f59152b65e8320790d268f409420157540d34fdf9e23e74",
+    "outputHash": "84c09dc53c749c769f59152b65e8320790d268f409420157540d34fdf9e23e74",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "wayfarer-back.webp": {
+    "sourceHash": "d2fb002ac0273fe4df10b85e303f24edf7adad1b2ee13cd0c5274793f4de0068",
+    "outputHash": "d2fb002ac0273fe4df10b85e303f24edf7adad1b2ee13cd0c5274793f4de0068",
+    "recipe": "cwebp -q 90 -m 6"
+  },
+  "wayfarer-face.webp": {
+    "sourceHash": "61fdf3cca31f00faeab106330f9865abe10ec3356dae74dbbf1e59ae1100167a",
+    "outputHash": "61fdf3cca31f00faeab106330f9865abe10ec3356dae74dbbf1e59ae1100167a",
+    "recipe": "cwebp -q 90 -m 6"
+  }
+}
