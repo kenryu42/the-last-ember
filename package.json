@@ -9,7 +9,7 @@
     "build": "bun run typecheck && bun --bun vite build",
     "preview": "bun --bun vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "bun test",
+    "test": "AGENT=1 bun test",
     "check:boundaries": "bun scripts/check-boundaries.ts",
     "lint": "oxlint --type-aware --deny-warnings --report-unused-disable-directives src tests scripts vite.config.ts .amp/qa-wayfarer-comparison-probe.js",
     "lint:fix": "bun run lint --fix",
@@ -17,7 +17,7 @@
     "format:check": "oxfmt --check .",
     "check:duplicates": "jscpd --config .jscpd.json --fail-on-empty --exit-code 1 --no-tips --reporters ai",
     "check:unused": "knip",
-    "check": "bun run format:check && bun run check:boundaries && bun run typecheck && bun run lint && bun run check:duplicates && bun run check:unused && bun test"
+    "check": "bun run format:check && bun run check:boundaries && bun run typecheck && bun run lint && bun run check:duplicates && bun run check:unused && bun run test"
   },
   "dependencies": {
     "@fontsource-variable/cormorant-garamond": "^5.3.0",
