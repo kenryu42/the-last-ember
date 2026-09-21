@@ -1,3 +1,29 @@
+# Project structure
+
+Keep one package. Place changes with the responsibility they belong to:
+
+- `src/app/`: screen composition, settings, session state and autosave.
+- `src/game/`: browser-independent model, content, engine, selectors and save validation.
+- `src/lab/`: playtest fixtures, observations, policies, recording and simulations.
+- `src/platform/browser/`: browser storage, preferences and local history.
+- `src/ui/`: feature folders for cards, combat, journey and stops; shared components
+  and audio. GSAP/PixiJS belong in `combat/`; playtest UI belongs in `devtools/`.
+- `tests/` mirrors these responsibilities. `scripts/` groups lab CLIs, studies,
+  reports and browser checks. `docs/` holds guides; `experiments/` holds retained
+  evidence; ignored `artifacts/` holds disposable output. Assets stay in `public/assets/`.
+
+Keep game code independent of UI, browser APIs and the lab. The lab shares the
+game engine; ordinary UI must not import lab or app modules. Put shared game
+calculations in `game/selectors/`.
+
+Start at `game/engine/resolve.ts` for rules, `app/useGameSession.ts` for committed
+state, and `ui/combat/useActionPresentation.ts` for animation. Save committed
+results before playback; animation must not determine gameplay. Preserve CSS
+import order in `ui/styles/style.css`.
+
+Run `bun run check` and `bun run build` after code changes. See
+[architecture](docs/development/architecture.md) for details.
+
 # Pre-release compatibility policy
 
 The Last Ember has not been released. Breaking changes are acceptable.
