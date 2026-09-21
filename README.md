@@ -1,5 +1,7 @@
 # The Last Ember
 
+![The Last Ember: Mara, Eryn, and Aldren carrying an amber lantern through a misty ruined forest](public/assets/readme-hero.png)
+
 A local-first solo deckbuilding adventure. Mara, Eryn, and Aldren carry the last
 living ember through a forest frontier, a fallen kingdom, and a mountain pass.
 One shared deck, one health pool, and magic that attracts the dark.
