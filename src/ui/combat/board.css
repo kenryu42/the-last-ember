@@ -155,7 +155,7 @@
     filter 0.3s;
   flex-shrink: 1;
 }
-.enemy-unit.dead {
+.enemy-unit.dead > :not(.floating-hit) {
   opacity: 0.25;
   filter: grayscale(1);
 }

@@ -21,6 +21,7 @@ import { Modal } from "../shared/Modal";
 import type { Inspect } from "../cards/inspection";
 import { Hand } from "../cards/Hand";
 import { BearerSelection } from "../journey/BearerSelection";
+import { DamageNumbers } from "./DamageNumbers";
 import { useCardTargetDrag } from "./useCardTargetDrag";
 export function CombatBoard({
   run,
@@ -279,17 +280,9 @@ export function CombatBoard({
                     {aim ? "Drop to play" : selected !== null ? "Choose target" : "Inspect"}
                   </span>
                 </button>
-                {active &&
-                  stage === "impact" &&
-                  feedback.cue !== "enemy" &&
-                  /\d+ damage/.test(feedback.text) && (
-                    <span className="floating-hit" aria-hidden="true">
-                      −{feedback.text.match(/(\d+) damage/)?.[1]}
-                      {feedback.text.includes("blocked") && (
-                        <small>{feedback.text.match(/(\d+) blocked/)?.[1]} blocked</small>
-                      )}
-                    </span>
-                  )}
+                <DamageNumbers
+                  frame={active && stage === "impact" && feedback.cue !== "enemy" ? feedback : null}
+                />
                 <div className="enemy-name">{def.name}</div>
                 <div className="health-bar enemy-health">
                   <span style={{ transform: `scaleX(${enemy.hp / enemy.maxHp})` }} />

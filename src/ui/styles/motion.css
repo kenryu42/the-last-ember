@@ -61,17 +61,18 @@
   }
 }
 @keyframes recoil {
-  0% {
-    transform: translateX(0);
+  0%,
+  18% {
+    transform: translateX(7px) rotate(-2deg) scale(1.025, 0.975);
+    filter: brightness(1.65) saturate(0.55);
   }
-  25% {
-    transform: translateX(10px) rotate(-2deg);
-  }
-  65% {
-    transform: translateX(-3px) rotate(1deg);
+  45% {
+    transform: translateX(-2px) rotate(0.5deg);
+    filter: brightness(1.08);
   }
   100% {
-    transform: translateX(0);
+    transform: none;
+    filter: none;
   }
 }
 @keyframes windup {
