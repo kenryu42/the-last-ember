@@ -268,3 +268,16 @@
 .upgrade-preview {
   border-color: #8aac65;
 }
+
+.draggable-card .game-card {
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+.draggable-card .game-card:active {
+  cursor: grabbing;
+}
+
+.hand-card.dragging {
+  opacity: 0;
+}

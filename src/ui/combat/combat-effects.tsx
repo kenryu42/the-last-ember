@@ -65,7 +65,12 @@ export function CombatEffects({
         : null;
     const source =
       frame.cue === "enemy" ? enemy : companion && companion.width > 0 ? companion : party;
-    const target = frame.cue === "enemy" ? party : (enemy ?? party);
+    const target =
+      frame.cue === "dread"
+        ? document.querySelector(".dread-meter")?.getBoundingClientRect()
+        : frame.cue === "enemy"
+          ? party
+          : (enemy ?? party);
     if (!source || !target) {
       setGeometry(null);
       return;

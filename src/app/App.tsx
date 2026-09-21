@@ -124,10 +124,17 @@ export function App() {
     "--hand-settle": `${200 / animationSpeed}ms`,
   };
   return (
-    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Delegated user gestures unlock browser audio; main is not itself a control.
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Delegated gestures unlock audio and dismiss card targeting; main is not itself a control.
     <main
       className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !shown.scene.introPending && !arrival && !title ? "in-combat" : ""}`}
       style={presentationStyle}
+      onClick={(event) => {
+        if (
+          selected !== null &&
+          !(event.target instanceof Element && event.target.closest(".enemy-target:not(:disabled)"))
+        )
+          setSelected(null);
+      }}
       onPointerDown={wakeAudio}
       onKeyDown={wakeAudio}
     >

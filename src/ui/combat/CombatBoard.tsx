@@ -15,12 +15,13 @@ import { thresholdState } from "../../game/selectors/dread";
 import type { Action, Card, Combat, Frame, Run } from "../../game/model";
 import { heroSchema } from "../../game/model";
 import { Art } from "../shared/Art";
-import { CardPile } from "../cards/CardView";
+import { CardPile, CardView } from "../cards/CardView";
 import { Icon } from "../shared/Icon";
 import { Modal } from "../shared/Modal";
 import type { Inspect } from "../cards/inspection";
 import { Hand } from "../cards/Hand";
 import { BearerSelection } from "../journey/BearerSelection";
+import { useCardTargetDrag } from "./useCardTargetDrag";
 export function CombatBoard({
   run,
   combat,
@@ -48,12 +49,23 @@ export function CombatBoard({
 }) {
   const [enemyInfo, setEnemyInfo] = useState<number | null>(null),
     [log, setLog] = useState(false);
+  const { aim, handlers } = useCardTargetDrag({ run, combat, busy, dispatch });
   const sceneHeading = useRef<HTMLHeadingElement>(null);
   const choosingBearer = combat.ember?.window === "choose";
   useLayoutEffect(() => {
     sceneHeading.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, [choosingBearer]);
+  const dragStyle = aim
+    ? {
+        left: aim.x - aim.offsetX * aim.scale,
+        top: aim.y - aim.offsetY * aim.scale,
+        "--card-width": `${aim.width}px`,
+        transform: `scale(${aim.scale})`,
+        transformOrigin: "top left",
+      }
+    : undefined;
+  const draggedCard = combat.hand.find((card) => card.uid === aim?.uid);
   const selectedCard = combat.hand.find((card) => card.uid === selected);
   const enemy = combat.enemies.find((e) => e.uid === enemyInfo);
   const bonus = mode === "candidate" ? thresholdStrength(run, combat) : 0;
@@ -66,11 +78,22 @@ export function CombatBoard({
   if (choosingBearer) return <BearerSelection run={run} dispatch={dispatch} busy={busy} />;
   return (
     <section
-      className={`combat-board ${combat.ember ? "has-ember" : ""}`}
+      {...handlers}
+      className={`combat-board ${combat.ember ? "has-ember" : ""} ${aim ? "is-dragging-card" : ""}`}
       aria-label="Combat"
       aria-busy={busy}
       data-reduced={reduced}
     >
+      {aim && draggedCard && (
+        <div className="dragged-card" aria-hidden="true" style={dragStyle}>
+          <CardView
+            card={draggedCard}
+            cost={cardCost(run, combat, cardDef(draggedCard.def))}
+            disabled
+            allowArtPreview={false}
+          />
+        </div>
+      )}
       <div className="combat-heading">
         <div>
           <p className="eyebrow">
@@ -237,7 +260,7 @@ export function CombatBoard({
                   )}
                 </div>
                 <button
-                  className={`enemy-target ${selected !== null && !dead ? "valid-target" : ""}`}
+                  className={`enemy-target ${(selected !== null || aim !== null) && !dead ? "valid-target" : ""} ${aim?.target === enemy.uid ? "drop-target" : ""}`}
                   data-enemy={enemy.uid}
                   disabled={dead || busy}
                   onClick={() =>
@@ -253,7 +276,7 @@ export function CombatBoard({
                 >
                   <Art sheet="enemies" index={def.art} className="enemy-art" />
                   <span className="target-reticle">
-                    {selected !== null ? "Choose target" : "Inspect"}
+                    {aim ? "Drop to play" : selected !== null ? "Choose target" : "Inspect"}
                   </span>
                 </button>
                 {active &&
@@ -440,7 +463,7 @@ export function CombatBoard({
         ) : feedback ? (
           feedback.text
         ) : (
-          "Read their intentions. Make your stand."
+          "Drag a card onto an enemy, or click to play."
         )}
       </output>
       <div className="hand-area">
@@ -464,7 +487,8 @@ export function CombatBoard({
           cards={combat.hand}
           energy={combat.energy}
           cost={(card) => cardCost(run, combat, cardDef(card.def))}
-          selected={selected}
+          selected={aim?.uid ?? selected}
+          dragging={aim?.uid ?? null}
           select={select}
           busy={busy}
         />

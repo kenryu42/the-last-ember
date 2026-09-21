@@ -11,6 +11,7 @@ export function Hand({
   selected,
   select,
   busy,
+  dragging,
 }: {
   cards: Card[];
   energy: number;
@@ -18,6 +19,7 @@ export function Hand({
   selected: number | null;
   select: (card: Card) => void;
   busy: boolean;
+  dragging: number | null;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const touch = useRef(false);
@@ -121,7 +123,7 @@ export function Hand({
           return (
             <div
               key={card.uid}
-              className={`hand-card ${inspected === card.uid ? "inspected" : ""} ${selected === card.uid ? "targeting" : ""}`}
+              className={`hand-card ${dragging === card.uid ? "dragging" : ""} ${needsTarget(cardDef(card.def)) && !busy && cost(card) <= energy ? "draggable-card" : ""} ${inspected === card.uid ? "inspected" : ""} ${selected === card.uid ? "targeting" : ""}`}
               style={style}
               onPointerDownCapture={(event) => {
                 touch.current = event.pointerType !== "mouse";
