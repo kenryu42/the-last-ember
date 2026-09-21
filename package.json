@@ -11,7 +11,13 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "check:boundaries": "bun scripts/check-boundaries.ts",
-    "check": "bun run check:boundaries && bun run typecheck && bun test"
+    "lint": "oxlint --type-aware --deny-warnings --report-unused-disable-directives src tests scripts vite.config.ts .amp/qa-wayfarer-comparison-probe.js",
+    "lint:fix": "bun run lint --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "check:duplicates": "jscpd --config .jscpd.json --fail-on-empty --exit-code 1 --no-tips --reporters ai",
+    "check:unused": "knip",
+    "check": "bun run format:check && bun run check:boundaries && bun run typecheck && bun run lint && bun run check:duplicates && bun run check:unused && bun test"
   },
   "dependencies": {
     "@fontsource-variable/cormorant-garamond": "^5.3.0",
@@ -27,7 +33,11 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.1",
-    "prettier": "^3.9.6",
+    "jscpd": "5.3.0",
+    "knip": "6.37.0",
+    "oxfmt": "0.68.0",
+    "oxlint": "1.83.0",
+    "oxlint-tsgolint": "7.0.2002",
     "typescript": "7.0.2",
     "vite": "8.3.0"
   }

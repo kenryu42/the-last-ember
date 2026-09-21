@@ -6,12 +6,13 @@ Use Bun 1.3.10. No database, backend, credentials, or external runtime asset ser
 is required. The starter's React/TypeScript/Vite/Bun architecture is retained.
 Zod validates external data; local Fontsource packages supply the two typefaces.
 CSS and the Web Animations API handle card and travel motion; GSAP and PixiJS render combat attacks. Web Audio supplies original synth
-cues and a regional, phrase-based score. Prettier is development-only.
+cues and a regional, phrase-based score.
 
 ```sh
 bun install --frozen-lockfile
 bun run dev
 bun test
+bun run check
 bun run typecheck
 bun run build
 bun run preview
@@ -21,6 +22,27 @@ bun scripts/lab/simulate.ts your-seed
 
 `typecheck` covers application code, tests, and verification scripts. `build` also
 runs it. `dist/` is the production output; preview serves that output, not source.
+
+`check` runs Oxfmt in check mode, import boundaries, TypeScript 7's native
+typechecker, type-aware Oxlint, jscpd, Knip, and tests, in that order. It stops at the first
+failure and does not fix or reformat files. CI runs this command before the build.
+The existing TypeScript project covers `src/`, `tests/`, `scripts/`, and Vite configuration.
+
+Run `bun run lint`, `bun run format:check`, `bun run check:duplicates`, or
+`bun run check:unused` to inspect findings independently. `bun run lint:fix`
+and `bun run format` explicitly write changes. Oxfmt replaces Prettier; import
+sorting is disabled to preserve ordering. Generated experiment evidence and
+asset files are excluded from formatting; Git-ignored build output is also skipped.
+
+jscpd checks authored application code, tests, scripts, CSS, and HTML with a
+0% duplication limit. Any detected duplication above that limit fails the check.
+The command prints a compact clone report. Running jscpd with only `.jscpd.json`
+also writes JSON to `artifacts/quality/duplication/`. Knip treats the app,
+Bun tests, standalone scripts, and the retained browser probe as entry points;
+Vite configuration is discovered by its Vite plugin. The two Fontsource packages
+are exempt from unused-dependency checks because `src/ui/styles/base.css` loads
+their WOFF2 files through CSS URLs. Findings in existing code
+remain failures and require a separate cleanup task.
 
 ### Browser regression tools
 

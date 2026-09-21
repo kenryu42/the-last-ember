@@ -1,0 +1,6 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "entry": ["scripts/**/*.ts", "tests/**/*.test.ts", ".amp/qa-wayfarer-comparison-probe.js"],
+  "project": ["src/**/*.{ts,tsx}", "tests/**/*.{ts,tsx}", "scripts/**/*.ts"],
+  "ignoreDependencies": ["@fontsource-variable/cormorant-garamond", "@fontsource-variable/dm-sans"]
+}

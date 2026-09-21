@@ -1,0 +1,14 @@
+{
+  "path": [
+    "src",
+    "tests",
+    "scripts",
+    "vite.config.ts",
+    "index.html",
+    ".amp/qa-wayfarer-comparison-probe.js"
+  ],
+  "format": ["typescript", "tsx", "javascript", "css", "python", "markup"],
+  "threshold": 0,
+  "reporters": ["console", "json"],
+  "output": "artifacts/quality/duplication"
+}
