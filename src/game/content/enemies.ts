@@ -93,14 +93,8 @@ export const ENEMIES: EnemyDef[] = [
     name: "The Rootbound King",
     hp: 92,
     art: 8,
-    pattern: [
-      { kind: "guard", amount: 10 },
-      attack(15),
-      { kind: "howl", amount: 2 },
-      attack(20),
-    ],
-    special:
-      "At half health or below, attacks gain 3 damage. Dread calls a wolf.",
+    pattern: [{ kind: "guard", amount: 10 }, attack(15), { kind: "howl", amount: 2 }, attack(20)],
+    special: "At half health or below, attacks gain 3 damage. Dread calls a wolf.",
   },
   {
     id: "marshal",
@@ -108,22 +102,15 @@ export const ENEMIES: EnemyDef[] = [
     hp: 124,
     art: 9,
     pattern: [attack(15), { kind: "guard", amount: 16 }, attack(22)],
-    special:
-      "At half health or below, attacks gain 3 damage. The host answers Dread.",
+    special: "At half health or below, attacks gain 3 damage. The host answers Dread.",
   },
   {
     id: "hollow",
     name: "The Hollow Beacon",
     hp: 166,
     art: 10,
-    pattern: [
-      { kind: "howl", amount: 2 },
-      attack(21),
-      { kind: "drain", amount: 15 },
-      attack(26),
-    ],
-    special:
-      "At Dread 6+, attacks gain 4 damage. At half health or below, attacks gain 3.",
+    pattern: [{ kind: "howl", amount: 2 }, attack(21), { kind: "drain", amount: 15 }, attack(26)],
+    special: "At Dread 6+, attacks gain 4 damage. At half health or below, attacks gain 3.",
   },
 ];
 export function enemyDef(id: EnemyKind): EnemyDef {

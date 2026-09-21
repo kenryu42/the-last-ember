@@ -4,13 +4,7 @@ import { cardDef } from "../../content/cards";
 import { RELICS } from "../../content/relics";
 import type { Action, Resolution } from "../../model";
 import { random, shuffle, pick } from ".././rng";
-import {
-  makeCard,
-  rewardPool,
-  heal,
-  grantRelic,
-  relicOffer,
-} from ".././rewards";
+import { makeCard, rewardPool, heal, grantRelic, relicOffer } from ".././rewards";
 import { generateRoute } from ".././journey/route";
 import { reachable } from "../../selectors/route";
 import { startCombat } from ".././combat/setup";
@@ -19,8 +13,7 @@ export function resolveTravel(
   action: Extract<Action, { type: "travel" }>,
 ): Resolution {
   const node = run.route.find((n) => n.id === action.node);
-  if (!node || !reachable(run, node))
-    return fail("Choose a connected stop on the next row.");
+  if (!node || !reachable(run, node)) return fail("Choose a connected stop on the next row.");
   run.row = node.row;
   run.location = node.id;
   run.visited.push(node.id);
@@ -51,10 +44,7 @@ export function resolveReward(
   action: Extract<Action, { type: "reward" }>,
 ): Resolution {
   const s = run.scene;
-  if (
-    s.kind !== "reward" ||
-    (action.card !== null && !s.cards.includes(action.card))
-  )
+  if (s.kind !== "reward" || (action.card !== null && !s.cards.includes(action.card)))
     return fail("That reward is not available.");
   if (action.card) run.deck.push(makeCard(run, action.card));
   if (s.relic) grantRelic(run, s.relic);
@@ -78,11 +68,7 @@ export function resolveLeave(
   if (
     s.kind !== "shop" &&
     !(s.kind === "camp" && s.used) &&
-    !(
-      s.kind === "event" &&
-      s.resolved !== null &&
-      s.pendingUpgrade === undefined
-    )
+    !(s.kind === "event" && s.resolved !== null && s.pendingUpgrade === undefined)
   )
     return fail("Finish this stop before continuing.");
   run.scene = { kind: "map" };
@@ -93,14 +79,9 @@ export function resolveRest(
   { run, emit, fail, finish }: ResolutionContext,
   _action: Extract<Action, { type: "rest" }>,
 ): Resolution {
-  if (run.scene.kind !== "camp" || run.scene.used)
-    return fail("This camp has already been used.");
+  if (run.scene.kind !== "camp" || run.scene.used) return fail("This camp has already been used.");
   run.scene.used = true;
-  emit(
-    "heal",
-    "party",
-    `Restored ${heal(run, Math.ceil(run.maxHp * 0.25))} health.`,
-  );
+  emit("heal", "party", `Restored ${heal(run, Math.ceil(run.maxHp * 0.25))} health.`);
   return finish();
 }
 
@@ -109,10 +90,7 @@ export function resolveUpgrade(
   action: Extract<Action, { type: "upgrade" }>,
 ): Resolution {
   const s = run.scene;
-  if (
-    !(s.kind === "camp" && !s.used) &&
-    !(s.kind === "event" && s.pendingUpgrade === action.uid)
-  )
+  if (!(s.kind === "camp" && !s.used) && !(s.kind === "event" && s.pendingUpgrade === action.uid))
     return fail("No improvement is available for this card.");
   const card = run.deck.find((c) => c.uid === action.uid && !c.upgraded);
   if (!card) return fail("Choose an unupgraded card.");
@@ -136,8 +114,7 @@ export function resolveChoice(
   action: Extract<Action, { type: "choice" }>,
 ): Resolution {
   const s = run.scene;
-  if (s.kind !== "event" || s.resolved !== null)
-    return fail("That choice has already been made.");
+  if (s.kind !== "event" || s.resolved !== null) return fail("That choice has already been made.");
   const choice = EVENTS[s.event]?.choices[action.index];
   if (!choice) return fail("Unknown choice.");
   if (run.gold + choice.gold < 0) return fail("Not enough gold.");
@@ -185,13 +162,7 @@ export function resolveBuy(
   const s = run.scene;
   if (s.kind !== "shop") return fail("There is no merchant here.");
   const cost =
-    action.item === "card"
-      ? 40
-      : action.item === "relic"
-        ? 85
-        : action.item === "heal"
-          ? 30
-          : 45;
+    action.item === "card" ? 40 : action.item === "relic" ? 85 : action.item === "heal" ? 30 : 45;
   if (run.gold < cost) return fail("Not enough gold.");
   if (action.item === "card") {
     const id = s.cards[action.index];
@@ -208,11 +179,7 @@ export function resolveBuy(
     heal(run, 20);
     s.healed = true;
   } else {
-    if (
-      s.removed ||
-      run.deck.length <= 5 ||
-      !run.deck.some((c) => c.uid === action.index)
-    )
+    if (s.removed || run.deck.length <= 5 || !run.deck.some((c) => c.uid === action.index))
       return fail("Cannot remove that card.");
     run.deck = run.deck.filter((c) => c.uid !== action.index);
     s.removed = true;

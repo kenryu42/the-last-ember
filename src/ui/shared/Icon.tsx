@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
 export function Icon({ name, size = 22 }: { name: string; size?: number }) {
   const paths: Record<string, ReactNode> = {
-    flame: (
-      <path d="M12 2c2 6 7 7 7 13a7 7 0 0 1-14 0c0-3 2-5 4-7-1 5 2 5 2 2 0-3 1-5 1-8Z" />
-    ),
+    flame: <path d="M12 2c2 6 7 7 7 13a7 7 0 0 1-14 0c0-3 2-5 4-7-1 5 2 5 2 2 0-3 1-5 1-8Z" />,
     battle: (
       <>
         <path d="m5 3 14 14M3 3l1 5 4-4-5-1Zm12 14 3-3m-3 6 5-5M4 20l5-5M16 3l5 1-1 5-5 5" />

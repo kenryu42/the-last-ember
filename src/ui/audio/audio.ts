@@ -30,11 +30,7 @@ const scheduledMusic = new Set<MusicVoice>();
 export function configureAudio(next: Settings) {
   settings = next;
   if (context && musicGain && effectsGain) {
-    musicGain.gain.setTargetAtTime(
-      next.muted ? 0 : next.music * 0.22,
-      context.currentTime,
-      0.15,
-    );
+    musicGain.gain.setTargetAtTime(next.muted ? 0 : next.music * 0.22, context.currentTime, 0.15);
     effectsGain.gain.setTargetAtTime(
       next.muted ? 0 : next.effects * 0.7,
       context.currentTime,
@@ -92,15 +88,9 @@ function playMusicNote(
     filter = ctx.createBiquadFilter();
   const end = at + duration;
   const pitch = frequency(note);
-  oscillator.frequency.setValueAtTime(
-    instrument === "drum" ? Math.max(90, pitch) : pitch,
-    at,
-  );
+  oscillator.frequency.setValueAtTime(instrument === "drum" ? Math.max(90, pitch) : pitch, at);
   if (instrument === "drum")
-    oscillator.frequency.exponentialRampToValueAtTime(
-      42,
-      at + Math.min(0.12, duration),
-    );
+    oscillator.frequency.exponentialRampToValueAtTime(42, at + Math.min(0.12, duration));
   oscillator.type =
     instrument === "strings" || instrument === "wind"
       ? "sawtooth"
@@ -263,11 +253,7 @@ export function sound(cue: Cue, detail?: SoundDetail) {
           : detail?.phase === "launch"
             ? 0.12
             : 0.2;
-      const buffer = ctx.createBuffer(
-        1,
-        Math.ceil(ctx.sampleRate * duration),
-        ctx.sampleRate,
-      );
+      const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * duration), ctx.sampleRate);
       const data = buffer.getChannelData(0);
       // Local presentation noise; it never consumes the run's seeded RNG.
       let noise = (variation + 1) * 0x9e3779b9;
@@ -301,10 +287,7 @@ export function sound(cue: Cue, detail?: SoundDetail) {
       gain.gain.setValueAtTime(0.001, now);
       gain.gain.linearRampToValueAtTime(
         peak,
-        now +
-          (cue === "spell" && detail?.phase === "launch"
-            ? duration * 0.6
-            : 0.008),
+        now + (cue === "spell" && detail?.phase === "launch" ? duration * 0.6 : 0.008),
       );
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
       source.connect(filter);
@@ -340,24 +323,14 @@ export function sound(cue: Cue, detail?: SoundDetail) {
       const oscillator = ctx.createOscillator(),
         gain = ctx.createGain(),
         start = now + index * 0.045,
-        duration = ["victory", "defeat", "spell", "heal"].includes(cue)
-          ? 0.5
-          : 0.18;
+        duration = ["victory", "defeat", "spell", "heal"].includes(cue) ? 0.5 : 0.18;
       effectVoices++;
-      oscillator.type = ["blade", "enemy", "dread"].includes(cue)
-        ? "triangle"
-        : "sine";
+      oscillator.type = ["blade", "enemy", "dread"].includes(cue) ? "triangle" : "sine";
       oscillator.detune.value = ((variation % 5) - 2) * 3;
       oscillator.frequency.setValueAtTime(frequency, start);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        frequency * 0.75,
-        start + duration,
-      );
+      oscillator.frequency.exponentialRampToValueAtTime(frequency * 0.75, start + duration);
       gain.gain.setValueAtTime(0, start);
-      gain.gain.linearRampToValueAtTime(
-        settings ? settings.effects * 0.11 : 0,
-        start + 0.008,
-      );
+      gain.gain.linearRampToValueAtTime(settings ? settings.effects * 0.11 : 0, start + 0.008);
       gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
       oscillator.connect(gain);
       if (!effectsGain) return;

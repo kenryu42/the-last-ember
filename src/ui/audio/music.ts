@@ -1,10 +1,8 @@
 import type { Run } from "../../game/model";
 
 export type Region = "forest" | "ruins" | "mountain";
-export type MusicMode =
-  "title" | "explore" | "camp" | "combat" | "boss" | "ending";
-export type Instrument =
-  "pluck" | "flute" | "strings" | "bell" | "wind" | "bass" | "drum";
+type MusicMode = "title" | "explore" | "camp" | "combat" | "boss" | "ending";
+export type Instrument = "pluck" | "flute" | "strings" | "bell" | "wind" | "bass" | "drum";
 
 export interface Note {
   readonly beat: number;
@@ -69,26 +67,17 @@ export const REGION_SCORES: Readonly<Record<Region, readonly Note[]>> = {
 };
 
 export function deriveSoundscape(run: Run | null, title: boolean): Soundscape {
-  const region: Region =
-    run?.act === 1 ? "ruins" : run?.act === 2 ? "mountain" : "forest";
+  const region: Region = run?.act === 1 ? "ruins" : run?.act === 2 ? "mountain" : "forest";
   let mode: MusicMode = "explore";
   if (title || !run) mode = "title";
-  else if (run.scene.kind === "combat")
-    mode = run.scene.type === "boss" ? "boss" : "combat";
+  else if (run.scene.kind === "combat") mode = run.scene.type === "boss" ? "boss" : "combat";
   else if (run.scene.kind === "camp") mode = "camp";
   else if (run.scene.kind === "ending") mode = "ending";
   const value = run?.scene.kind === "combat" ? run.scene.dread : 0;
   const dread: 0 | 1 | 2 = value >= 8 ? 2 : value >= 4 ? 1 : 0;
-  const ending =
-    run?.scene.kind === "ending"
-      ? run.scene.won
-        ? "victory"
-        : "defeat"
-      : undefined;
+  const ending = run?.scene.kind === "ending" ? (run.scene.won ? "victory" : "defeat") : undefined;
   const key = `${region}:${mode}:${dread}:${ending ?? ""}`;
-  return ending
-    ? { region, mode, dread, ending, key }
-    : { region, mode, dread, key };
+  return ending ? { region, mode, dread, ending, key } : { region, mode, dread, key };
 }
 
 const PROGRESSIONS: Readonly<Record<Region, readonly number[]>> = {
@@ -97,10 +86,7 @@ const PROGRESSIONS: Readonly<Record<Region, readonly number[]>> = {
   mountain: [0, 3, -2, 5],
 };
 
-export function composeBar(
-  soundscape: Soundscape,
-  measure = 0,
-): readonly Note[] {
+export function composeBar(soundscape: Soundscape, measure = 0): readonly Note[] {
   const base = REGION_SCORES[soundscape.region];
   const variation = ((measure % 4) + 4) % 4;
   const shift = PROGRESSIONS[soundscape.region][variation] ?? 0;
@@ -123,11 +109,7 @@ export function composeBar(
       level: note.level * modeLevel,
     }));
   const root =
-    (soundscape.region === "forest"
-      ? 45
-      : soundscape.region === "ruins"
-        ? 41
-        : 38) + shift;
+    (soundscape.region === "forest" ? 45 : soundscape.region === "ruins" ? 41 : 38) + shift;
   result.push(
     {
       beat: 0,
@@ -152,8 +134,7 @@ export function composeBar(
     },
   );
   if (soundscape.ending) {
-    const intervals =
-      soundscape.ending === "victory" ? [12, 16, 19, 24] : [12, 10, 7, 3];
+    const intervals = soundscape.ending === "victory" ? [12, 16, 19, 24] : [12, 10, 7, 3];
     intervals.forEach((interval, index) =>
       result.push({
         beat: index * 2,

@@ -20,13 +20,7 @@
   left: -75px;
   top: -75px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    #fff4c6 0 6%,
-    #ffbd60b0 15%,
-    #c7622560 38%,
-    transparent 69%
-  );
+  background: radial-gradient(circle, #fff4c6 0 6%, #ffbd60b0 15%, #c7622560 38%, transparent 69%);
   animation: fx-bloom var(--impact) ease-out both;
 }
 .fx-shockwave {

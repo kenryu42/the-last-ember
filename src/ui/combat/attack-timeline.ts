@@ -74,11 +74,7 @@ export function createAttackTimeline(
       duration * 0.62,
     );
   } else {
-    timeline.to(
-      motion,
-      { burst: 1, duration: duration * 0.45, ease: "power3.out" },
-      0,
-    );
+    timeline.to(motion, { burst: 1, duration: duration * 0.45, ease: "power3.out" }, 0);
     timeline.to(
       motion,
       { opacity: 0, fade: 0, duration: duration * 0.85, ease: "power2.out" },

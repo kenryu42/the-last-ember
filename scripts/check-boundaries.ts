@@ -5,11 +5,7 @@ function sourceFiles(directory: string): string[] {
   if (!existsSync(directory)) return [];
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name);
-    return entry.isDirectory()
-      ? sourceFiles(path)
-      : /\.tsx?$/.test(path)
-        ? [path]
-        : [];
+    return entry.isDirectory() ? sourceFiles(path) : /\.tsx?$/.test(path) ? [path] : [];
   });
 }
 
@@ -21,9 +17,7 @@ export function checkBoundaries(root: string): string[] {
     const transpiler = new Bun.Transpiler({
       loader: file.endsWith(".tsx") ? "tsx" : "ts",
     });
-    const imports = new Set(
-      transpiler.scanImports(text).map((entry) => entry.path),
-    );
+    const imports = new Set(transpiler.scanImports(text).map((entry) => entry.path));
     // The transpiler erases type-only imports. They follow the same ownership rules.
     for (const match of text.matchAll(
       /(?:import|export)\s+(?:type\s+)?(?:\{[^}]*\}|\*\s+as\s+\w+|\w+)\s+from\s*["']([^"']+)["']/g,
@@ -37,17 +31,14 @@ export function checkBoundaries(root: string): string[] {
       const allowed = path.startsWith("src/game/")
         ? target.startsWith("src/game/") || target === "zod"
         : path.startsWith("src/lab/")
-          ? target.startsWith("src/game/") ||
-            target.startsWith("src/lab/") ||
-            target === "zod"
+          ? target.startsWith("src/game/") || target.startsWith("src/lab/") || target === "zod"
           : path.startsWith("src/platform/")
             ? target.startsWith("src/game/") ||
               target.startsWith("src/platform/") ||
               target === "zod"
             : path.startsWith("src/ui/")
               ? !target.startsWith("src/app/") &&
-                (!target.startsWith("src/lab/") ||
-                  path.startsWith("src/ui/devtools/"))
+                (!target.startsWith("src/lab/") || path.startsWith("src/ui/devtools/"))
               : path.startsWith("src/app/")
                 ? !target.startsWith("src/lab/")
                 : true;

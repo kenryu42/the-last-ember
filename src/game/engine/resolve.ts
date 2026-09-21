@@ -52,10 +52,7 @@ export function resolve(
     if (combat.objective) {
       // With no enemies, renewable energy and a nonempty reshuffling deck make
       // remaining Work guaranteed. Do not force empty turns or extra rewards.
-      if (
-        !danger &&
-        combat.hand.length + combat.draw.length + combat.discard.length > 0
-      )
+      if (!danger && combat.hand.length + combat.draw.length + combat.discard.length > 0)
         combat.objective.progress = combat.objective.target;
       if (combat.objective.progress < combat.objective.target) return;
     } else if (danger) return;
@@ -121,20 +118,11 @@ export function resolve(
         run.actBearer = action.hero;
         return finish();
       }
-      if (
-        c.kind !== "combat" ||
-        !c.ember ||
-        c.ember.window !== "choose" ||
-        run.actBearer !== null
-      )
+      if (c.kind !== "combat" || !c.ember || c.ember.window !== "choose" || run.actBearer !== null)
         return fail("The Ember bearer is locked until this Act is cleared.");
       run.actBearer = action.hero;
       c.ember = { bearer: action.hero, window: "closed", used: false };
-      emit(
-        "dread",
-        null,
-        `${action.hero} carries the Ember for Act ${run.act + 1}.`,
-      );
+      emit("dread", null, `${action.hero} carries the Ember for Act ${run.act + 1}.`);
       return finish();
     }
     case "work":

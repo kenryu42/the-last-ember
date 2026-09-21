@@ -44,35 +44,27 @@ export function CombatEffects({
   card: Card | null;
   speed: number;
 }) {
-  const [geometry, setGeometry] = useState<
-    (Geometry & { frame: Frame }) | null
-  >(null);
+  const [geometry, setGeometry] = useState<(Geometry & { frame: Frame }) | null>(null);
   const powerful = powerfulCard(card);
   const timing = attackTiming(frame?.cue ?? "draw", powerful, speed);
+  // Geometry must be measured from the committed DOM before the effect is painted.
+  /* oxlint-disable react/set-state-in-effect */
   useLayoutEffect(() => {
     if (!frame) {
       setGeometry(null);
       return;
     }
     const owner = card ? cardDef(card.def).owner : "Mara";
-    const party = document
-      .querySelector(".party-health")
-      ?.getBoundingClientRect();
+    const party = document.querySelector(".party-health")?.getBoundingClientRect();
     const companion = document
       .querySelector(`[data-companion="${owner}"]`)
       ?.getBoundingClientRect();
     const enemy =
       typeof frame.target === "number"
-        ? document
-            .querySelector(`[data-enemy="${frame.target}"]`)
-            ?.getBoundingClientRect()
+        ? document.querySelector(`[data-enemy="${frame.target}"]`)?.getBoundingClientRect()
         : null;
     const source =
-      frame.cue === "enemy"
-        ? enemy
-        : companion && companion.width > 0
-          ? companion
-          : party;
+      frame.cue === "enemy" ? enemy : companion && companion.width > 0 ? companion : party;
     const target = frame.cue === "enemy" ? party : (enemy ?? party);
     if (!source || !target) {
       setGeometry(null);
@@ -91,6 +83,7 @@ export function CombatEffects({
       angle: (Math.atan2(dy, dx) * 180) / Math.PI,
     });
   }, [frame, card]);
+  /* oxlint-enable react/set-state-in-effect */
   const kind = frameAttack(frame);
   const request = useMemo<AttackRequest | null>(
     () =>

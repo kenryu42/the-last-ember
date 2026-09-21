@@ -1,18 +1,13 @@
 import { cardDef } from "../game/content/cards";
 import { enemyDef } from "../game/content/enemies";
 import { cardCost } from "../game/selectors/combat";
-import {
-  dreadResponse,
-  intention,
-  thresholdStrength,
-} from "../game/selectors/intentions";
+import { dreadResponse, intention, thresholdStrength } from "../game/selectors/intentions";
 import { thresholdState } from "../game/selectors/dread";
 import type { TestRules } from "./config";
 import type { Card, Run } from "../game/model";
 // Explicit allowlist. No run seed, RNG, nextId, route, log, reward or ordered draw pile.
 // Sorting every pile also prevents insertion order becoming a hidden-order side channel.
-export const sorted = (cards: Card[]) =>
-  cards.map((c) => ({ ...c })).sort((a, b) => a.uid - b.uid);
+export const sorted = (cards: Card[]) => cards.map((c) => ({ ...c })).sort((a, b) => a.uid - b.uid);
 export function observe(run: Run, rules: TestRules) {
   const common = {
     rules,
@@ -52,11 +47,7 @@ export function observe(run: Run, rules: TestRules) {
       pattern: structuredClone(enemyDef(enemy.def).pattern),
       intent: {
         ...(response?.modifiers.find((m) => m.uid === enemy.uid)?.intent ??
-          intention(
-            enemy,
-            c,
-            rules === "candidate" ? thresholdStrength(run, c) : 0,
-          )),
+          intention(enemy, c, rules === "candidate" ? thresholdStrength(run, c) : 0)),
       },
     })),
     thresholds: thresholdState(run, c, rules),

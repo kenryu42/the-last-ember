@@ -31,16 +31,12 @@ export function SettingsPanel({
   const hasRun = run !== null;
   const exportSave = () => {
     try {
-      const content = run
-        ? JSON.stringify(run, null, 2)
-        : localStorage.getItem(SAVE_KEY);
+      const content = run ? JSON.stringify(run, null, 2) : localStorage.getItem(SAVE_KEY);
       if (!content) {
         setError("There is no journey to export.");
         return;
       }
-      const url = URL.createObjectURL(
-        new Blob([content], { type: "application/json" }),
-      );
+      const url = URL.createObjectURL(new Blob([content], { type: "application/json" }));
       const a = document.createElement("a");
       a.href = url;
       a.download = "the-last-ember-save.json";
@@ -72,16 +68,14 @@ export function SettingsPanel({
           />
         </label>
         <small id="gameplay-speed-help">
-          0.5× slower · 1× default · 2× faster. Applies to the next action.
-          Reduced motion skips animations at any speed.
+          0.5× slower · 1× default · 2× faster. Applies to the next action. Reduced motion skips
+          animations at any speed.
         </small>
         <label className="toggle">
           <input
             type="checkbox"
             checked={settings.muted}
-            onChange={(e) =>
-              updateSettings({ ...settings, muted: e.target.checked })
-            }
+            onChange={(e) => updateSettings({ ...settings, muted: e.target.checked })}
           />
           Mute all audio
         </label>
@@ -94,9 +88,7 @@ export function SettingsPanel({
             max="1"
             step="0.05"
             value={settings.music}
-            onChange={(e) =>
-              updateSettings({ ...settings, music: Number(e.target.value) })
-            }
+            onChange={(e) => updateSettings({ ...settings, music: Number(e.target.value) })}
           />
         </label>
         <label>
@@ -121,9 +113,7 @@ export function SettingsPanel({
           <input
             type="checkbox"
             checked={settings.reduced}
-            onChange={(e) =>
-              updateSettings({ ...settings, reduced: e.target.checked })
-            }
+            onChange={(e) => updateSettings({ ...settings, reduced: e.target.checked })}
           />
           Reduced motion, immediate results
         </label>
@@ -131,9 +121,7 @@ export function SettingsPanel({
           <input
             type="checkbox"
             checked={settings.shake}
-            onChange={(e) =>
-              updateSettings({ ...settings, shake: e.target.checked })
-            }
+            onChange={(e) => updateSettings({ ...settings, shake: e.target.checked })}
           />
           Gentle impact shake
         </label>
@@ -158,8 +146,8 @@ export function SettingsPanel({
         </button>
       </div>
       <p className="muted">
-        Audio begins after a click or keypress. Changes save automatically.
-        Export keeps a JSON copy for recovery and development.
+        Audio begins after a click or keypress. Changes save automatically. Export keeps a JSON copy
+        for recovery and development.
       </p>
       <details>
         <summary>Restore an exported journey</summary>
@@ -169,27 +157,24 @@ export function SettingsPanel({
             type="file"
             accept=".json,application/json"
             disabled={busy}
-            onChange={async (event) => {
+            onChange={(event) => {
               const file = event.target.files?.[0];
               if (!file) return;
               if (file.size > 1_000_000) {
                 setError("Save files must be smaller than 1 MB.");
                 return;
               }
-              try {
-                const parsed = parseSave(await file.text());
-                if (parsed.kind === "valid") {
-                  setError("");
-                  restore(parsed.run);
-                } else
-                  setError(
-                    parsed.kind === "error"
-                      ? parsed.message
-                      : "This file is empty.",
-                  );
-              } catch {
-                setError("The selected file could not be read.");
-              }
+              void (async () => {
+                try {
+                  const parsed = parseSave(await file.text());
+                  if (parsed.kind === "valid") {
+                    setError("");
+                    restore(parsed.run);
+                  } else setError(parsed.kind === "error" ? parsed.message : "This file is empty.");
+                } catch {
+                  setError("The selected file could not be read.");
+                }
+              })();
             }}
           />
         </label>

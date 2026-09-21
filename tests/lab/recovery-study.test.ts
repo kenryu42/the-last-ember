@@ -19,34 +19,20 @@ describe("recovery experiment", () => {
     expect(first.run.hp).toBe(9);
     expect(first.turns).toBe(4);
     const snapshot = structuredClone(first.run);
-    const rest = followup(
-      first.run,
-      "rest",
-      "quiet",
-      "elite",
-      "recovery-v03-1/second/elite",
-    );
-    const upgrade = followup(
-      first.run,
-      "primary",
-      "quiet",
-      "elite",
-      "recovery-v03-1/second/elite",
-    );
+    const rest = followup(first.run, "rest", "quiet", "elite", "recovery-v03-1/second/elite");
+    const upgrade = followup(first.run, "primary", "quiet", "elite", "recovery-v03-1/second/elite");
     expect(rest.campHp).toBe(27);
     expect(upgrade.campHp).toBe(9);
-    expect(
-      upgrade.run.deck.filter((c) => c.upgraded).map((c) => [c.uid, c.def]),
-    ).toEqual([[13, "needle"]]);
+    expect(upgrade.run.deck.filter((c) => c.upgraded).map((c) => [c.uid, c.def])).toEqual([
+      [13, "needle"],
+    ]);
     expect(rest.run.deck.some((c) => c.upgraded)).toBe(false);
     expect(first.run).toEqual(snapshot);
     expect(start).toEqual(original);
     expect(fight(rest.run).run.hp).toBe(7);
     expect(fight(upgrade.run).outcome).toBe("loss");
     const full = fight(shortStart("recovery-v03-1", "defense", "fury", 70));
-    expect(
-      followup(full.run, "rest", "defense", "battle", "stream").campHp,
-    ).toBe(70);
+    expect(followup(full.run, "rest", "defense", "battle", "stream").campHp).toBe(70);
     expect(campAction(first.run, "bread", "quiet")).toEqual({
       type: "upgrade",
       uid: 24,
@@ -55,8 +41,7 @@ describe("recovery experiment", () => {
 
   test("matches second-fight shuffle and encounter despite first-fight RNG divergence", () => {
     const inputs = [70, 45].map(
-      (hp) =>
-        fight(shortStart("recovery-v03-1", "exposed", "reinforce", hp)).run,
+      (hp) => fight(shortStart("recovery-v03-1", "exposed", "reinforce", hp)).run,
     );
     expect(new Set(inputs.map((r) => r.rng)).size).toBe(2);
     const runs = inputs.flatMap((r) =>
@@ -95,22 +80,10 @@ describe("recovery experiment", () => {
     const first = fight(shortStart("recovery-v03-1", "exposed", "fury", 70));
     expect(first.run.hp).toBe(44);
     const rest = fight(
-      followup(
-        first.run,
-        "rest",
-        "exposed",
-        "elite",
-        "recovery-v03-1/second/elite",
-      ).run,
+      followup(first.run, "rest", "exposed", "elite", "recovery-v03-1/second/elite").run,
     );
     const upgrade = fight(
-      followup(
-        first.run,
-        "primary",
-        "exposed",
-        "elite",
-        "recovery-v03-1/second/elite",
-      ).run,
+      followup(first.run, "primary", "exposed", "elite", "recovery-v03-1/second/elite").run,
     );
     expect([rest.run.hp, rest.turns]).toEqual([26, 7]);
     expect([upgrade.run.hp, upgrade.turns]).toEqual([29, 6]);
@@ -118,18 +91,10 @@ describe("recovery experiment", () => {
 
   test("reachable one-turn healing delay beats every same-turn kill, but bread exhausts", () => {
     const first = fight(shortStart("recovery-v03-1", "defense", "fury", 70));
-    let run = followup(
-      first.run,
-      "rest",
-      "defense",
-      "battle",
-      "recovery-v03-1/second/battle",
-    ).run;
+    let run = followup(first.run, "rest", "defense", "battle", "recovery-v03-1/second/battle").run;
     for (let i = 0; i < 14; i++) run = step(run, combatAction(run));
     if (run.scene.kind !== "combat") throw new Error("Expected combat");
-    expect([run.hp, run.scene.turn, run.scene.energy, run.scene.block]).toEqual(
-      [68, 4, 1, 9],
-    );
+    expect([run.hp, run.scene.turn, run.scene.energy, run.scene.block]).toEqual([68, 4, 1, 9]);
     let nodes = 0;
     function sameTurnBest(state: Run): number {
       if (++nodes > 100) throw new Error("Enumeration bound exceeded");
@@ -142,10 +107,7 @@ describe("recovery experiment", () => {
           ? state.scene.enemies.filter((e) => e.hp > 0).map((e) => e.uid)
           : [null];
         for (const target of targets)
-          best = Math.max(
-            best,
-            sameTurnBest(step(state, { type: "play", uid: card.uid, target })),
-          );
+          best = Math.max(best, sameTurnBest(step(state, { type: "play", uid: card.uid, target })));
       }
       return best;
     }

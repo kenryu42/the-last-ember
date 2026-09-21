@@ -60,10 +60,8 @@ export function CombatBoard({
       ? dreadResponse(combat)
       : null;
   const shownIntent = (enemy: Combat["enemies"][number]) =>
-    response?.modifiers.find((m) => m.uid === enemy.uid)?.intent ??
-    intention(enemy, combat, bonus);
-  if (choosingBearer)
-    return <BearerSelection run={run} dispatch={dispatch} busy={busy} />;
+    response?.modifiers.find((m) => m.uid === enemy.uid)?.intent ?? intention(enemy, combat, bonus);
+  if (choosingBearer) return <BearerSelection run={run} dispatch={dispatch} busy={busy} />;
   return (
     <section
       className={`combat-board ${combat.ember ? "has-ember" : ""}`}
@@ -92,8 +90,8 @@ export function CombatBoard({
               Escape · {combat.objective.progress}/{combat.objective.target}
             </h2>
             <p>
-              Reach {combat.objective.target} Progress, or clear all danger for
-              automatic completion.
+              Reach {combat.objective.target} Progress, or clear all danger for automatic
+              completion.
             </p>
           </div>
           <label>
@@ -101,12 +99,8 @@ export function CombatBoard({
             <select
               aria-label="Discard a card to Work"
               value=""
-              disabled={
-                busy || combat.energy < 1 || combat.objective.worked >= 2
-              }
-              onChange={(event) =>
-                dispatch({ type: "work", uid: Number(event.target.value) })
-              }
+              disabled={busy || combat.energy < 1 || combat.objective.worked >= 2}
+              onChange={(event) => dispatch({ type: "work", uid: Number(event.target.value) })}
             >
               <option value="" disabled>
                 Discard a card → +1 Progress (no effects)
@@ -132,6 +126,7 @@ export function CombatBoard({
               <small> / 10</small>
             </b>
           </div>
+          {/* oxlint-disable jsx-a11y/prefer-tag-over-role -- Custom segmented meter preserves ten individually filled visual segments. */}
           <div
             className="dread-meter"
             role="meter"
@@ -144,30 +139,28 @@ export function CombatBoard({
               <span key={i} className={i < combat.dread ? "filled" : ""} />
             ))}
           </div>
+          {/* oxlint-enable jsx-a11y/prefer-tag-over-role */}
           <p className="dread-caption">The dark is listening.</p>
           {response ? (
             <>
-              <div
-                className={`threshold ${response.band === "minor" ? "pending" : ""}`}
-              >
+              <div className={`threshold ${response.band === "minor" ? "pending" : ""}`}>
                 <b>4</b>
                 <p>
-                  <strong>4–7 · Minor Fury · every turn</strong>Frontmost living
-                  enemy: +2 Attack/Drain this phase only.
+                  <strong>4–7 · Minor Fury · every turn</strong>Frontmost living enemy: +2
+                  Attack/Drain this phase only.
                 </p>
               </div>
-              <div
-                className={`threshold ${response.band === "major" ? "pending" : ""}`}
-              >
+              <div className={`threshold ${response.band === "major" ? "pending" : ""}`}>
                 <b>8</b>
                 <p>
-                  <strong>8–10 · Major Fury · replaces minor</strong>All living
-                  enemies: +3 Attack/Drain this phase only. Then lose 4 Dread.
+                  <strong>8–10 · Major Fury · replaces minor</strong>All living enemies: +3
+                  Attack/Drain this phase only. Then lose 4 Dread.
                 </p>
               </div>
+
               <p className="dread-caption">
-                If you end now: {response.band}. Dread after response:{" "}
-                {response.dreadAfter}, before Howls. Intentions include Fury.
+                If you end now: {response.band}. Dread after response: {response.dreadAfter}, before
+                Howls. Intentions include Fury.
               </p>
             </>
           ) : (
@@ -194,10 +187,7 @@ export function CombatBoard({
               </div>
             ))
           )}
-          <button
-            className="text-button combat-log-toggle"
-            onClick={() => setLog(true)}
-          >
+          <button className="text-button combat-log-toggle" onClick={() => setLog(true)}>
             Read combat log <Icon name="arrow" size={14} />
           </button>
         </aside>
@@ -271,17 +261,13 @@ export function CombatBoard({
                     <span className="floating-hit" aria-hidden="true">
                       −{feedback.text.match(/(\d+) damage/)?.[1]}
                       {feedback.text.includes("blocked") && (
-                        <small>
-                          {feedback.text.match(/(\d+) blocked/)?.[1]} blocked
-                        </small>
+                        <small>{feedback.text.match(/(\d+) blocked/)?.[1]} blocked</small>
                       )}
                     </span>
                   )}
                 <div className="enemy-name">{def.name}</div>
                 <div className="health-bar enemy-health">
-                  <span
-                    style={{ transform: `scaleX(${enemy.hp / enemy.maxHp})` }}
-                  />
+                  <span style={{ transform: `scaleX(${enemy.hp / enemy.maxHp})` }} />
                   <b>
                     {enemy.hp} / {enemy.maxHp}
                   </b>
@@ -294,12 +280,8 @@ export function CombatBoard({
                     </span>
                   )}
                   {enemy.weak > 0 && <span>Weak {enemy.weak}</span>}
-                  {enemy.vulnerable > 0 && (
-                    <span>Vulnerable {enemy.vulnerable}</span>
-                  )}
-                  {enemy.strength + bonus > 0 && (
-                    <span>Attack +{enemy.strength + bonus}</span>
-                  )}
+                  {enemy.vulnerable > 0 && <span>Vulnerable {enemy.vulnerable}</span>}
+                  {enemy.strength + bonus > 0 && <span>Attack +{enemy.strength + bonus}</span>}
                 </div>
               </div>
             );
@@ -325,9 +307,7 @@ export function CombatBoard({
                     <small>
                       {combat.ember?.bearer === name
                         ? `Act ${["I", "II", "III"][run.act]} · Ember bearer`
-                        : ["The guardian", "The ranger", "The emberkeeper"][
-                            index
-                          ]}
+                        : ["The guardian", "The ranger", "The emberkeeper"][index]}
                     </small>
                   </span>
                 </div>
@@ -353,11 +333,11 @@ export function CombatBoard({
         {combat.ember && (
           <div className="ember-controls">
             <div className="bearer-ability-line">
+              {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Native summary remains keyboard operable; hover and focus also reveal its details. */}
               <details
                 className="ability-info"
                 onPointerEnter={(event) => {
-                  if (event.pointerType === "mouse")
-                    event.currentTarget.open = true;
+                  if (event.pointerType === "mouse") event.currentTarget.open = true;
                 }}
                 onPointerLeave={(event) => {
                   if (
@@ -367,8 +347,7 @@ export function CombatBoard({
                     event.currentTarget.open = false;
                 }}
                 onFocus={(event) => {
-                  if (event.target.matches(":focus-visible"))
-                    event.currentTarget.open = true;
+                  if (event.target.matches(":focus-visible")) event.currentTarget.open = true;
                 }}
                 onBlur={(event) => {
                   if (!event.currentTarget.contains(event.relatedTarget))
@@ -396,13 +375,12 @@ export function CombatBoard({
                       : "Once per turn, optionally empower one Spell hit: +5 damage for +1 Dread. Choose a spell and target below to cast it empowered."}
                 </p>
               </details>
-              <span
+              <output
                 key={`${combat.turn}-${combat.ember.used}`}
                 className={`bearer-status ${combat.ember.used ? "used" : "ready"}`}
-                role="status"
               >
                 {combat.ember.used ? "Used this turn" : "Ready"}
-              </span>
+              </output>
             </div>
             {combat.ember.bearer === "Aldren" && !combat.ember.used && (
               <details className="empower-options">
@@ -411,15 +389,11 @@ export function CombatBoard({
                   combat.enemies.flatMap((enemy) => {
                     const def = cardDef(card.def),
                       target = needsTarget(def) ? enemy.uid : null;
-                    return empowerTargets(combat, def, target).includes(
-                      enemy.uid,
-                    )
+                    return empowerTargets(combat, def, target).includes(enemy.uid)
                       ? [
                           <button
                             key={`${card.uid}:${enemy.uid}`}
-                            disabled={
-                              busy || cardCost(run, combat, def) > combat.energy
-                            }
+                            disabled={busy || cardCost(run, combat, def) > combat.energy}
                             onClick={() =>
                               dispatch({
                                 type: "play",
@@ -429,8 +403,7 @@ export function CombatBoard({
                               })
                             }
                           >
-                            {def.name} → {enemyDef(enemy.def).name} · +5 to one
-                            hit
+                            {def.name} → {enemyDef(enemy.def).name} · +5 to one hit
                           </button>,
                         ]
                       : [];
@@ -441,22 +414,15 @@ export function CombatBoard({
           </div>
         )}
       </div>
-      <div
+      <output
         className={`action-message ${selected !== null ? "target-message" : ""}`}
-        role="status"
+        style={{ display: "block" }}
       >
         {selected !== null ? (
           <>
             <span>
               Choose an enemy for{" "}
-              <b>
-                {
-                  cardDef(
-                    combat.hand.find((c) => c.uid === selected)?.def ??
-                      "strike",
-                  ).name
-                }
-              </b>
+              <b>{cardDef(combat.hand.find((c) => c.uid === selected)?.def ?? "strike").name}</b>
             </span>
             <button
               className="text-button"
@@ -475,7 +441,7 @@ export function CombatBoard({
         ) : (
           "Read their intentions. Make your stand."
         )}
-      </div>
+      </output>
       <div className="hand-area">
         <div className="energy-pile">
           <div className="energy-orb">
@@ -488,9 +454,7 @@ export function CombatBoard({
             onClick={() =>
               inspect({
                 title: "Draw pile · order hidden",
-                cards: [...combat.draw].sort((a, b) =>
-                  a.def.localeCompare(b.def),
-                ),
+                cards: [...combat.draw].sort((a, b) => a.def.localeCompare(b.def)),
               })
             }
           />
@@ -504,11 +468,7 @@ export function CombatBoard({
           busy={busy}
         />
         <div className="end-pile">
-          <button
-            className="end-turn"
-            disabled={busy}
-            onClick={() => dispatch({ type: "end" })}
-          >
+          <button className="end-turn" disabled={busy} onClick={() => dispatch({ type: "end" })}>
             <span className="end-turn-seal" aria-hidden="true">
               <Icon name="flame" size={22} />
             </span>
@@ -517,9 +477,7 @@ export function CombatBoard({
           <CardPile
             kind="discard"
             cards={combat.discard}
-            onClick={() =>
-              inspect({ title: "Discard pile", cards: combat.discard })
-            }
+            onClick={() => inspect({ title: "Discard pile", cards: combat.discard })}
           />
           <button
             className="text-button"
@@ -536,17 +494,10 @@ export function CombatBoard({
         </div>
       </div>
       {enemy && (
-        <Modal
-          title={enemyDef(enemy.def).name}
-          close={() => setEnemyInfo(null)}
-          wide
-        >
+        <Modal title={enemyDef(enemy.def).name} close={() => setEnemyInfo(null)} wide>
           <div className="enemy-inspection">
-            <div
-              className="enemy-portrait"
-              role="img"
-              aria-label={enemyDef(enemy.def).name}
-            >
+            {/* oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- Art renders a cropped sprite sheet, with the accessible name supplied by this wrapper. */}
+            <div className="enemy-portrait" role="img" aria-label={enemyDef(enemy.def).name}>
               <Art sheet="enemies" index={enemyDef(enemy.def).art} />
             </div>
             <div className="enemy-inspection-details">
@@ -578,8 +529,8 @@ export function CombatBoard({
                 ))}
               </ol>
               <p className="enemy-inspection-note">
-                Attack modifiers and Weak are already included in the current
-                intention. The base cycle shows unmodified values.
+                Attack modifiers and Weak are already included in the current intention. The base
+                cycle shows unmodified values.
               </p>
             </div>
           </div>

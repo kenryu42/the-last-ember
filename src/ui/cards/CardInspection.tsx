@@ -13,16 +13,10 @@ export function CardInspection({
 }) {
   const [inspectedCard, setInspectedCard] = useState<Card | null>(null);
   return (
-    <Modal
-      title={`${inspection.title} · ${inspection.cards.length}`}
-      close={close}
-      wide
-    >
+    <Modal title={`${inspection.title} · ${inspection.cards.length}`} close={close} wide>
       {inspectedCard ? (
         <>
-          <p>
-            Every card has one improvement. Visit a camp to improve this copy.
-          </p>
+          <p>Every card has one improvement. Visit a camp to improve this copy.</p>
           <div className="upgrade-compare">
             <CardView card={inspectedCard} />
             {!inspectedCard.upgraded && (
@@ -39,11 +33,7 @@ export function CardInspection({
           <p className="muted">Select a card to inspect its improvement.</p>
           <div className="deck-grid">
             {inspection.cards.map((card) => (
-              <CardView
-                key={card.uid}
-                card={card}
-                onClick={() => setInspectedCard(card)}
-              />
+              <CardView key={card.uid} card={card} onClick={() => setInspectedCard(card)} />
             ))}
           </div>
         </>

@@ -13,8 +13,7 @@ import {
   drawSequence,
 } from "./card-motion";
 
-const delay = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 // Only resolved snapshots enter presentation. Saving and input locking belong to the session.
 export function useActionPresentation() {
@@ -23,12 +22,7 @@ export function useActionPresentation() {
   const [stage, setStage] = useState<"anticipate" | "impact">("impact");
   const [actingCard, setActingCard] = useState<Card | null>(null);
   const [animationSpeed, setAnimationSpeed] = useState(1);
-  const play = async (
-    before: Run,
-    action: Action,
-    result: Resolution,
-    settings: Settings,
-  ) => {
+  const play = async (before: Run, action: Action, result: Resolution, settings: Settings) => {
     const speed = settings.gameplaySpeed;
     setFeedback(null);
     setAnimationSpeed(speed);
@@ -38,9 +32,7 @@ export function useActionPresentation() {
         : null;
     setActingCard(playedCard);
     if (action.type === "play" && !settings.reduced) {
-      const source = document.querySelector<HTMLElement>(
-        `.hand [data-card="${action.uid}"]`,
-      );
+      const source = document.querySelector<HTMLElement>(`.hand [data-card="${action.uid}"]`);
       const destination = document
         .querySelector(
           playedCard && cardDef(playedCard.def).exhaust
@@ -101,14 +93,9 @@ export function useActionPresentation() {
             blocked: frame.text.includes("blocked"),
             powerful,
           });
-          if (
-            frame.run.scene.kind === "combat" &&
-            presented.scene.kind === "combat"
-          ) {
+          if (frame.run.scene.kind === "combat" && presented.scene.kind === "combat") {
             const sequence = drawSequence(presented.scene, frame.run.scene);
-            flushSync(() =>
-              setVisual({ ...frame.run, scene: sequence.initial }),
-            );
+            flushSync(() => setVisual({ ...frame.run, scene: sequence.initial }));
             for (const step of sequence.steps) {
               if (step.kind === "shuffle") await animateShuffle(speed);
               flushSync(() => setVisual({ ...frame.run, scene: step.combat }));

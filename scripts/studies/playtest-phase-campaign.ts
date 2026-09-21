@@ -1,16 +1,9 @@
 import { HeadlessFight } from "../../src/lab/runner";
-import {
-  configSchema,
-  POLICY_VERSION,
-  PLANNER_V2_VERSION,
-} from "../../src/lab/headless-config";
+import { configSchema, POLICY_VERSION, PLANNER_V2_VERSION } from "../../src/lab/headless-config";
 import { PLAYTEST_ENCOUNTERS } from "../../src/lab/fixtures/combat";
 
 // Declared before evaluation. Do not retune either planner on these ten seeds.
-const seeds = Array.from(
-  { length: 10 },
-  (_, i) => `ember-v02-phase-${String(i).padStart(3, "0")}`,
-);
+const seeds = Array.from({ length: 10 }, (_, i) => `ember-v02-phase-${String(i).padStart(3, "0")}`);
 const budget = {
   maxTurns: 40,
   maxActions: 400,
@@ -69,15 +62,13 @@ for (const variant of ["base", "diagnostic-mixed"])
           config,
           control: brief(a),
           candidate: brief(b),
-          equalHealthAndOutcome:
-            a.finalHealth === b.finalHealth && a.outcome === b.outcome,
+          equalHealthAndOutcome: a.finalHealth === b.finalHealth && a.outcome === b.outcome,
           sameTrace: JSON.stringify(a.trace) === JSON.stringify(b.trace),
           controlUnderCandidate: crossReplay(a, "candidate"),
           candidateUnderControl: crossReplay(b, "control"),
         });
         if (
-          (b.finalHealth < a.finalHealth ||
-            (a.outcome === "win" && b.outcome !== "win")) &&
+          (b.finalHealth < a.finalHealth || (a.outcome === "win" && b.outcome !== "win")) &&
           adverse.length < 4
         )
           adverse.push({ config, control: a.trace, candidate: b.trace });
@@ -100,8 +91,7 @@ const wardSource = new HeadlessFight(wardConfig).auto();
 const suppressionIndex = wardSource.telemetry.findIndex((r) =>
   r.thresholdEvents.some((e) => e.at === 8 && e.event === "suppressed"),
 );
-if (suppressionIndex < 0)
-  throw new Error("Ward8 source no longer reaches recovery");
+if (suppressionIndex < 0) throw new Error("Ward8 source no longer reaches recovery");
 const prefix = wardSource.trace.slice(0, suppressionIndex);
 const wardBranches = [];
 for (const rules of ["control", "candidate"] as const)
@@ -146,10 +136,7 @@ for (const rules of ["control", "candidate"] as const) {
     rules,
     result: brief(result),
     trace: result.trace,
-    otherRulesReplay: crossReplay(
-      result,
-      rules === "control" ? "candidate" : "control",
-    ),
+    otherRulesReplay: crossReplay(result, rules === "control" ? "candidate" : "control"),
   });
 }
 

@@ -103,18 +103,14 @@ export function createPlaytestRun({
   | { deckId: "exposed" | "defense"; variant: "ablation" }
 )): Run {
   const deck = PLAYTEST_DECKS.find((deck) => deck.id === deckId);
-  const encounter = PLAYTEST_ENCOUNTERS.find(
-    (encounter) => encounter.id === encounterId,
-  );
+  const encounter = PLAYTEST_ENCOUNTERS.find((encounter) => encounter.id === encounterId);
   if (!deck || !encounter) throw new Error("Unknown playtest fixture");
 
   const run = newRun(seed);
   run.act = 1;
   // Keep legal progression metadata without exposing route play in the benchmark.
   run.route = generateRoute(run);
-  const node = run.route.find(
-    (node) => node.row === 0 && node.kind === "battle",
-  );
+  const node = run.route.find((node) => node.row === 0 && node.kind === "battle");
   if (!node) throw new Error("Missing opening battle");
   run.row = node.row;
   run.location = node.id;
@@ -123,9 +119,7 @@ export function createPlaytestRun({
     makeCard(
       run,
       variant === "ablation" &&
-        (deckId === "exposed"
-          ? id === "spark" || id === "sacrifice"
-          : id === "shield")
+        (deckId === "exposed" ? id === "spark" || id === "sacrifice" : id === "shield")
         ? "strike"
         : id,
     ),

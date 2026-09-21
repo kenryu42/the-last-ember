@@ -67,19 +67,12 @@ const expectedEnemies = {
     { def: "sentinel", hp: 46 },
     { def: "sentinel", hp: 46 },
   ],
-} satisfies Record<
-  (typeof PLAYTEST_ENCOUNTERS)[number]["id"],
-  Pick<Enemy, "def" | "hp">[]
->;
+} satisfies Record<(typeof PLAYTEST_ENCOUNTERS)[number]["id"], Pick<Enemy, "def" | "hp">[]>;
 const seeds = ["ember-v02-a", "ember-v02-b"];
 
 describe("isolated v0.2 playtest fixtures", () => {
   test("stable IDs, display names and exactly 20 supported card definitions", () => {
-    expect(PLAYTEST_DECKS.map((deck) => deck.id)).toEqual([
-      "quiet",
-      "exposed",
-      "defense",
-    ]);
+    expect(PLAYTEST_DECKS.map((deck) => deck.id)).toEqual(["quiet", "exposed", "defense"]);
     expect(PLAYTEST_ENCOUNTERS.map((encounter) => encounter.id)).toEqual([
       "fury",
       "reinforce",
@@ -93,9 +86,7 @@ describe("isolated v0.2 playtest fixtures", () => {
       const def = CARDS.find((card) => card.id === id);
       expect(def).toBeDefined();
       expect(
-        def?.effects.some(
-          (effect) => effect.kind === "weak" || effect.kind === "vulnerable",
-        ),
+        def?.effects.some((effect) => effect.kind === "weak" || effect.kind === "vulnerable"),
       ).toBe(false);
     }
   });
@@ -227,8 +218,6 @@ describe("isolated v0.2 playtest fixtures", () => {
     combat(first).hand.length = 0;
     expect(other).toEqual(snapshot);
     expect(createPlaytestRun(options)).toEqual(snapshot);
-    expect({ decks: PLAYTEST_DECKS, encounters: PLAYTEST_ENCOUNTERS }).toEqual(
-      definitions,
-    );
+    expect({ decks: PLAYTEST_DECKS, encounters: PLAYTEST_ENCOUNTERS }).toEqual(definitions);
   });
 });

@@ -3,8 +3,7 @@ import type { Intent } from "../content/enemies";
 import type { Combat, Enemy, Run } from "../model";
 import { has } from "../engine/rewards";
 export function dreadResponse(combat: Combat) {
-  const band =
-    combat.dread >= 8 ? "major" : combat.dread >= 4 ? "minor" : "none";
+  const band = combat.dread >= 8 ? "major" : combat.dread >= 4 ? "minor" : "none";
   const living = combat.enemies.filter((e) => e.hp > 0);
   const dreadAfter = combat.dread - (band === "major" ? 4 : 0);
   let phaseDread = dreadAfter;
@@ -13,8 +12,7 @@ export function dreadResponse(combat: Combat) {
     band,
     dreadAfter,
     modifiers: living.map((enemy, index) => {
-      const attack =
-        band === "major" ? 3 : band === "minor" && index === 0 ? 2 : 0;
+      const attack = band === "major" ? 3 : band === "minor" && index === 0 ? 2 : 0;
       const intent = intention(enemy, { ...combat, dread: phaseDread }, attack);
       if (enemy.joinsOn <= combat.turn && intent.kind === "howl")
         phaseDread = Math.min(10, phaseDread + intent.amount);
@@ -52,13 +50,7 @@ export function thresholds(run: Run, combat: Combat) {
   return [4 + shift, 8 + shift].map((at, index) => ({
     at,
     strength:
-      index === 0
-        ? combat.reaction === "fury"
-          ? 2
-          : 0
-        : combat.reaction === "ward"
-          ? 4
-          : 3,
+      index === 0 ? (combat.reaction === "fury" ? 2 : 0) : combat.reaction === "ward" ? 4 : 3,
     fired: combat.fired?.includes(at) ?? false,
     pending: combat.dread >= at && !combat.fired?.includes(at),
     text:
@@ -73,12 +65,7 @@ export function thresholds(run: Run, combat: Combat) {
           : "All enemies gain 3 attack damage.",
   }));
 }
-export function hitDamage(
-  run: Run,
-  combat: Combat,
-  enemy: Enemy,
-  base: number,
-) {
+export function hitDamage(run: Run, combat: Combat, enemy: Enemy, base: number) {
   const amount =
     base +
     (has(run, "lens") && combat.dread <= 3 ? 2 : 0) +

@@ -63,8 +63,7 @@
   object-position: center top;
   transform: scale(1.45);
   transform-origin: center top;
-  filter: brightness(var(--bearer-brightness, 1))
-    saturate(var(--bearer-saturation, 1));
+  filter: brightness(var(--bearer-brightness, 1)) saturate(var(--bearer-saturation, 1));
   transition: filter 180ms ease;
 }
 .bearer-choice::after {
@@ -72,13 +71,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    0deg,
-    #081114 0%,
-    #081114e8 14%,
-    #08111499 32%,
-    transparent 66%
-  );
+  background: linear-gradient(0deg, #081114 0%, #081114e8 14%, #08111499 32%, transparent 66%);
 }
 .bearer-choice:focus-visible {
   outline-offset: -5px;
@@ -141,8 +134,7 @@
     Georgia,
     serif;
 }
-.bearer-choices:has(.bearer-choice:focus-visible)
-  .bearer-choice:not(:focus-visible) {
+.bearer-choices:has(.bearer-choice:focus-visible) .bearer-choice:not(:focus-visible) {
   --bearer-brightness: 0.38;
   --bearer-saturation: 0.45;
 }
@@ -153,15 +145,12 @@
   --bearer-call-border: #ffe3ad;
 }
 @media (hover: hover) and (pointer: fine) {
-  .bearer-choices:has(.bearer-choice:hover:not(:disabled)):not(
-      :has(:focus-visible)
-    )
+  .bearer-choices:has(.bearer-choice:hover:not(:disabled)):not(:has(:focus-visible))
     .bearer-choice:not(:hover) {
     --bearer-brightness: 0.38;
     --bearer-saturation: 0.45;
   }
-  .bearer-choices:not(:has(:focus-visible))
-    .bearer-choice:hover:not(:disabled) {
+  .bearer-choices:not(:has(:focus-visible)) .bearer-choice:hover:not(:disabled) {
     --bearer-brightness: 1.15;
     --bearer-call-background: #e5c58a;
     --bearer-call-color: #142123;

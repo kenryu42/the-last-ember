@@ -71,9 +71,7 @@ test("Act bearer choice precedes actions and stays locked on later turns", () =>
   expect(rejected.error).toContain("locked");
   expect(rejected.run).toEqual(next);
   expect(c(rejected.run).dread).toBe(7);
-  expect(
-    legalActions(observe(next, "recurring")).some((a) => a.type === "bearer"),
-  ).toBe(false);
+  expect(legalActions(observe(next, "recurring")).some((a) => a.type === "bearer")).toBe(false);
 });
 test("each Act requires a bearer before travel, without drawing or consuming RNG", () => {
   let run = newRun("act-start", "recurring", {
@@ -100,9 +98,7 @@ test("each Act requires a bearer before travel, without drawing or consuming RNG
     expect(choice.run).toEqual({ ...run, actBearer: hero });
     run = choice.run;
     expect(parseSave(JSON.stringify(run))).toEqual({ kind: "valid", run });
-    expect(resolve(run, { type: "bearer", hero: "Mara" }).error).toContain(
-      "locked",
-    );
+    expect(resolve(run, { type: "bearer", hero: "Mara" }).error).toContain("locked");
     const travel = resolve(run, { type: "travel", node: node.id });
     expect(travel.error).toBeNull();
     run = travel.run;
@@ -213,9 +209,7 @@ test("bearer persists through encounters and passive use resets each turn and fi
   });
   expect(run.actBearer).toBe("Eryn");
   expect(c(run).dread).toBe(0);
-  expect(resolve(run, { type: "bearer", hero: "Mara" }).error).toContain(
-    "locked",
-  );
+  expect(resolve(run, { type: "bearer", hero: "Mara" }).error).toContain("locked");
 });
 
 test("a full journey chooses once per Act and round-trips the locked bearer through every stop", () => {
@@ -228,14 +222,7 @@ test("a full journey chooses once per Act and round-trips the locked bearer thro
     concealment: true,
     escapeAct: 1,
   } as const;
-  const result = simulateJourney(
-    "act-bearer:0",
-    "strategic",
-    96,
-    "static",
-    "recurring",
-    prototype,
-  );
+  const result = simulateJourney("act-bearer:0", "strategic", 96, "static", "recurring", prototype);
   expect(result.outcome).toBe("win");
   let run = newRun(result.seed, "recurring", prototype);
   const chosenActs: number[] = [];
@@ -262,9 +249,7 @@ test("a full journey chooses once per Act and round-trips the locked bearer thro
     expect(loaded).toEqual({ kind: "valid", run });
     if (loaded.kind === "valid") run = loaded.run;
     if (run.actBearer !== null) {
-      expect(journeyLegalActions(run).some((a) => a.type === "bearer")).toBe(
-        false,
-      );
+      expect(journeyLegalActions(run).some((a) => a.type === "bearer")).toBe(false);
       expect(
         resolve(run, {
           type: "bearer",
@@ -289,13 +274,9 @@ test("Work does not activate a passive or unlock the Act bearer", () => {
   const worked = resolve(run, { type: "work", uid: card.uid }).run;
   expect(c(worked).ember?.used).toBe(false);
   expect(c(worked).block).toBe(0);
-  expect(
-    resolve(worked, { type: "bearer", hero: "Eryn" }).error,
-  ).not.toBeNull();
+  expect(resolve(worked, { type: "bearer", hero: "Eryn" }).error).not.toBeNull();
   const played = play(run).run;
-  expect(
-    resolve(played, { type: "bearer", hero: "Eryn" }).error,
-  ).not.toBeNull();
+  expect(resolve(played, { type: "bearer", hero: "Eryn" }).error).not.toBeNull();
 });
 test("Mara adds 3 to only the first Block effect regardless of card owner", () => {
   let run = setup("Mara", ["unseen", "guard"]);

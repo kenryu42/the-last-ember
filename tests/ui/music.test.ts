@@ -2,11 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { newRun } from "../../src/game/engine/run";
 import { startCombat } from "../../src/game/engine/combat/setup";
 import type { Combat, Run } from "../../src/game/model";
-import {
-  composeBar,
-  deriveSoundscape,
-  REGION_SCORES,
-} from "../../src/ui/audio/music";
+import { composeBar, deriveSoundscape, REGION_SCORES } from "../../src/ui/audio/music";
 
 function combat(run: Run): Combat {
   if (run.scene.kind !== "combat") throw new Error("Expected combat");
@@ -45,15 +41,9 @@ describe("soundscape selection", () => {
 
 describe("deterministic composition", () => {
   test("each region owns a distinct instrumental identity", () => {
-    expect(
-      REGION_SCORES.forest.some((note) => note.instrument === "pluck"),
-    ).toBe(true);
-    expect(REGION_SCORES.ruins.some((note) => note.instrument === "bell")).toBe(
-      true,
-    );
-    expect(
-      REGION_SCORES.mountain.some((note) => note.instrument === "wind"),
-    ).toBe(true);
+    expect(REGION_SCORES.forest.some((note) => note.instrument === "pluck")).toBe(true);
+    expect(REGION_SCORES.ruins.some((note) => note.instrument === "bell")).toBe(true);
+    expect(REGION_SCORES.mountain.some((note) => note.instrument === "wind")).toBe(true);
   });
 
   test("combat adds percussion, camp removes it, and Dread adds tension", () => {
@@ -62,9 +52,7 @@ describe("deterministic composition", () => {
     const combat = composeBar({ ...base, mode: "combat" });
     const dread = composeBar({ ...base, mode: "combat", dread: 2 });
     expect(camp.some((note) => note.instrument === "drum")).toBe(false);
-    expect(
-      combat.filter((note) => note.instrument === "drum").length,
-    ).toBeGreaterThan(0);
+    expect(combat.filter((note) => note.instrument === "drum").length).toBeGreaterThan(0);
     expect(dread.length).toBeGreaterThan(combat.length);
     expect(composeBar({ ...base, mode: "combat" })).toEqual(combat);
   });
@@ -76,20 +64,12 @@ describe("deterministic composition", () => {
       dread: 0,
       key: "forest:explore:0",
     } as const;
-    const measures = [0, 1, 2, 3].map((measure) =>
-      composeBar(soundscape, measure),
-    );
-    expect(new Set(measures.map((notes) => JSON.stringify(notes))).size).toBe(
-      4,
-    );
+    const measures = [0, 1, 2, 3].map((measure) => composeBar(soundscape, measure));
+    expect(new Set(measures.map((notes) => JSON.stringify(notes))).size).toBe(4);
     const measureTwo = composeBar(soundscape, 2);
     expect(composeBar(soundscape, 4)).toEqual(composeBar(soundscape, 0));
     expect(composeBar(soundscape, 2)).toEqual(measureTwo);
-    expect(
-      measures.every((notes) =>
-        notes.some((note) => note.instrument === "bass"),
-      ),
-    ).toBe(true);
+    expect(measures.every((notes) => notes.some((note) => note.instrument === "bass"))).toBe(true);
   });
 
   test("derives title and distinct ending moods while keeping scene keys stable", () => {

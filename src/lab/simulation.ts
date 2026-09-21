@@ -9,7 +9,7 @@ import { createHeadlessRun } from "./fixtures/headless";
 import { legalActions } from "./legal-actions";
 import { observe } from "./observation";
 
-export const LAB_VERSION = "lab-1";
+const LAB_VERSION = "lab-1";
 
 export function assertInvariants(run: Run) {
   runSchema.parse(run);
@@ -20,18 +20,11 @@ export function assertInvariants(run: Run) {
   const c = run.scene;
   if (run.hp <= 0 || c.hand.length > 10) throw new Error("Invalid live combat");
   const zones = [...c.hand, ...c.draw, ...c.discard, ...c.exhaust];
-  if (
-    zones.length !== deck.size ||
-    new Set(zones.map((c) => c.uid)).size !== deck.size
-  )
+  if (zones.length !== deck.size || new Set(zones.map((c) => c.uid)).size !== deck.size)
     throw new Error("Zone conservation failed");
   for (const card of zones) {
     const original = deck.get(card.uid);
-    if (
-      !original ||
-      original.def !== card.def ||
-      original.upgraded !== card.upgraded
-    )
+    if (!original || original.def !== card.def || original.upgraded !== card.upgraded)
       throw new Error("Zone identity changed");
   }
   const ids = [...zones.map((c) => c.uid), ...c.enemies.map((e) => e.uid)];
@@ -43,8 +36,7 @@ export function assertInvariants(run: Run) {
     (c.dreadResponse !== undefined && c.fired !== undefined)
   )
     throw new Error("Invalid threshold history");
-  if (c.enemies.some((e) => e.hp > e.maxHp))
-    throw new Error("Enemy health above cap");
+  if (c.enemies.some((e) => e.hp > e.maxHp)) throw new Error("Enemy health above cap");
 }
 
 function snapshot(run: Run) {
@@ -126,9 +118,7 @@ export function simulate(config: LabConfig, detailed = false) {
     );
     if (!legal.some((a) => JSON.stringify(a) === JSON.stringify(action)))
       throw new Error("Policy selected illegal action");
-    const playable = new Set(
-      legal.flatMap((a) => (a.type === "play" ? [a.uid] : [])),
-    );
+    const playable = new Set(legal.flatMap((a) => (a.type === "play" ? [a.uid] : [])));
     opportunitiesThisTurn += playable.size;
     for (const card of c.hand) {
       const row = cards[card.def];
@@ -137,10 +127,7 @@ export function simulate(config: LabConfig, detailed = false) {
         if (playable.has(card.uid)) row.playable++;
       }
     }
-    const played =
-      action.type === "play"
-        ? c.hand.find((x) => x.uid === action.uid)
-        : undefined;
+    const played = action.type === "play" ? c.hand.find((x) => x.uid === action.uid) : undefined;
     if (action.type === "work") spent++;
     if (played) {
       const def = cardDef(played.def);
@@ -176,15 +163,8 @@ export function simulate(config: LabConfig, detailed = false) {
     // Use effect snapshots for exact draws, including reshuffles and terminal card effects.
     let previous = run;
     for (const frame of result.frames) {
-      if (
-        frame.run.scene.kind === "combat" &&
-        previous.scene.kind === "combat"
-      ) {
-        if (
-          frame.run.scene.relicTurn?.coalUsed &&
-          !previous.scene.relicTurn?.coalUsed
-        )
-          generated++;
+      if (frame.run.scene.kind === "combat" && previous.scene.kind === "combat") {
+        if (frame.run.scene.relicTurn?.coalUsed && !previous.scene.relicTurn?.coalUsed) generated++;
         const old = new Set(previous.scene.hand.map((x) => x.uid));
         for (const card of frame.run.scene.hand)
           if (!old.has(card.uid)) {
@@ -200,8 +180,7 @@ export function simulate(config: LabConfig, detailed = false) {
       previous = frame.run;
     }
     drawn += result.accounting.drawn;
-    if (action.type === "end" && result.run.scene.kind === "combat")
-      generated += 3;
+    if (action.type === "end" && result.run.scene.kind === "combat") generated += 3;
     if (result.run.stats.damage > run.stats.damage) firstDamage ??= c.turn;
     minHp = Math.min(minHp, result.run.hp);
     history.push({
@@ -257,9 +236,7 @@ export function simulate(config: LabConfig, detailed = false) {
     passOnlyTurns,
     maxPassStreak,
     repeatedState,
-    nonGameSignal:
-      maxPassStreak >= 3 ||
-      (outcome === "loss" && (history.at(-1)?.turn ?? 1) <= 2),
+    nonGameSignal: maxPassStreak >= 3 || (outcome === "loss" && (history.at(-1)?.turn ?? 1) <= 2),
     comeback: outcome === "win" && minHp <= 20,
     cards,
     history,
@@ -267,12 +244,11 @@ export function simulate(config: LabConfig, detailed = false) {
     replay,
   };
 }
-export type LabResult = ReturnType<typeof simulate>;
+type LabResult = ReturnType<typeof simulate>;
 
 export function distribution(values: number[]) {
   const sorted = [...values].sort((a, b) => a - b);
-  const q = (p: number) =>
-    sorted[Math.max(0, Math.ceil(p * sorted.length) - 1)] ?? null;
+  const q = (p: number) => sorted[Math.max(0, Math.ceil(p * sorted.length) - 1)] ?? null;
   return {
     min: q(0),
     p25: q(0.25),
@@ -319,10 +295,8 @@ export function summarizeLab(results: ReportRow[]) {
       z = 1.96,
       denominator = 1 + (z * z) / n;
     const center = (p + (z * z) / (2 * n)) / denominator;
-    const margin =
-      (z * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n))) / denominator;
-    const mean = (f: (r: ReportRow) => number) =>
-      rows.reduce((n, r) => n + f(r), 0) / n;
+    const margin = (z * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n))) / denominator;
+    const mean = (f: (r: ReportRow) => number) => rows.reduce((n, r) => n + f(r), 0) / n;
     return {
       cell,
       n,
@@ -343,15 +317,12 @@ export function summarizeLab(results: ReportRow[]) {
       blocked: mean((r) => r.blocked),
       forcedPassTurns: mean((r) => r.forcedPassTurns),
       legalActions: mean(
-        (r) =>
-          r.history.reduce((n, h) => n + h.legal, 0) / Math.max(1, r.actions),
+        (r) => r.history.reduce((n, h) => n + h.legal, 0) / Math.max(1, r.actions),
       ),
       examples: [
         ...new Set([
-          rows.reduce((a, b) => (a.finalHealth < b.finalHealth ? a : b)).config
-            .seed,
-          rows.reduce((a, b) => ((a.turns ?? 0) > (b.turns ?? 0) ? a : b))
-            .config.seed,
+          rows.reduce((a, b) => (a.finalHealth < b.finalHealth ? a : b)).config.seed,
+          rows.reduce((a, b) => ((a.turns ?? 0) > (b.turns ?? 0) ? a : b)).config.seed,
           rows[0]?.config.seed,
         ]),
       ],

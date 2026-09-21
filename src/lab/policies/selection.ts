@@ -7,8 +7,7 @@ import type { Observation } from ".././observation";
 // Independent policy randomness: never use the engine's seed or RNG here.
 function randomIndex(seed: string, size: number) {
   let hash = 2166136261;
-  for (const c of seed)
-    hash = Math.imul(hash ^ c.charCodeAt(0), 16777619) >>> 0;
+  for (const c of seed) hash = Math.imul(hash ^ c.charCodeAt(0), 16777619) >>> 0;
   hash ^= hash >>> 16;
   hash = Math.imul(hash, 0x7feb352d) >>> 0;
   hash ^= hash >>> 15;
@@ -24,10 +23,8 @@ export function selectAction(
 ): CombatAction {
   const first = actions[0];
   if (!first) throw new Error("No legal decision");
-  if (bot === "stall" && o.kind === "combat" && o.ember?.window === "choose")
-    return first;
-  if (bot === "random")
-    return actions[randomIndex(seed, actions.length)] ?? first;
+  if (bot === "stall" && o.kind === "combat" && o.ember?.window === "choose") return first;
+  if (bot === "random") return actions[randomIndex(seed, actions.length)] ?? first;
   if (bot === "search-tempo") return planV2(o, seed, budget, 1.5).action;
   if (
     bot === "rollout-one" ||
@@ -48,9 +45,7 @@ export function selectAction(
       (a) =>
         a.type === "play" &&
         o.hand.some(
-          (c) =>
-            c.uid === a.uid &&
-            cardDef(c.def).effects.some((e) => e.kind === "energy"),
+          (c) => c.uid === a.uid && cardDef(c.def).effects.some((e) => e.kind === "energy"),
         ),
     );
     if (acceleration) return acceleration;
@@ -66,14 +61,9 @@ export function selectAction(
               c.uid === a.uid &&
               cardDef(c.def).effects.every(
                 (e) =>
-                  ![
-                    "hit",
-                    "all",
-                    "shieldStrike",
-                    "spendBlock",
-                    "precision",
-                    "defiance",
-                  ].includes(e.kind),
+                  !["hit", "all", "shieldStrike", "spendBlock", "precision", "defiance"].includes(
+                    e.kind,
+                  ),
               ),
           ),
       ) ?? { type: "end" }

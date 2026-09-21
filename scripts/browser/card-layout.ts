@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { browserSession } from "./agent-browser";
 import { CARDS } from "../../src/game/content/cards";
 import { makeCard } from "../../src/game/engine/rewards";
 import { newRun } from "../../src/game/engine/run";
@@ -8,25 +8,7 @@ import { parseSave } from "../../src/game/validation/save";
 // Isolated rendered regression: actual camp and read-only comparisons, not CSS probes.
 // Starts and closes its own browser session. Run against a running production preview.
 const session = "card-layout";
-const response = z.object({
-  success: z.boolean(),
-  data: z.object({ result: z.unknown().optional() }).passthrough().optional(),
-  error: z.unknown().optional(),
-});
-async function browser(...args: string[]) {
-  const process = Bun.spawn(
-    ["agent-browser", "--session", session, "--restore", ...args, "--json"],
-    { stdout: "pipe", stderr: "pipe" },
-  );
-  const output = await new Response(process.stdout).text();
-  const error = await new Response(process.stderr).text();
-  if (await process.exited)
-    throw new Error(`${args.join(" ")}: ${error} ${output}`);
-  const parsed = response.parse(JSON.parse(output));
-  if (!parsed.success) throw new Error(JSON.stringify(parsed.error));
-  return parsed.data?.result;
-}
-
+const browser = browserSession(session);
 // Stringified after TypeScript transpilation, then executed in the actual browser.
 async function compareAll(mode: "camp" | "inspection") {
   const settle = () =>
@@ -41,23 +23,18 @@ async function compareAll(mode: "camp" | "inspection") {
     button.click();
   }
   await document.fonts.ready;
-  const ids = [
-    ...document.querySelectorAll<HTMLElement>(".deck-grid [data-def]"),
-  ].map((element) => element.dataset.def);
-  if (ids.length !== 32)
-    throw new Error(`Expected 32 base cards, got ${ids.length}`);
+  const ids = [...document.querySelectorAll<HTMLElement>(".deck-grid [data-def]")].map(
+    (element) => element.dataset.def,
+  );
+  if (ids.length !== 32) throw new Error(`Expected 32 base cards, got ${ids.length}`);
   let checked = 0;
   const focusedEvidence = [];
   for (const id of ids) {
-    const card = document.querySelector<HTMLButtonElement>(
-      `.deck-grid [data-def="${id}"]`,
-    );
+    const card = document.querySelector<HTMLButtonElement>(`.deck-grid [data-def="${id}"]`);
     if (!card) throw new Error(`Missing ${id}`);
     card.click();
     await settle();
-    const pair = document.querySelectorAll<HTMLElement>(
-      ".upgrade-compare .game-card",
-    );
+    const pair = document.querySelectorAll<HTMLElement>(".upgrade-compare .game-card");
     if (pair.length !== 2) throw new Error(`Missing comparison for ${id}`);
     for (const face of pair) {
       const heading = face.querySelector(".card-heading");
@@ -68,16 +45,7 @@ async function compareAll(mode: "camp" | "inspection") {
       const owner = face.querySelector(".card-owner");
       const seal = face.querySelector(".cost");
       const painting = face.querySelector(".card-art .art-image");
-      if (
-        !heading ||
-        !title ||
-        !art ||
-        !rules ||
-        !footer ||
-        !owner ||
-        !seal ||
-        !painting
-      )
+      if (!heading || !title || !art || !rules || !footer || !owner || !seal || !painting)
         throw new Error("Incomplete card");
       const h = heading.getBoundingClientRect(),
         a = art.getBoundingClientRect();
@@ -90,11 +58,7 @@ async function compareAll(mode: "camp" | "inspection") {
         !firstRule ||
         !lastRule ||
         Math.abs(
-          (firstRule.top +
-            lastRule.bottom -
-            owner.getBoundingClientRect().bottom -
-            f.top) /
-            2,
+          (firstRule.top + lastRule.bottom - owner.getBoundingClientRect().bottom - f.top) / 2,
         ) > 1
       ) {
         throw new Error(`Rules not vertically centered: ${id}`);
@@ -103,11 +67,7 @@ async function compareAll(mode: "camp" | "inspection") {
         const range = document.createRange();
         range.selectNodeContents(rule);
         for (const line of range.getClientRects()) {
-          if (
-            Math.abs(
-              (line.left + line.right - ruleArea.left - ruleArea.right) / 2,
-            ) > 2
-          ) {
+          if (Math.abs((line.left + line.right - ruleArea.left - ruleArea.right) / 2) > 2) {
             throw new Error(`Rules not horizontally centered: ${id}`);
           }
         }
@@ -141,11 +101,7 @@ async function compareAll(mode: "camp" | "inspection") {
           line.left < h.left - 1 ||
           line.right > h.right + 1,
       );
-      if (
-        bad ||
-        rules.getBoundingClientRect().bottom > f.top + 1 ||
-        f.bottom > b.bottom - 5
-      ) {
+      if (bad || rules.getBoundingClientRect().bottom > f.top + 1 || f.bottom > b.bottom - 5) {
         throw new Error(
           JSON.stringify({
             mode,
@@ -190,9 +146,7 @@ async function compareAll(mode: "camp" | "inspection") {
     clickText(mode === "camp" ? "Choose another" : "Back to cards");
     await settle();
   }
-  document
-    .querySelector<HTMLButtonElement>('.deck-grid [data-def="sacrifice"]')
-    ?.click();
+  document.querySelector<HTMLButtonElement>('.deck-grid [data-def="sacrifice"]')?.click();
   await settle();
   return { mode, width: innerWidth, checked, focusedEvidence };
 }
@@ -213,23 +167,12 @@ async function checkFaces() {
       await new Promise<void>((resolve) =>
         requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
       );
-      const popup = face.parentElement?.querySelector(
-        ".card-art-popover:popover-open",
-      );
+      const popup = face.parentElement?.querySelector(".card-art-popover:popover-open");
       if (!popup) throw new Error("Missing focused card artwork");
       const preview = popup.getBoundingClientRect();
-      if (
-        Math.abs(preview.top - Math.max(12, face.getBoundingClientRect().top)) >
-        1
-      )
-        throw new Error(
-          `Artwork must align with card top: ${face.dataset.def}`,
-        );
-      if (
-        preview.left < 0 ||
-        preview.right > innerWidth ||
-        preview.bottom > innerHeight
-      )
+      if (Math.abs(preview.top - Math.max(12, face.getBoundingClientRect().top)) > 1)
+        throw new Error(`Artwork must align with card top: ${face.dataset.def}`);
+      if (preview.left < 0 || preview.right > innerWidth || preview.bottom > innerHeight)
         throw new Error(`Artwork outside viewport: ${face.dataset.def}`);
     }
     const bounds = face.getBoundingClientRect();
@@ -254,9 +197,7 @@ async function checkFaces() {
         }
       }
     }
-    const footer = face
-      .querySelector(".card-keywords")
-      ?.getBoundingClientRect();
+    const footer = face.querySelector(".card-keywords")?.getBoundingClientRect();
     if (!footer || footer.bottom > bounds.bottom - 4)
       throw new Error(`Footer overflow: ${face.dataset.def}`);
   }
@@ -264,8 +205,7 @@ async function checkFaces() {
 }
 
 async function checkHand() {
-  if (document.activeElement instanceof HTMLElement)
-    document.activeElement.blur();
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   const hand = document.querySelector<HTMLElement>(".hand");
   if (!hand || hand.scrollWidth > hand.clientWidth)
@@ -282,10 +222,7 @@ async function checkHand() {
     const cost = seal.getBoundingClientRect();
     if (
       !card.contains(
-        document.elementFromPoint(
-          cost.left + cost.width / 2,
-          cost.top + cost.height / 2,
-        ),
+        document.elementFromPoint(cost.left + cost.width / 2, cost.top + cost.height / 2),
       )
     )
       throw new Error(`Covered selection area: ${card.dataset.def}`);
@@ -294,20 +231,12 @@ async function checkHand() {
     last = cards.at(-1);
   if (!first || !last) throw new Error("Missing hand edges");
   first.focus();
-  first.dispatchEvent(
-    new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }),
-  );
+  first.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
   if (document.activeElement !== last) throw new Error("Left arrow must wrap");
-  last.dispatchEvent(
-    new KeyboardEvent("keydown", { key: "Home", bubbles: true }),
-  );
-  if (document.activeElement !== first)
-    throw new Error("Home must select first card");
-  first.dispatchEvent(
-    new KeyboardEvent("keydown", { key: "End", bubbles: true }),
-  );
-  if (document.activeElement !== last)
-    throw new Error("End must select last card");
+  last.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true }));
+  if (document.activeElement !== first) throw new Error("Home must select first card");
+  first.dispatchEvent(new KeyboardEvent("keydown", { key: "End", bubbles: true }));
+  if (document.activeElement !== last) throw new Error("End must select last card");
   last.blur();
   return {
     width: innerWidth,
@@ -331,13 +260,7 @@ if (parseSave(save).kind !== "valid") throw new Error("Invalid layout fixture");
 try {
   await browser("open", process.argv[2] ?? "http://localhost:4173");
   for (const width of [390, 1280]) {
-    await browser(
-      "set",
-      "viewport",
-      String(width),
-      width === 390 ? "844" : "900",
-      "2",
-    );
+    await browser("set", "viewport", String(width), width === 390 ? "844" : "900", "2");
     for (const mode of ["camp", "inspection"]) {
       await browser(
         "eval",
@@ -365,10 +288,7 @@ try {
       );
       await browser("wait", ".deck-grid");
       await browser("mouse", "move", "0", "0");
-      const result = await browser(
-        "eval",
-        `(${compareAll.toString()})(${JSON.stringify(mode)})`,
-      );
+      const result = await browser("eval", `(${compareAll.toString()})(${JSON.stringify(mode)})`);
       console.log(JSON.stringify(result));
       await browser("screenshot", `/tmp/wayfarer-${mode}-${width}.png`);
       if (mode === "camp") {
@@ -404,17 +324,10 @@ try {
   combat.scene.discard = [];
   combat.scene.exhaust = [];
   for (const width of [390, 1280]) {
-    await browser(
-      "set",
-      "viewport",
-      String(width),
-      width === 390 ? "844" : "720",
-      "2",
-    );
+    await browser("set", "viewport", String(width), width === 390 ? "844" : "720", "2");
     for (const fixture of [gallery, combat]) {
       const serialized = JSON.stringify(fixture);
-      if (parseSave(serialized).kind !== "valid")
-        throw new Error("Invalid ratio fixture");
+      if (parseSave(serialized).kind !== "valid") throw new Error("Invalid ratio fixture");
       await browser(
         "eval",
         `localStorage.setItem('last-ember.run.v1',${JSON.stringify(serialized)});location.reload()`,
@@ -442,9 +355,7 @@ try {
       await browser("wait", ".game-card");
       await browser("mouse", "move", "0", "0");
       if (fixture === combat) await browser("press", "Tab");
-      console.log(
-        JSON.stringify(await browser("eval", `(${checkFaces.toString()})()`)),
-      );
+      console.log(JSON.stringify(await browser("eval", `(${checkFaces.toString()})()`)));
       if (fixture === combat) {
         console.log(await browser("eval", `(${checkHand.toString()})()`));
       }

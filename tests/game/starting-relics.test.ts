@@ -66,14 +66,11 @@ test.each([
   [20, 6],
   [10, 3],
   [3, 0],
-])(
-  "Shieldfire retains remaining Block: %i becomes %i after 7 damage",
-  (block, expected) => {
-    const run = setup("shieldfire", []);
-    combat(run).block = block;
-    expect(combat(resolve(run, { type: "end" }).run).block).toBe(expected);
-  },
-);
+])("Shieldfire retains remaining Block: %i becomes %i after 7 damage", (block, expected) => {
+  const run = setup("shieldfire", []);
+  combat(run).block = block;
+  expect(combat(resolve(run, { type: "end" }).run).block).toBe(expected);
+});
 test("Hushed Coal includes Eryn, triggers once, and resets next turn", () => {
   let run = setup("hushed-coal", ["unseen", "silence"]);
   combat(run).dread = 6;
@@ -178,12 +175,8 @@ test("build-aware acquisition finds existing concealment without changing prior 
     prototype,
     "hushed-coal",
   );
-  expect(
-    candidate.trace.some((a) => a.type === "reward" && a.card === "silence"),
-  ).toBe(true);
-  expect(
-    control.trace.some((a) => a.type === "reward" && a.card === "silence"),
-  ).toBe(false);
+  expect(candidate.trace.some((a) => a.type === "reward" && a.card === "silence")).toBe(true);
+  expect(control.trace.some((a) => a.type === "reward" && a.card === "silence")).toBe(false);
   const first = candidate.trace.findIndex(
     (a, i) => JSON.stringify(a) !== JSON.stringify(control.trace[i]),
   );

@@ -9,8 +9,7 @@ export function newRun(
 ): Run {
   const safeSeed = seed.trim().slice(0, 80) || "last-ember";
   let rng = 2166136261;
-  for (const char of safeSeed)
-    rng = Math.imul(rng ^ char.charCodeAt(0), 16777619) >>> 0;
+  for (const char of safeSeed) rng = Math.imul(rng ^ char.charCodeAt(0), 16777619) >>> 0;
   const run: Run = {
     version: 1,
     dreadRules,

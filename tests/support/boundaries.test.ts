@@ -38,8 +38,7 @@ test("rejects ambient browser APIs but accepts game text mentioning them", () =>
   ).toHaveLength(1);
   expect(
     check({
-      "game/text.ts":
-        'export const text = "Keep this document in your inventory";',
+      "game/text.ts": 'export const text = "Keep this document in your inventory";',
     }),
   ).toEqual([]);
 });
@@ -66,12 +65,9 @@ test("accepts shared engine selectors and development-only laboratory consumers"
   expect(
     check({
       "game/selectors/dread.ts": "export const dread = 4;",
-      "ui/combat/board.ts":
-        'export { dread } from "../../game/selectors/dread";',
-      "ui/devtools/playtest.ts":
-        'export { observe } from "../../lab/observation";',
-      "lab/observation.ts":
-        'export { dread as observe } from "../game/selectors/dread";',
+      "ui/combat/board.ts": 'export { dread } from "../../game/selectors/dread";',
+      "ui/devtools/playtest.ts": 'export { observe } from "../../lab/observation";',
+      "lab/observation.ts": 'export { dread as observe } from "../game/selectors/dread";',
     }),
   ).toEqual([]);
 });

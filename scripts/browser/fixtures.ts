@@ -44,11 +44,7 @@ const wolf = makeEnemy(run, "wolf");
 wolf.hp = 40;
 wolf.maxHp = 40;
 wolf.block = 10;
-run.scene.enemies = [
-  wolf,
-  makeEnemy(run, "sentinel"),
-  makeEnemy(run, "soldier"),
-];
+run.scene.enemies = [wolf, makeEnemy(run, "sentinel"), makeEnemy(run, "soldier")];
 await write("combat", run);
 const defeat = structuredClone(run);
 defeat.hp = 1;

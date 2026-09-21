@@ -8,7 +8,7 @@ export function projectPhase(run: Run, mode: TestRules) {
   return resolve(run, { type: "end" }, mode);
 }
 
-export interface ActionRecord {
+interface ActionRecord {
   turn: number;
   action: "play" | "end" | "work" | "bearer";
   ember?: Resolution["accounting"]["ember"];
@@ -91,18 +91,13 @@ export function recordAction(
         thresholdEvents.push({
           at: t.at,
           event:
-            prior?.state === "locked"
-              ? "unlock"
-              : t.state === "active"
-                ? "reactivate"
-                : t.state,
+            prior?.state === "locked" ? "unlock" : t.state === "active" ? "reactivate" : t.state,
           dread: next.dread,
         });
     }
     previous = next;
   }
-  const lastCombat =
-    result.run.scene.kind === "combat" ? result.run.scene : previous;
+  const lastCombat = result.run.scene.kind === "combat" ? result.run.scene : previous;
   const row: ActionRecord = {
     turn: c.turn,
     action: action.type,
@@ -118,18 +113,13 @@ export function recordAction(
     unusedEnergy: action.type === "end" ? c.energy : null,
     unplayed: action.type === "end" ? c.hand.map((x) => x.def) : [],
     retained:
-      action.type === "end"
-        ? c.hand.filter((x) => cardDef(x.def).retain).map((x) => x.def)
-        : [],
+      action.type === "end" ? c.hand.filter((x) => cardDef(x.def).retain).map((x) => x.def) : [],
     dreadStart: c.dread,
     dreadEnd: lastCombat.dread,
     thresholdEvents,
     suppressedAttackDamage: result.accounting.suppressedAttackDamage,
     killedBeforeFirstAction: lastCombat.enemies.filter(
-      (e) =>
-        e.hp === 0 &&
-        e.step === 0 &&
-        c.enemies.some((old) => old.uid === e.uid && old.hp > 0),
+      (e) => e.hp === 0 && e.step === 0 && c.enemies.some((old) => old.uid === e.uid && old.hp > 0),
     ).length,
     decisionMs,
   };
@@ -159,8 +149,7 @@ export const metricDefinitions = {
     "Narrow metric: for each actual attack/drain that resolves, difference in pre-block damage after Weak if all already-unlocked threshold strength were active at that instant. Same Dread, base strength, boss health and prior actions. Not counterfactual health saved or a replay of control; excludes attacks after death.",
   draws:
     "Actual cards entering hand, including opening hand and repeat draws; excludes retained cards and respects hand cap.",
-  unusedEnergy:
-    "Recorded only on an explicit end action. A winning play does not count as an end.",
+  unusedEnergy: "Recorded only on an explicit end action. A winning play does not count as an end.",
   largestTurn:
     "Sum of actual enemy HP damage and played cards in each player turn. No invented meaningful-decision count.",
 };
@@ -175,35 +164,19 @@ export function summarize(record: FightRecord) {
   }
   return {
     ...record.result,
-    drawn:
-      record.initialDrawn + record.actions.reduce((n, r) => n + r.drawn, 0),
+    drawn: record.initialDrawn + record.actions.reduce((n, r) => n + r.drawn, 0),
     played: record.actions.reduce((n, r) => n + r.played, 0),
     activeDecisionMs: record.actions.reduce((n, r) => n + r.decisionMs, 0),
     unusedEnergy: record.actions.reduce((n, r) => n + (r.unusedEnergy ?? 0), 0),
-    suppressedAttackDamage: record.actions.reduce(
-      (n, r) => n + r.suppressedAttackDamage,
-      0,
-    ),
-    killedBeforeFirstAction: record.actions.reduce(
-      (n, r) => n + r.killedBeforeFirstAction,
-      0,
-    ),
-    largestTurnDamage: Math.max(
-      0,
-      ...Array.from(turns.values(), (t) => t.damage),
-    ),
-    largestTurnCards: Math.max(
-      0,
-      ...Array.from(turns.values(), (t) => t.cards),
-    ),
+    suppressedAttackDamage: record.actions.reduce((n, r) => n + r.suppressedAttackDamage, 0),
+    killedBeforeFirstAction: record.actions.reduce((n, r) => n + r.killedBeforeFirstAction, 0),
+    largestTurnDamage: Math.max(0, ...Array.from(turns.values(), (t) => t.damage)),
+    largestTurnCards: Math.max(0, ...Array.from(turns.values(), (t) => t.cards)),
     dreadStart: record.initialDread,
     dreadEnd: record.actions.at(-1)?.dreadEnd ?? record.initialDread,
   };
 }
-export function exportFight(
-  record: FightRecord,
-  questionnaire: Record<string, string>,
-) {
+export function exportFight(record: FightRecord, questionnaire: Record<string, string>) {
   return JSON.stringify(
     { ...record, summary: summarize(record), questionnaire, metricDefinitions },
     null,
@@ -211,10 +184,9 @@ export function exportFight(
   );
 }
 export function exportFightCsv(record: FightRecord) {
-  const quote = (value: unknown) => {
+  const quote = (value: string | number | boolean | null | undefined) => {
     const text = String(value ?? "");
-    const safe =
-      typeof value === "string" && /^\s*[=+@-]/.test(text) ? `'${text}` : text;
+    const safe = typeof value === "string" && /^\s*[=+@-]/.test(text) ? `'${text}` : text;
     return `"${safe.replaceAll('"', '""')}"`;
   };
   const values = {

@@ -7,8 +7,7 @@ export function legalActions(o: Observation): CombatAction[] {
   if (o.kind !== "combat") return [];
   const actions: CombatAction[] = [];
   if (o.ember?.window === "choose") {
-    for (const hero of heroSchema.options)
-      actions.push({ type: "bearer", hero });
+    for (const hero of heroSchema.options) actions.push({ type: "bearer", hero });
     return actions;
   }
   for (const card of o.hand) {
@@ -18,10 +17,10 @@ export function legalActions(o: Observation): CombatAction[] {
     if (cardCost(o, o, def) > o.energy) continue;
     if (needsTarget(def)) {
       for (const enemy of o.enemies)
-        if (enemy.hp > 0)
-          actions.push({ type: "play", uid: card.uid, target: enemy.uid });
+        if (enemy.hp > 0) actions.push({ type: "play", uid: card.uid, target: enemy.uid });
     } else actions.push({ type: "play", uid: card.uid, target: null });
   }
+  // oxlint-disable-next-line unicorn/no-useless-spread -- Snapshot base actions before appending empowered variants to the same array.
   for (const action of [...actions]) {
     if (action.type !== "play") continue;
     const card = o.hand.find((c) => c.uid === action.uid);

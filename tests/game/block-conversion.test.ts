@@ -1,9 +1,6 @@
+import { resolveCombat } from "../support/combat";
 import { expect, test } from "bun:test";
-import {
-  BREAK_FORMATION,
-  cardDef,
-  needsTarget,
-} from "../../src/game/content/cards";
+import { BREAK_FORMATION, cardDef, needsTarget } from "../../src/game/content/cards";
 import { makeEnemy } from "../../src/game/engine/combat/enemy";
 import { newRun } from "../../src/game/engine/run";
 import { resolve } from "../../src/game/engine/resolve";
@@ -40,37 +37,28 @@ function setup(upgraded = false) {
 test.each([
   [false, 34],
   [true, 29],
-] as const)(
-  "Block conversion %s spends once before damage and costs no energy",
-  (upgraded, hp) => {
-    const { run, card, enemy } = setup(upgraded);
-    const result = resolve(run, {
-      type: "play",
-      uid: card.uid,
-      target: enemy.uid,
-    });
-    expect(result.error).toBeNull();
-    if (result.run.scene.kind !== "combat") throw new Error("Expected combat");
-    const c = result.run.scene;
-    expect(c.block).toBe(0);
-    expect(c.energy).toBe(0);
-    expect(c.enemies[0]?.hp).toBe(hp);
-    expect(c.enemies[0]?.block).toBe(0);
-    expect(c.ember?.used).toBe(false);
-    expect(c.discard).toContainEqual(card);
-    expect(
-      resolve(result.run, { type: "play", uid: card.uid, target: enemy.uid })
-        .error,
-    ).not.toBeNull();
-  },
-);
+] as const)("Block conversion %s spends once before damage and costs no energy", (upgraded, hp) => {
+  const { run, card, enemy } = setup(upgraded);
+  const { result, combat: c } = resolveCombat(run, {
+    type: "play",
+    uid: card.uid,
+    target: enemy.uid,
+  });
+  expect(c.block).toBe(0);
+  expect(c.energy).toBe(0);
+  expect(c.enemies[0]?.hp).toBe(hp);
+  expect(c.enemies[0]?.block).toBe(0);
+  expect(c.ember?.used).toBe(false);
+  expect(c.discard).toContainEqual(card);
+  expect(
+    resolve(result.run, { type: "play", uid: card.uid, target: enemy.uid }).error,
+  ).not.toBeNull();
+});
 test("invalid target and Work do not spend Block; the attack is not a Spell", () => {
   const { run, card } = setup();
   expect(needsTarget(cardDef(card.def))).toBe(true);
   expect(cardDef(card.def).tags).toBeUndefined();
-  expect(
-    resolve(run, { type: "play", uid: card.uid, target: null }).error,
-  ).not.toBeNull();
+  expect(resolve(run, { type: "play", uid: card.uid, target: null }).error).not.toBeNull();
   if (run.scene.kind !== "combat") throw new Error("Expected combat");
   expect(run.scene.block).toBe(9);
   run.scene.energy = 1;
@@ -90,8 +78,8 @@ test("conversion eligibility adds one design without changing historical offers"
   });
   expect(rewardPool(control)).toHaveLength(30);
   expect(rewardPool(candidate)).toHaveLength(31);
-  expect(
-    rewardPool(candidate).filter((c) => c.id !== BREAK_FORMATION.id),
-  ).toEqual(rewardPool(control));
+  expect(rewardPool(candidate).filter((c) => c.id !== BREAK_FORMATION.id)).toEqual(
+    rewardPool(control),
+  );
   expect(new Set(rewardPool(candidate).map((c) => c.id)).size).toBe(31);
 });

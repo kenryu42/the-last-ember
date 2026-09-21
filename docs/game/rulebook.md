@@ -63,28 +63,28 @@ retain kill-all victory.
 
 ### Starting supplies
 
-| Resource | Starting value |
-| --- | ---: |
-| Health / maximum health | 70 / 70 |
-| Gold | 50 |
-| Deck | 12 cards |
-| Relics | None |
-| Energy each turn | 3 |
-| Cards drawn each turn | 5 |
-| Maximum hand size | 10 |
+| Resource                | Starting value |
+| ----------------------- | -------------: |
+| Health / maximum health |        70 / 70 |
+| Gold                    |             50 |
+| Deck                    |       12 cards |
+| Relics                  |           None |
+| Energy each turn        |              3 |
+| Cards drawn each turn   |              5 |
+| Maximum hand size       |             10 |
 
 Your starting deck contains:
 
-| Copies | Card | Base effect |
-| ---: | --- | --- |
-| 2 | Steady blade | 1 energy: deal 7 damage |
-| 2 | Shelter | 1 energy: gain 7 Block |
-| 2 | True shot | 1 energy: deal 6 damage, then draw 1 |
-| 2 | Walk unseen | 1 energy: gain 5 Block, then lose 2 Dread |
-| 1 | Ancient flame | 2 energy: deal 18 damage, then gain 3 Dread |
-| 1 | Defiance | 1 energy: deal 7 damage, or 14 at Dread 6+ |
-| 1 | Hold the pass | 1 energy: gain 11 Block, then gain 1 Dread |
-| 1 | Shared bread | 1 energy: restore 5 health, draw 1, Exhaust |
+| Copies | Card          | Base effect                                 |
+| -----: | ------------- | ------------------------------------------- |
+|      2 | Steady blade  | 1 energy: deal 7 damage                     |
+|      2 | Shelter       | 1 energy: gain 7 Block                      |
+|      2 | True shot     | 1 energy: deal 6 damage, then draw 1        |
+|      2 | Walk unseen   | 1 energy: gain 5 Block, then lose 2 Dread   |
+|      1 | Ancient flame | 2 energy: deal 18 damage, then gain 3 Dread |
+|      1 | Defiance      | 1 energy: deal 7 damage, or 14 at Dread 6+  |
+|      1 | Hold the pass | 1 energy: gain 11 Block, then gain 1 Dread  |
+|      1 | Shared bread  | 1 energy: restore 5 health, draw 1, Exhaust |
 
 ## 2. Travel through three acts
 
@@ -117,14 +117,14 @@ encounter only after choosing. There is no revealed route map, and you cannot ba
 Every act begins with a battle, guarantees a camp, and ends with its guardian. The
 intervening roads offer different combinations of encounters.
 
-| Stop | What happens |
-| --- | --- |
-| Battle | Defeat a normal enemy formation for gold and a card offer |
-| Elite | Fight a stronger formation for more gold and a relic offer |
-| Event | Choose between two stated outcomes |
-| Camp | Rest **or** improve one card |
-| Merchant | Spend gold on cards, a relic, healing, or removal |
-| Guardian | Defeat the act boss to advance or finish the journey |
+| Stop     | What happens                                               |
+| -------- | ---------------------------------------------------------- |
+| Battle   | Defeat a normal enemy formation for gold and a card offer  |
+| Elite    | Fight a stronger formation for more gold and a relic offer |
+| Event    | Choose between two stated outcomes                         |
+| Camp     | Rest **or** improve one card                               |
+| Merchant | Spend gold on cards, a relic, healing, or removal          |
+| Guardian | Defeat the act boss to advance or finish the journey       |
 
 Every crossroads offers three paths, including the final approach. The final
 three paths converge on the Act's guardian. Each stop has its own illustration:
@@ -245,12 +245,12 @@ at the beginning of the next enemy phase, **before** Dread can grant new Block.
 
 ### Enemies show what they intend to do
 
-| Intention | Effect |
-| --- | --- |
-| Attack | Deal the stated damage to the fellowship |
-| Guard | Gain Block |
-| Howl | Raise your Dread |
-| Drain | Deal damage, then heal for the health actually lost |
+| Intention | Effect                                              |
+| --------- | --------------------------------------------------- |
+| Attack    | Deal the stated damage to the fellowship            |
+| Guard     | Gain Block                                          |
+| Howl      | Raise your Dread                                    |
+| Drain     | Deal damage, then heal for the health actually lost |
 
 A fully blocked Drain heals the enemy for **zero**.
 
@@ -263,10 +263,10 @@ earlier enemy can also affect a later enemy.
 
 ### Status effects
 
-| Status | Rule |
-| --- | --- |
-| Weak | The enemy's Attack and Drain damage is reduced by 25%, rounded down |
-| Vulnerable | Your hits against that enemy deal 50% more damage, rounded down |
+| Status     | Rule                                                                |
+| ---------- | ------------------------------------------------------------------- |
+| Weak       | The enemy's Attack and Drain damage is reduced by 25%, rounded down |
+| Vulnerable | Your hits against that enemy deal 50% more damage, rounded down     |
 
 Applying more of a status adds **duration**, not a stronger percentage.
 
@@ -300,11 +300,11 @@ beforehand can avoid or change the response.
 
 ### Recurring Fury
 
-| Dread | Response each turn |
-| --- | --- |
-| 0–3 | None |
-| 4–7 | Frontmost living enemy: +2 Attack/Drain this enemy phase only |
-| 8–10 | All living enemies: +3 Attack/Drain this phase only; then lose 4 Dread |
+| Dread | Response each turn                                                     |
+| ----- | ---------------------------------------------------------------------- |
+| 0–3   | None                                                                   |
+| 4–7   | Frontmost living enemy: +2 Attack/Drain this enemy phase only          |
+| 8–10  | All living enemies: +3 Attack/Drain this phase only; then lose 4 Dread |
 
 Major **replaces** minor. Bonuses expire after that enemy phase; they never
 accumulate. Howls happen after the check and relief, giving the player the next
@@ -350,19 +350,19 @@ controlling what happens next.**
 
 Several cards reward building the right state before playing them.
 
-| Card | Base effect | What matters |
-| --- | --- | --- |
-| Defiance | 7 damage, doubled at Dread 6+ | Raise Dread first |
-| Through the leaves | 8 damage, +6 at Dread 3 or less | Lower Dread first |
-| Fading strike | 1 energy: lower Dread by 2, then deal 4 damage, +6 at Dread 3 or less | Its own concealment can enable its attack; Eryn extends the recovery range |
-| Iron answer | Damage equal to 3 + current Block | Build Block first; it does not consume Block |
-| Break formation | 0 energy: lose all Block, then deal 4 + the Block lost as damage | Remove a threat now or preserve defense; new-journey rewards only |
-| Face the darkness | Gain Block equal to 7 + current Dread | Higher Dread means more defense |
-| A small opening | Apply 2 Vulnerable, then gain 1 Dread | Play before your attacks |
-| Challenge | Apply 2 Weak, then gain 1 Dread | Weaken dangerous enemy actions |
-| Twin arrows | Two separate hits of 4 | Per-hit bonuses apply twice |
-| Borrowed fire | Gain 1 energy, gain 2 Dread, Exhaust | Extend the turn at an exposure cost |
-| Shoulder the burden | Gain 3 Dread, gain 2 energy, Exhaust | More energy and more exposure |
+| Card                | Base effect                                                           | What matters                                                               |
+| ------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Defiance            | 7 damage, doubled at Dread 6+                                         | Raise Dread first                                                          |
+| Through the leaves  | 8 damage, +6 at Dread 3 or less                                       | Lower Dread first                                                          |
+| Fading strike       | 1 energy: lower Dread by 2, then deal 4 damage, +6 at Dread 3 or less | Its own concealment can enable its attack; Eryn extends the recovery range |
+| Iron answer         | Damage equal to 3 + current Block                                     | Build Block first; it does not consume Block                               |
+| Break formation     | 0 energy: lose all Block, then deal 4 + the Block lost as damage      | Remove a threat now or preserve defense; new-journey rewards only          |
+| Face the darkness   | Gain Block equal to 7 + current Dread                                 | Higher Dread means more defense                                            |
+| A small opening     | Apply 2 Vulnerable, then gain 1 Dread                                 | Play before your attacks                                                   |
+| Challenge           | Apply 2 Weak, then gain 1 Dread                                       | Weaken dangerous enemy actions                                             |
+| Twin arrows         | Two separate hits of 4                                                | Per-hit bonuses apply twice                                                |
+| Borrowed fire       | Gain 1 energy, gain 2 Dread, Exhaust                                  | Extend the turn at an exposure cost                                        |
+| Shoulder the burden | Gain 3 Dread, gain 2 energy, Exhaust                                  | More energy and more exposure                                              |
 
 For example, starting with no Block and no other modifiers:
 
@@ -385,10 +385,10 @@ Cards can be improved once, marked with `+`.
 Most improvements change printed effect values without changing energy cost.
 In new journeys, improving Ancient flame at camp or through an event offers two branches:
 
-| Branch | Cost | Effect |
-| --- | ---: | --- |
-| Veiled Flame | 2 | Deal 18 damage to one enemy; gain 1 Dread |
-| Wildfire | 2 | Deal 14 damage to every enemy; gain 4 Dread |
+| Branch       | Cost | Effect                                      |
+| ------------ | ---: | ------------------------------------------- |
+| Veiled Flame |    2 | Deal 18 damage to one enemy; gain 1 Dread   |
+| Wildfire     |    2 | Deal 14 damage to every enemy; gain 4 Dread |
 
 Both remain Spells. Aldren can empower one hit, not the whole Wildfire volley.
 Branches keep the original card copy and cannot be improved again. They do not
@@ -414,11 +414,11 @@ Always read the improved text, especially on cards with several effects.
 After a nonfinal combat victory, you receive gold and may take **one of three
 offered cards**, or skip all three.
 
-| Encounter | Act I gold | Act II gold | Act III gold |
-| --- | ---: | ---: | ---: |
-| Normal battle | 25 | 33 | 41 |
-| Elite | 45 | 53 | 61 |
-| Guardian | 65 | 73 | Final victory |
+| Encounter     | Act I gold | Act II gold |  Act III gold |
+| ------------- | ---------: | ----------: | ------------: |
+| Normal battle |         25 |          33 |            41 |
+| Elite         |         45 |          53 |            61 |
+| Guardian      |         65 |          73 | Final victory |
 
 Elite and nonfinal guardian rewards also offer an unowned relic when available.
 You receive that relic when accepting the reward screen, even if you skip the
@@ -444,11 +444,11 @@ health**, rounded up. At 70 maximum health, that is 14.
 
 ### Merchants
 
-| Purchase | Cost | Limit |
-| --- | ---: | --- |
-| Offered card | 40 gold | Each offered copy once |
-| Offered relic | 85 gold | Once |
-| Restore 20 health | 30 gold | Once per merchant; cannot buy at full health |
+| Purchase                         |    Cost | Limit                                                      |
+| -------------------------------- | ------: | ---------------------------------------------------------- |
+| Offered card                     | 40 gold | Each offered copy once                                     |
+| Offered relic                    | 85 gold | Once                                                       |
+| Restore 20 health                | 30 gold | Once per merchant; cannot buy at full health               |
 | Permanently remove a chosen card | 45 gold | Once per merchant; cannot reduce the deck below five cards |
 
 You may make several affordable purchases, then leave.
@@ -473,42 +473,42 @@ New journeys start without a relic choice. The following experimental starting
 relics are available in CLI experiments, but are not part
 of normal new-game setup or ordinary relic offers:
 
-| Starting relic | Effect |
-| --- | --- |
-| Shieldfire | At turn start retain up to 6 Block remaining after the enemy phase |
-| Hushed Coal | Once per turn, a card lowering Dread from 6+ to 3 or less draws 1 card and grants 1 energy |
-| Black Lantern | The first Spell each turn costs 1 less energy, minimum 0, and adds 1 Dread before its effects |
+| Starting relic | Effect                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| Shieldfire     | At turn start retain up to 6 Block remaining after the enemy phase                            |
+| Hushed Coal    | Once per turn, a card lowering Dread from 6+ to 3 or less draws 1 card and grants 1 energy    |
+| Black Lantern  | The first Spell each turn costs 1 less energy, minimum 0, and adds 1 Dread before its effects |
 
 Eryn's extra reduction counts toward Hushed Coal's crossing. Work triggers none
 of these card-play effects. A zero-cost Spell still consumes Black Lantern's
 first-Spell activation and adds its Dread. Major Fury relief is not a card and
 does not activate Hushed Coal.
 
-| Relic | Effect |
-| --- | --- |
-| Copper kettle | Restore 3 health after each combat victory |
-| Mended ribbon | +10 maximum health; restore 10 health when acquired |
-| Old watch badge | Begin combat with 8 Block |
-| Ranger's lens | Each hit gains +2 damage at Dread 3 or less |
-| Singing coal | Each hit gains +3 damage at Dread 6+ |
-| White flint | +1 energy on the first turn of combat |
-| Unfinished map | Draw +1 card at every turn start |
-| Silver thread | Each Block effect grants +2 Block |
-| Wooden bowl | Each healing effect restores +3 health |
-| Quiet bell | Original-rule CLI controls only: thresholds move to 5 and 9; excluded from recurring runs |
-| Roadwarden's purse | +12 gold from combat rewards |
-| Grey feather | Begin each combat with one additional card |
+| Relic              | Effect                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| Copper kettle      | Restore 3 health after each combat victory                                                |
+| Mended ribbon      | +10 maximum health; restore 10 health when acquired                                       |
+| Old watch badge    | Begin combat with 8 Block                                                                 |
+| Ranger's lens      | Each hit gains +2 damage at Dread 3 or less                                               |
+| Singing coal       | Each hit gains +3 damage at Dread 6+                                                      |
+| White flint        | +1 energy on the first turn of combat                                                     |
+| Unfinished map     | Draw +1 card at every turn start                                                          |
+| Silver thread      | Each Block effect grants +2 Block                                                         |
+| Wooden bowl        | Each healing effect restores +3 health                                                    |
+| Quiet bell         | Original-rule CLI controls only: thresholds move to 5 and 9; excluded from recurring runs |
+| Roadwarden's purse | +12 gold from combat rewards                                                              |
+| Grey feather       | Begin each combat with one additional card                                                |
 
 Healing cannot exceed maximum health. Wooden bowl also improves healing from
 camps, events, and other relics.
 
 ## 10. The guardians punish careless timing
 
-| Guardian | Health | Repeating base intentions |
-| --- | ---: | --- |
-| The Rootbound King | 92 | Guard 10 → Attack 15 → Howl 2 → Attack 20 |
-| The Fallen Marshal | 124 | Attack 15 → Guard 16 → Attack 22 |
-| The Hollow Beacon | 166 | Howl 2 → Attack 21 → Drain 15 → Attack 26 |
+| Guardian           | Health | Repeating base intentions                 |
+| ------------------ | -----: | ----------------------------------------- |
+| The Rootbound King |     92 | Guard 10 → Attack 15 → Howl 2 → Attack 20 |
+| The Fallen Marshal |    124 | Attack 15 → Guard 16 → Attack 22          |
+| The Hollow Beacon  |    166 | Howl 2 → Attack 21 → Drain 15 → Attack 26 |
 
 All three gain **+3 Attack and Drain damage while at half health or below**.
 
@@ -525,20 +525,20 @@ Ordinary enemies also scale by act. Compared with Act I, they gain:
 
 ## 11. What persists and what resets
 
-| Element | Next turn | Next encounter |
-| --- | --- | --- |
-| Health | Persists | Persists |
-| Gold, permanent deck, upgrades, relics | Persist | Persist |
-| Energy | Resets to 3, with applicable bonuses | Starts fresh |
-| Your Block | Clears after the enemy phase | Starts fresh |
-| Dread | Persists | Resets to 0 |
-| Fury modifiers | Expire after enemy phase | None |
-| Bearer choice | Persists | Persists through the Act; choose again after advancing |
-| Bearer passive use | Resets | Resets at the start of each fight |
-| Progress | Persists; Work allowance resets to 2 | Encounter-specific |
-| Unplayed Retain cards | Stay in hand | Rejoin the shuffled deck |
-| Exhausted cards | Stay unavailable | Return |
-| Enemy statuses and bonuses | Follow combat rules | Do not carry over |
+| Element                                | Next turn                            | Next encounter                                         |
+| -------------------------------------- | ------------------------------------ | ------------------------------------------------------ |
+| Health                                 | Persists                             | Persists                                               |
+| Gold, permanent deck, upgrades, relics | Persist                              | Persist                                                |
+| Energy                                 | Resets to 3, with applicable bonuses | Starts fresh                                           |
+| Your Block                             | Clears after the enemy phase         | Starts fresh                                           |
+| Dread                                  | Persists                             | Resets to 0                                            |
+| Fury modifiers                         | Expire after enemy phase             | None                                                   |
+| Bearer choice                          | Persists                             | Persists through the Act; choose again after advancing |
+| Bearer passive use                     | Resets                               | Resets at the start of each fight                      |
+| Progress                               | Persists; Work allowance resets to 2 | Encounter-specific                                     |
+| Unplayed Retain cards                  | Stay in hand                         | Rejoin the shuffled deck                               |
+| Exhausted cards                        | Stay unavailable                     | Return                                                 |
+| Enemy statuses and bonuses             | Follow combat rules                  | Do not carry over                                      |
 
 The game saves after each committed action. Continuing restores the same state,
 including draw order and offers. The same seed **and the same actions** reproduce

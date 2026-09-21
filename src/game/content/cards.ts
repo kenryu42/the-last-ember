@@ -1,22 +1,12 @@
-export type Owner = "Mara" | "Eryn" | "Aldren" | "Fellowship";
+type Owner = "Mara" | "Eryn" | "Aldren" | "Fellowship";
 export type Effect =
   | {
-      kind:
-        | "hit"
-        | "all"
-        | "block"
-        | "draw"
-        | "dread"
-        | "energy"
-        | "heal"
-        | "weak"
-        | "vulnerable";
+      kind: "hit" | "all" | "block" | "draw" | "dread" | "energy" | "heal" | "weak" | "vulnerable";
       amount: number;
       upgrade: number;
     }
   | {
-      kind:
-        "defiance" | "precision" | "shieldStrike" | "spendBlock" | "resolve";
+      kind: "defiance" | "precision" | "shieldStrike" | "spendBlock" | "resolve";
       amount: number;
       upgrade: number;
     };
@@ -397,14 +387,8 @@ export function effectText(effect: Effect, upgraded: boolean): string {
 }
 export function needsTarget(card: CardDef) {
   return card.effects.some((e) =>
-    [
-      "hit",
-      "weak",
-      "vulnerable",
-      "defiance",
-      "precision",
-      "shieldStrike",
-      "spendBlock",
-    ].includes(e.kind),
+    ["hit", "weak", "vulnerable", "defiance", "precision", "shieldStrike", "spendBlock"].includes(
+      e.kind,
+    ),
   );
 }

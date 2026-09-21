@@ -9,22 +9,15 @@ import type { Observation } from "../observation";
 import { legalActions } from "../legal-actions";
 // Build from the observation alone. Even speculative end/draw resolves use this
 // independent belief RNG, never the fixture seed or actual engine state.
-function belief(
-  o: Extract<Observation, { kind: "combat" }>,
-  seed: string,
-): Run {
+function belief(o: Extract<Observation, { kind: "combat" }>, seed: string): Run {
   const run = newRun(seed);
   run.hp = o.hp;
   run.maxHp = o.maxHp;
   run.act = o.act;
   run.actBearer = o.actBearer;
   run.relics = [...o.relics];
-  run.deck = [...o.hand, ...o.drawComposition, ...o.discard, ...o.exhaust].map(
-    (c) => ({ ...c }),
-  );
-  run.nextId =
-    Math.max(0, ...run.deck.map((c) => c.uid), ...o.enemies.map((e) => e.uid)) +
-    1;
+  run.deck = [...o.hand, ...o.drawComposition, ...o.discard, ...o.exhaust].map((c) => ({ ...c }));
+  run.nextId = Math.max(0, ...run.deck.map((c) => c.uid), ...o.enemies.map((e) => e.uid)) + 1;
   run.scene = {
     kind: "combat",
     encounter: "Public belief",
@@ -37,62 +30,39 @@ function belief(
     ...(o.ember ? { ember: { ...o.ember } } : {}),
     ...(o.relicTurn ? { relicTurn: { ...o.relicTurn } } : {}),
     ...(o.objective ? { objective: { ...o.objective } } : {}),
-    ...(o.rules === "recurring"
-      ? { dreadResponse: "fury" as const }
-      : { fired: [...o.fired] }),
+    ...(o.rules === "recurring" ? { dreadResponse: "fury" as const } : { fired: [...o.fired] }),
     hand: sorted(o.hand),
     draw: shuffle(run, sorted(o.drawComposition)),
     discard: sorted(o.discard),
     exhaust: sorted(o.exhaust),
     log: [],
-    enemies: o.enemies.map(
-      ({ pattern: _pattern, intent: _intent, ...enemy }) => ({ ...enemy }),
-    ),
+    enemies: o.enemies.map(({ pattern: _pattern, intent: _intent, ...enemy }) => ({ ...enemy })),
   };
   return run;
 }
 
-function score(
-  run: Run,
-  start: Extract<Observation, { kind: "combat" }>,
-  policy: Policy,
-) {
-  if (run.scene.kind === "ending")
-    return run.scene.won ? 100000 + run.hp : -100000;
+function score(run: Run, start: Extract<Observation, { kind: "combat" }>, policy: Policy) {
+  if (run.scene.kind === "ending") return run.scene.won ? 100000 + run.hp : -100000;
   const o = observe(run, start.rules);
   if (o.kind !== "combat") return -100000;
-  const healthWeight =
-    policy === "offense" ? 0.4 : policy === "defense" ? 3 : 1.5;
+  const healthWeight = policy === "offense" ? 0.4 : policy === "defense" ? 3 : 1.5;
   const damage =
-    start.enemies.reduce((n, e) => n + e.hp, 0) -
-    o.enemies.reduce((n, e) => n + e.hp, 0);
+    start.enemies.reduce((n, e) => n + e.hp, 0) - o.enemies.reduce((n, e) => n + e.hp, 0);
   const kills =
-    start.enemies.filter((e) => e.hp > 0).length -
-    o.enemies.filter((e) => e.hp > 0).length;
+    start.enemies.filter((e) => e.hp > 0).length - o.enemies.filter((e) => e.hp > 0).length;
   const incoming = o.enemies
     .filter((e) => e.hp > 0 && e.joinsOn <= o.turn)
     .reduce(
-      (n, e) =>
-        n +
-        (e.intent.kind === "attack" || e.intent.kind === "drain"
-          ? e.intent.amount
-          : 0),
+      (n, e) => n + (e.intent.kind === "attack" || e.intent.kind === "drain" ? e.intent.amount : 0),
       0,
     );
   const sameTurn = o.turn === start.turn;
   // Block beyond the current threat has value only with an affordable Iron answer.
-  const shieldReady = o.hand.some(
-    (c) => c.def === "shield" && o.energy >= cardDef(c.def).cost,
-  );
-  const blockValue =
-    Math.min(o.block, incoming) * healthWeight +
-    (shieldReady ? o.block * 0.8 : 0);
+  const shieldReady = o.hand.some((c) => c.def === "shield" && o.energy >= cardDef(c.def).cost);
+  const blockValue = Math.min(o.block, incoming) * healthWeight + (shieldReady ? o.block * 0.8 : 0);
   const dreadPenalty =
     policy === "dread" || policy === "planner"
-      ? o.thresholds.reduce(
-          (n, t) => n + (o.dread >= t.at ? (t.state === "locked" ? 7 : 4) : 0),
-          0,
-        )
+      ? o.thresholds.reduce((n, t) => n + (o.dread >= t.at ? (t.state === "locked" ? 7 : 4) : 0), 0)
       : 0;
   return (
     damage +
@@ -116,11 +86,8 @@ export function chooseAction(
   let best: CombatAction = { type: "end" };
   let bestScore = -Infinity;
   let used = 0;
-  let frontier: { run: Run; first: CombatAction | null }[] = [
-    { run: root, first: null },
-  ];
-  const depth =
-    policy === "planner" || (o.ember && o.ember.window !== "closed") ? 3 : 1;
+  let frontier: { run: Run; first: CombatAction | null }[] = [{ run: root, first: null }];
+  const depth = policy === "planner" || (o.ember && o.ember.window !== "closed") ? 3 : 1;
   for (let d = 0; d < depth && used < budget; d++) {
     const next: { run: Run; first: CombatAction; score: number }[] = [];
     for (const node of frontier) {
@@ -165,9 +132,7 @@ function phaseScore(
   }
   if (run.scene.kind !== "combat") throw new Error("Unexpected planning scene");
   return (
-    10 *
-      ((run.scene.objective?.progress ?? 0) -
-        (start.objective?.progress ?? 0)) +
+    10 * ((run.scene.objective?.progress ?? 0) - (start.objective?.progress ?? 0)) +
     start.enemies.reduce((n, e) => n + e.hp, 0) -
     run.scene.enemies.reduce((n, e) => n + e.hp, 0) +
     18 *
@@ -196,8 +161,7 @@ export function planV2(
     const first = choices[0];
     if (!first) throw new Error("Missing bearer choices");
     const allowance = Math.floor((budget - choices.length) / choices.length);
-    if (allowance < 6)
-      return { action: first, engineCalls: 0, samples: 0, value: 0 };
+    if (allowance < 6) return { action: first, engineCalls: 0, samples: 0, value: 0 };
     const root = belief(o, planningSeed);
     let action = first,
       value = -Infinity,
@@ -205,12 +169,7 @@ export function planV2(
     for (const choice of choices) {
       const chosen = resolve(root, choice, o.rules, { captureFrames: false });
       if (chosen.error) throw new Error(chosen.error);
-      const plan = planV2(
-        observe(chosen.run, o.rules),
-        planningSeed,
-        allowance,
-        healthWeight,
-      );
+      const plan = planV2(observe(chosen.run, o.rules), planningSeed, allowance, healthWeight);
       engineCalls += 1 + plan.engineCalls;
       if (plan.value > value) {
         value = plan.value;
@@ -220,12 +179,8 @@ export function planV2(
     return { action, value, engineCalls, samples: 3 };
   }
   const samples = 3;
-  const roots = Array.from({ length: samples }, (_, i) =>
-    belief(o, `${planningSeed}:sample:${i}`),
-  );
-  let frontier: { runs: Run[]; first: CombatAction | null }[] = [
-    { runs: roots, first: null },
-  ];
+  const roots = Array.from({ length: samples }, (_, i) => belief(o, `${planningSeed}:sample:${i}`));
+  let frontier: { runs: Run[]; first: CombatAction | null }[] = [{ runs: roots, first: null }];
   let used = 0;
   let best: CombatAction = { type: "end" };
   let bestScore = -Infinity;
@@ -272,10 +227,7 @@ export function planV2(
           best = first;
           bestScore = value;
         }
-        if (
-          action.type !== "end" &&
-          runs.every((run) => run.scene.kind === "combat")
-        )
+        if (action.type !== "end" && runs.every((run) => run.scene.kind === "combat"))
           next.push({ runs, first, value });
       }
     }
@@ -298,12 +250,8 @@ export function planHorizon(
   const fallback = planV2(o, planningSeed, Math.min(256, budget));
   const actions = legalActions(o);
   const samples = 3;
-  const quota = Math.floor(
-    (budget - fallback.engineCalls) / (actions.length * samples),
-  );
-  const roots = Array.from({ length: samples }, (_, i) =>
-    belief(o, `${planningSeed}:sample:${i}`),
-  );
+  const quota = Math.floor((budget - fallback.engineCalls) / (actions.length * samples));
+  const roots = Array.from({ length: samples }, (_, i) => belief(o, `${planningSeed}:sample:${i}`));
   let engineCalls = fallback.engineCalls;
   let completedCandidates = 0;
   let best = fallback.action;
@@ -332,11 +280,8 @@ export function planHorizon(
         if (used + continuationBudget + 1 > quota) break;
         const seed = `${planningSeed}:roll:${sample}:${steps}`;
         const plan =
-          continuation === "sequence"
-            ? planV2(observation, seed, continuationBudget)
-            : null;
-        const next =
-          plan?.action ?? chooseAction(observation, "offense", seed, width);
+          continuation === "sequence" ? planV2(observation, seed, continuationBudget) : null;
+        const next = plan?.action ?? chooseAction(observation, "offense", seed, width);
         const result = resolve(run, next, o.rules, { captureFrames: false });
         if (result.error) throw new Error(result.error);
         run = result.run;

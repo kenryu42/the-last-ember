@@ -32,9 +32,7 @@ export function journeyLegalActions(run: Run): Action[] {
     case "ending":
       return [];
     case "combat":
-      return legalActions(
-        observe(run, run.dreadRules === "recurring" ? "recurring" : "control"),
-      );
+      return legalActions(observe(run, run.dreadRules === "recurring" ? "recurring" : "control"));
     case "map":
       candidates = needsActBearer(run)
         ? heroSchema.options.map((hero) => ({ type: "bearer", hero }))
@@ -101,10 +99,7 @@ export function journeyObservation(run: Run) {
   if (run.scene.kind === "combat")
     return {
       kind: "combat" as const,
-      combat: observe(
-        run,
-        run.dreadRules === "recurring" ? "recurring" : "control",
-      ),
+      combat: observe(run, run.dreadRules === "recurring" ? "recurring" : "control"),
     };
   return {
     kind: "journey" as const,
@@ -135,14 +130,10 @@ function progressionScore(
       ((o.relics.includes("hushed-coal") &&
         def.effects.some((e) => e.kind === "dread" && e.amount <= -3) &&
         !o.deck.some((c) =>
-          cardDef(c.def).effects.some(
-            (e) => e.kind === "dread" && e.amount <= -3,
-          ),
+          cardDef(c.def).effects.some((e) => e.kind === "dread" && e.amount <= -3),
         )) ||
         (o.relics.includes("shieldfire") &&
-          def.effects.some(
-            (e) => e.kind === "shieldStrike" || e.kind === "spendBlock",
-          ) &&
+          def.effects.some((e) => e.kind === "shieldStrike" || e.kind === "spendBlock") &&
           !o.deck.some((c) =>
             cardDef(c.def).effects.some(
               (e) => e.kind === "shieldStrike" || e.kind === "spendBlock",
@@ -222,9 +213,7 @@ function progressionScore(
       if (a.item === "heal") return Math.min(o.maxHp - o.hp, 20) - 10;
       if (a.item === "relic") return 10;
       if (a.item === "remove")
-        return o.deck.some((c) => c.uid === a.index && c.def === "strike")
-          ? 2
-          : -1;
+        return o.deck.some((c) => c.uid === a.index && c.def === "strike") ? 2 : -1;
       return o.scene.kind === "shop" && o.scene.cards[a.index]
         ? rating(o.scene.cards[a.index] ?? "strike") - 9
         : -1;
@@ -259,18 +248,9 @@ function evaluateDeck(
     run.row = 1;
     run.nextId = Math.max(...run.deck.map((card) => card.uid)) + 1;
     startCombat(run, kind);
-    const formation =
-      run.scene.kind === "combat" ? run.scene.enemies.map((e) => e.def) : [];
-    for (
-      let step = 0;
-      step < 160 && run.scene.kind === "combat" && run.scene.turn <= 20;
-      step++
-    ) {
-      const plan = planV2(
-        observe(run, "recurring"),
-        `branch-evaluation:${index}:${step}`,
-        budget,
-      );
+    const formation = run.scene.kind === "combat" ? run.scene.enemies.map((e) => e.def) : [];
+    for (let step = 0; step < 160 && run.scene.kind === "combat" && run.scene.turn <= 20; step++) {
+      const plan = planV2(observe(run, "recurring"), `branch-evaluation:${index}:${step}`, budget);
       const result = resolve(run, plan.action, "recurring", {
         captureFrames: false,
       });
@@ -300,9 +280,7 @@ export function evaluateFlameBranches(
       {
         ...context,
         deck: context.deck.map((card) =>
-          card.uid === uid
-            ? { ...card, def: branch, upgraded: true }
-            : { ...card },
+          card.uid === uid ? { ...card, def: branch, upgraded: true } : { ...card },
         ),
       },
       budget,
@@ -356,13 +334,8 @@ export function simulateJourney(
   prototype?: Run["prototype"],
   startingRelic?: StartingRelic,
 ) {
-  if (
-    progression === "sampled" &&
-    (dreadRules !== "recurring" || !prototype?.ember)
-  )
-    throw new Error(
-      "Sampled acquisition requires recurring Dread and Ember bearers",
-    );
+  if (progression === "sampled" && (dreadRules !== "recurring" || !prototype?.ember))
+    throw new Error("Sampled acquisition requires recurring Dread and Ember bearers");
   let run = newRun(seed, dreadRules, prototype, startingRelic);
   const trace: Action[] = [];
   const decisions = [];
@@ -403,22 +376,12 @@ export function simulateJourney(
             : null
         : null;
     if (plan) engineCalls += plan.engineCalls;
-    if (
-      plan &&
-      "completedCandidates" in plan &&
-      plan.completedCandidates < plan.candidates
-    )
+    if (plan && "completedCandidates" in plan && plan.completedCandidates < plan.candidates)
       incompleteDecisions++;
     let action =
       plan?.action ??
       (o.kind === "combat"
-        ? selectAction(
-            o.combat,
-            legalActions(o.combat),
-            bot,
-            planningSeed,
-            budget,
-          )
+        ? selectAction(o.combat, legalActions(o.combat), bot, planningSeed, budget)
         : actions.sort(
             (a, b) =>
               progressionScore(
@@ -441,49 +404,31 @@ export function simulateJourney(
       // This diagnoses acquisition blind spots; it is not an optimized policy.
       const choices = [null, ...run.scene.cards];
       const sampled =
-        choices[
-          Math.floor(
-            random(newRun(`reward:${seed}:${trace.length}`)) * choices.length,
-          )
-        ];
+        choices[Math.floor(random(newRun(`reward:${seed}:${trace.length}`)) * choices.length)];
       if (sampled === undefined) throw new Error("Missing sampled reward");
       action = { type: "reward", card: sampled };
     }
     if (progression === "sampled" && run.scene.kind === "reward") {
       const alternatives = evaluateRewards(run, run.scene.cards);
       rewardEvaluations.push({ index: trace.length, alternatives });
-      const best = alternatives.reduce((a, b) =>
-        b.utility > a.utility ? b : a,
-      );
+      const best = alternatives.reduce((a, b) => (b.utility > a.utility ? b : a));
       action = { type: "reward", card: best.card };
     }
-    if (
-      progression === "continuation" &&
-      action?.type === "upgrade" &&
-      action.branch
-    ) {
+    if (progression === "continuation" && action?.type === "upgrade" && action.branch) {
       const alternatives = evaluateFlameBranches(run, action.uid);
       branchEvaluations.push({
         index: trace.length,
         uid: action.uid,
         alternatives,
       });
-      const best = alternatives.reduce((a, b) =>
-        b.utility > a.utility ? b : a,
-      );
+      const best = alternatives.reduce((a, b) => (b.utility > a.utility ? b : a));
       action = { ...action, branch: best.branch };
     }
-    if (
-      !action ||
-      !actions.some((a) => JSON.stringify(a) === JSON.stringify(action))
-    )
+    if (!action || !actions.some((a) => JSON.stringify(a) === JSON.stringify(action)))
       throw new Error(`No legal journey action at ${seed}:${trace.length}`);
     if (run.scene.kind === "combat") {
       const c = run.scene;
-      const card =
-        action.type === "play"
-          ? c.hand.find((x) => x.uid === action.uid)
-          : undefined;
+      const card = action.type === "play" ? c.hand.find((x) => x.uid === action.uid) : undefined;
       if (card)
         energyGeneratedThisTurn += cardDef(card.def).effects.reduce(
           (n, e) => n + (e.kind === "energy" ? value(e, card.upgraded) : 0),
@@ -491,10 +436,7 @@ export function simulateJourney(
         );
       if (action.type === "end") {
         unusedEnergy += c.energy;
-        generatorUnusedUpperBound += Math.min(
-          c.energy,
-          energyGeneratedThisTurn,
-        );
+        generatorUnusedUpperBound += Math.min(c.energy, energyGeneratedThisTurn);
         energyGeneratedThisTurn = 0;
       }
       decisions.push({
@@ -509,9 +451,7 @@ export function simulateJourney(
         action: action.type,
         engineCalls: plan?.engineCalls ?? null,
         completedCandidates:
-          plan && "completedCandidates" in plan
-            ? plan.completedCandidates
-            : null,
+          plan && "completedCandidates" in plan ? plan.completedCandidates : null,
         candidates: plan && "candidates" in plan ? plan.candidates : null,
       });
     } else energyGeneratedThisTurn = 0;
@@ -531,12 +471,7 @@ export function simulateJourney(
     ...(progression === "static" ? {} : { progression }),
     ...(progression === "continuation" ? { branchEvaluations } : {}),
     ...(progression === "sampled" ? { rewardEvaluations } : {}),
-    outcome:
-      run.scene.kind === "ending"
-        ? run.scene.won
-          ? "win"
-          : "loss"
-        : "timeout",
+    outcome: run.scene.kind === "ending" ? (run.scene.won ? "win" : "loss") : "timeout",
     hp: run.hp,
     stops: run.visited.length,
     act: run.act,

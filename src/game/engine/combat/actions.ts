@@ -18,10 +18,8 @@ export function resolveWork(
   action: Extract<Action, { type: "work" }>,
 ): Resolution {
   const c = run.scene;
-  if (c.kind !== "combat" || !c.objective)
-    return fail("No Work objective is active.");
-  if (c.objective.worked >= 2)
-    return fail("Work is limited to twice per turn.");
+  if (c.kind !== "combat" || !c.objective) return fail("No Work objective is active.");
+  if (c.objective.worked >= 2) return fail("Work is limited to twice per turn.");
   if (c.energy < 1) return fail("Work costs 1 energy.");
   const card = c.hand.find((card) => card.uid === action.uid);
   if (!card) return fail("Choose a card in hand to discard for Work.");
@@ -75,10 +73,7 @@ export function resolvePlay(
   run.stats.cards++;
   const strike = (enemy: Enemy, amount: number) => {
     if (enemy.hp <= 0) return;
-    const empowered =
-      c.ember?.bearer === "Aldren" &&
-      !c.ember.used &&
-      action.empower === enemy.uid;
+    const empowered = c.ember?.bearer === "Aldren" && !c.ember.used && action.empower === enemy.uid;
     if (empowered && c.ember) {
       c.ember.used = true;
       accounting.ember = {
@@ -94,20 +89,12 @@ export function resolvePlay(
       lost = Math.min(enemy.hp, damage - absorbed);
     if (empowered && accounting.ember)
       accounting.ember.damage =
-        lost -
-        Math.min(
-          enemy.hp,
-          Math.max(0, hitDamage(run, c, enemy, amount - 5) - enemy.block),
-        );
+        lost - Math.min(enemy.hp, Math.max(0, hitDamage(run, c, enemy, amount - 5) - enemy.block));
     enemy.block -= absorbed;
     enemy.hp -= lost;
     run.stats.damage += lost;
     emit(
-      def.owner === "Aldren"
-        ? "spell"
-        : def.owner === "Eryn"
-          ? "arrow"
-          : "blade",
+      def.owner === "Aldren" ? "spell" : def.owner === "Eryn" ? "arrow" : "blade",
       enemy.uid,
       `${def.name}: ${lost} damage${absorbed ? ` · ${absorbed} blocked` : ""}${empowered ? " · Aldren +5 base damage" : ""}`,
     );
@@ -159,11 +146,7 @@ export function resolvePlay(
           (effect.kind === "resolve" ? c.dread : 0) +
           (has(run, "thread") ? 2 : 0);
         c.block += amount;
-        emit(
-          "shield",
-          "party",
-          `+${amount} block${shelter ? " · Mara +3" : ""}`,
-        );
+        emit("shield", "party", `+${amount} block${shelter ? " · Mara +3" : ""}`);
         break;
       }
       case "draw": {
@@ -179,8 +162,7 @@ export function resolvePlay(
       }
       case "dread": {
         const before = c.dread;
-        const conceal =
-          n < 0 && before > 0 && c.ember?.bearer === "Eryn" && !c.ember.used;
+        const conceal = n < 0 && before > 0 && c.ember?.bearer === "Eryn" && !c.ember.used;
         if (conceal && c.ember) {
           c.ember.used = true;
           accounting.ember = {
@@ -250,9 +232,7 @@ export function resolveEnd(
   c.energy = 0;
   // Check player Dread before enemy actions, including Howls. Fury lives
   // only in this phase's modifier map, never in persistent enemy strength.
-  const recurring =
-    mode === "recurring" ||
-    (mode === "adventure" && c.dreadResponse !== undefined);
+  const recurring = mode === "recurring" || (mode === "adventure" && c.dreadResponse !== undefined);
   const response = recurring ? dreadResponse(c) : null;
   const modifiers = new Map(response?.modifiers.map((m) => [m.uid, m.attack]));
   // Old enemy block expires before threshold effects grant new block.
@@ -274,17 +254,13 @@ export function resolveEnd(
     run.stats.thresholds++;
     const first = c.fired.length === 1;
     if (first && c.reaction === "reinforce")
-      c.enemies.push(
-        makeEnemy(run, run.act === 0 ? "wolf" : "soldier", c.turn + 1),
-      );
+      c.enemies.push(makeEnemy(run, run.act === 0 ? "wolf" : "soldier", c.turn + 1));
     else if (first && c.reaction === "ward")
       c.enemies.filter((e) => e.hp > 0).forEach((e) => (e.block += 10));
     else if (mode !== "candidate")
       c.enemies
         .filter((e) => e.hp > 0)
-        .forEach(
-          (e) => (e.strength += first ? 2 : c.reaction === "ward" ? 4 : 3),
-        );
+        .forEach((e) => (e.strength += first ? 2 : c.reaction === "ward" ? 4 : 3));
     emit("dread", null, `Dread ${threshold.at}: ${threshold.text}`);
   }
   for (const enemy of c.enemies) {
@@ -300,18 +276,10 @@ export function resolveEnd(
     );
     if (intent.kind === "guard") {
       enemy.block += intent.amount;
-      emit(
-        "shield",
-        enemy.uid,
-        `${enemyDef(enemy.def).name}: +${intent.amount} block`,
-      );
+      emit("shield", enemy.uid, `${enemyDef(enemy.def).name}: +${intent.amount} block`);
     } else if (intent.kind === "howl") {
       c.dread = Math.min(10, c.dread + intent.amount);
-      emit(
-        "dread",
-        enemy.uid,
-        `${enemyDef(enemy.def).name}: +${intent.amount} Dread`,
-      );
+      emit("dread", enemy.uid, `${enemyDef(enemy.def).name}: +${intent.amount} Dread`);
     } else {
       if (mode === "candidate") {
         const alwaysActive = thresholdStrength(run, { ...c, dread: 10 });
@@ -322,8 +290,7 @@ export function resolveEnd(
         lost = Math.min(run.hp, intent.amount - absorbed);
       c.block -= absorbed;
       run.hp -= lost;
-      if (intent.kind === "drain")
-        enemy.hp = Math.min(enemy.maxHp, enemy.hp + lost);
+      if (intent.kind === "drain") enemy.hp = Math.min(enemy.maxHp, enemy.hp + lost);
       emit(
         "enemy",
         enemy.uid,

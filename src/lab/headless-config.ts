@@ -7,7 +7,7 @@ const seedSchema = z
   .refine((s) => s.trim() === s);
 export const policySchema = z.enum(["offense", "defense", "dread", "planner"]);
 // Preserve the v1 enumeration used by the frozen campaign scripts.
-export const allPolicySchema = z.union([policySchema, z.literal("planner-v2")]);
+const allPolicySchema = z.union([policySchema, z.literal("planner-v2")]);
 export type Policy = z.infer<typeof allPolicySchema>;
 export const POLICY_VERSION = "public-belief-v1";
 export const PLANNER_V2_VERSION = "public-belief-phase-v2";

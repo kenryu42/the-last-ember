@@ -12,18 +12,12 @@ export function JourneyCrossroads({
   dispatch: (action: Action) => void;
   busy?: boolean;
 }) {
-  if (needsActBearer(run))
-    return <BearerSelection run={run} dispatch={dispatch} busy={busy} />;
+  if (needsActBearer(run)) return <BearerSelection run={run} dispatch={dispatch} busy={busy} />;
   const act = ACTS[run.act];
   const location = act?.crossroads[run.row + 1];
-  const paths = run.route
-    .filter((node) => reachable(run, node))
-    .sort((a, b) => a.lane - b.lane);
+  const paths = run.route.filter((node) => reachable(run, node)).sort((a, b) => a.lane - b.lane);
   return (
-    <section
-      className="crossroads scene-enter"
-      aria-labelledby="crossroads-title"
-    >
+    <section className="crossroads scene-enter" aria-labelledby="crossroads-title">
       <div className="crossroads-view">
         <div className="crossroads-canvas">
           <img
@@ -49,11 +43,7 @@ export function JourneyCrossroads({
                   className="crossroads-path"
                   style={{ left: `${left}%`, width: `${right - left}%` }}
                   aria-label={
-                    [
-                      "Take the left path",
-                      "Go straight ahead",
-                      "Take the right path",
-                    ][lane]
+                    ["Take the left path", "Go straight ahead", "Take the right path"][lane]
                   }
                   aria-describedby="crossroads-hint"
                   onClick={() => dispatch({ type: "travel", node: node.id })}
@@ -66,9 +56,7 @@ export function JourneyCrossroads({
                     }}
                     aria-hidden="true"
                   >
-                    <span className="path-bearing">
-                      {["↖", "↑", "↗"][lane]}
-                    </span>
+                    <span className="path-bearing">{["↖", "↑", "↗"][lane]}</span>
                     <span className="path-label">
                       {["Left path", "Straight ahead", "Right path"][lane]}
                     </span>

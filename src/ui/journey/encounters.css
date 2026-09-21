@@ -42,7 +42,7 @@
   gap: 20px;
   background: linear-gradient(transparent, #101d20e8);
 }
-.arrival-copy p {
+.arrival-copy output {
   font:
     25px "Cormorant Garamond",
     Georgia,

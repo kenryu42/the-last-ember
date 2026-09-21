@@ -99,14 +99,14 @@ Each used ten named seeds `identity-v1:0..9` and ten fresh-entropy seeds with
 prefix `b999ce26-d554-4063-928c-c7f439f3aa08`, replayed across stages.
 These are 20 unique seeds per stage, not 100 independent seeds.
 
-| Stage | Full journey wins/runs | Constructed fight wins/runs | Timeouts |
-| --- | ---: | ---: | ---: |
-| Original baseline | 70/100 | 899/900 | 0 |
-| A: recurring Fury | 81/100 | 900/900 | 0 |
-| B: Escape target 6 | 80/100 | 1200/1200 | 0 |
-| B: Escape target 4 | 80/100 | 1200/1200 | 0 |
-| C: bearer, first planner | 48/50 | 600/600 | 0 |
-| C: bearer, fair starting search | 94/100 | 1200/1200 | 0 |
+| Stage                           | Full journey wins/runs | Constructed fight wins/runs | Timeouts |
+| ------------------------------- | ---------------------: | --------------------------: | -------: |
+| Original baseline               |                 70/100 |                     899/900 |        0 |
+| A: recurring Fury               |                 81/100 |                     900/900 |        0 |
+| B: Escape target 6              |                 80/100 |                   1200/1200 |        0 |
+| B: Escape target 4              |                 80/100 |                   1200/1200 |        0 |
+| C: bearer, first planner        |                  48/50 |                     600/600 |        0 |
+| C: bearer, fair starting search |                 94/100 |                   1200/1200 |        0 |
 
 Constructed fights use three existing decks and three formations; B/C add Escape.
 The first bearer campaign used only the ten named seeds. An additional 20
@@ -117,12 +117,12 @@ fights, and 456 bearer counterfactual continuations**. No human input was used.
 
 Journey wins by profile (out of 20 each):
 
-| Rules | Resource | Conservative | Health search | Fast search | General |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Original | 0 | 13 | 20 | 19 | 18 |
-| Recurring | 6 | 15 | 20 | 20 | 20 |
-| + Escape 4 | 5 | 17 | 19 | 20 | 19 |
-| + Bearer, corrected search | 14 | 20 | 20 | 20 | 20 |
+| Rules                      | Resource | Conservative | Health search | Fast search | General |
+| -------------------------- | -------: | -----------: | ------------: | ----------: | ------: |
+| Original                   |        0 |           13 |            20 |          19 |      18 |
+| Recurring                  |        6 |           15 |            20 |          20 |      20 |
+| + Escape 4                 |        5 |           17 |            19 |          20 |      19 |
+| + Bearer, corrected search |       14 |           20 |            20 |          20 |      20 |
 
 ### A: recurring consequences are real; difficulty fell
 
@@ -206,15 +206,15 @@ same 20 seeds and five combat profiles as C. A second acquisition-policy experim
 added 100 journeys per relic without changing rules, offers, or combat policies.
 All fixed-deck fights won and no run timed out.
 
-| Relic / acquisition policy | Wins / 100 | Total turn ends | Mean final HP | Coal activations | Escape finishes through Work |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| None / static, C control | 94 | 2,922 | 46.47 | 0 | 77 |
-| Shieldfire / static | 96 | 2,975 | 53.05 | 0 | 75 |
-| Hushed Coal / static | 90 | 2,933 | 46.25 | 92 | 77 |
-| Black Lantern / static | 100 | 2,365 | 57.88 | 0 | 99 |
-| Shieldfire / build-aware | 99 | 2,822 | 59.77 | 0 | 75 |
-| Hushed Coal / build-aware | 93 | 3,123 | 50.40 | 145 | 77 |
-| Black Lantern / build-aware | 99 | 1,996 | 53.14 | 0 | 99 |
+| Relic / acquisition policy  | Wins / 100 | Total turn ends | Mean final HP | Coal activations | Escape finishes through Work |
+| --------------------------- | ---------: | --------------: | ------------: | ---------------: | ---------------------------: |
+| None / static, C control    |         94 |           2,922 |         46.47 |                0 |                           77 |
+| Shieldfire / static         |         96 |           2,975 |         53.05 |                0 |                           75 |
+| Hushed Coal / static        |         90 |           2,933 |         46.25 |               92 |                           77 |
+| Black Lantern / static      |        100 |           2,365 |         57.88 |                0 |                           99 |
+| Shieldfire / build-aware    |         99 |           2,822 |         59.77 |                0 |                           75 |
+| Hushed Coal / build-aware   |         93 |           3,123 |         50.40 |              145 |                           77 |
+| Black Lantern / build-aware |         99 |           1,996 |         53.14 |                0 |                           99 |
 
 Shieldfire retained 7,335 Block in the static journeys. Lantern activated 1,649
 times, increased major responses from 399 to 569, and freed energy for escape.
@@ -462,10 +462,10 @@ strike, Through the leaves, or Quiet as snowfall. Five fixed seeds and fresh
 four relic conditions, and two health weights produce **864 fights**, all won
 without timeouts. The trace includes committed action states and accounting.
 
-| Comparator | Fading higher HP | Comparator higher HP | HP ties | Fading faster | Comparator faster | Turn ties |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Through the leaves | 70 | 53 | 165 | 39 | 72 | 177 |
-| Quiet as snowfall | 68 | 45 | 175 | 86 | 13 | 189 |
+| Comparator         | Fading higher HP | Comparator higher HP | HP ties | Fading faster | Comparator faster | Turn ties |
+| ------------------ | ---------------: | -------------------: | ------: | ------------: | ----------------: | --------: |
+| Through the leaves |               70 |                   53 |     165 |            39 |                72 |       177 |
+| Quiet as snowfall  |               68 |                   45 |     175 |            86 |                13 |       189 |
 
 These are 288 paired cases per comparator, not independent human playtests.
 Fading strike was played 334 times and discarded for Work 147 times. Of its
@@ -486,12 +486,12 @@ three relics, five combat profiles, and eight equivalent seeds: four
 `91e30aec-38cb-4b49-abc3-6074271d2247` seeds. **480 journeys** completed without
 timeouts. Full traces and normal offers are in the matching compressed archives.
 
-| Pool / acquisition | Shieldfire wins / 40 | Coal wins / 40 | Lantern wins / 40 |
-| --- | ---: | ---: | ---: |
-| Conversion / build-aware | 38 | 37 | 40 |
-| Conversion / exploratory | 39 | 37 | 38 |
-| Concealment / build-aware | 38 | 39 | 38 |
-| Concealment / exploratory | 36 | 36 | 40 |
+| Pool / acquisition        | Shieldfire wins / 40 | Coal wins / 40 | Lantern wins / 40 |
+| ------------------------- | -------------------: | -------------: | ----------------: |
+| Conversion / build-aware  |                   38 |             37 |                40 |
+| Conversion / exploratory  |                   39 |             37 |                38 |
+| Concealment / build-aware |                   38 |             39 |                38 |
+| Concealment / exploratory |                   36 |             36 |                40 |
 
 In the conversion control, random rewards acquired Break formation in Coal and
 Lantern decks: 3 selections on 21 offers and 8 on 20, respectively. Combat bots
@@ -532,11 +532,11 @@ Thirty journeys, the five combat profiles, all three relics, and the `:0` seed
 from each earlier prefix produced 2,736 internal trial fights with no timeouts.
 Of these, 2,687 won. The same 30-journey subset gives:
 
-| Relic | Build-aware wins / HP / turn ends | Sampled wins / HP / turn ends |
-| --- | --- | --- |
-| Shieldfire | 9 / 447 / 259 | 10 / 552 / 314 |
-| Hushed Coal | 9 / 438 / 322 | 9 / 427 / 328 |
-| Black Lantern | 9 / 565 / 245 | 9 / 499 / 263 |
+| Relic         | Build-aware wins / HP / turn ends | Sampled wins / HP / turn ends |
+| ------------- | --------------------------------- | ----------------------------- |
+| Shieldfire    | 9 / 447 / 259                     | 10 / 552 / 314                |
+| Hushed Coal   | 9 / 438 / 322                     | 9 / 427 / 328                 |
+| Black Lantern | 9 / 565 / 245                     | 9 / 499 / 263                 |
 
 Sampled is opt-in, not a replacement for the control. It fixed conditional-effect
 blindness without proving a better general deckbuilder. It selected Break formation
@@ -550,10 +550,10 @@ with all other parameters fixed. All baseline scores matched the saved scores.
 Each setting ran 480 fights, **1,440 total**, without timeouts:
 
 | Base damage | Beats skipping / 30 | Best offer / 30 |
-| --- | ---: | ---: |
-| 4 | 5 | 0 |
-| 5 | 8 | 0 |
-| 6 | 6 | 2 |
+| ----------- | ------------------: | --------------: |
+| 4           |                   5 |               0 |
+| 5           |                   8 |               0 |
+| 6           |                   6 |               2 |
 
 Retain **4/10 damage** for now. The non-monotonic result reflects the bounded
 planner and its changed sequences; it does not show that extra damage is harmful
@@ -574,17 +574,17 @@ scaling, not placement with frozen enemy stats. No bespoke enemy buffs were adde
 Sixty additional journeys compared against the matching 60-run subset of the
 earlier exploratory cohort, two seeds per prefix, three relics and five profiles:
 
-| Metric | Opening Escape | Act-two Escape |
-| --- | ---: | ---: |
-| Journey wins | 55/60 | 53/60 |
-| Objective completions | 60/60 | 60/60 |
-| Escaped with enemies alive | 43 | 55 |
-| Cleared enemies before completing | 17 | 5 |
-| Work actions | 204 | 230 |
-| Acquired-card plays in objective | 0 | 51 |
-| Upgraded-card plays in objective | 0 | 29 |
-| Objective turn ends | 101 | 89 |
-| Objective damage taken | 249 | 326 |
+| Metric                            | Opening Escape | Act-two Escape |
+| --------------------------------- | -------------: | -------------: |
+| Journey wins                      |          55/60 |          53/60 |
+| Objective completions             |          60/60 |          60/60 |
+| Escaped with enemies alive        |             43 |             55 |
+| Cleared enemies before completing |             17 |              5 |
+| Work actions                      |            204 |            230 |
+| Acquired-card plays in objective  |              0 |             51 |
+| Upgraded-card plays in objective  |              0 |             29 |
+| Objective turn ends               |            101 |             89 |
+| Objective damage taken            |            249 |            326 |
 
 All runs terminated. Mean objective damage rose from 4.15 to 5.43; mean turn ends
 fell from 1.68 to 1.48. This supports a faster, less health-preserving mission plan

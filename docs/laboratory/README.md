@@ -128,16 +128,16 @@ bot and budget; replay their recorded `Action[]` starting from `newRun(seed)`.
 
 ## Policies and their limits
 
-| Bot | Decision rule |
-|---|---|
-| random | Deterministic pseudo-random choice among legal actions, including end. |
-| greedy | Existing one-step offense heuristic, valuing damage, kills, energy and modest protection. |
-| strategic | Existing three-action beam planner with threshold and defense evaluation. |
-| search | Existing three-belief, bounded beam planner that projects the actual enemy phase. |
-| search-tempo | Same search with health weight 1.5 instead of 3, isolated policy experiment. |
-| burst | Alias for greedy's offense policy, not an independent reasoning algorithm. |
-| resource | Plays affordable energy generators first, then follows greedy. |
-| stall | Avoids damage cards, plays non-damage effects, then ends. A termination probe, not a win policy. |
+| Bot          | Decision rule                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| random       | Deterministic pseudo-random choice among legal actions, including end.                           |
+| greedy       | Existing one-step offense heuristic, valuing damage, kills, energy and modest protection.        |
+| strategic    | Existing three-action beam planner with threshold and defense evaluation.                        |
+| search       | Existing three-belief, bounded beam planner that projects the actual enemy phase.                |
+| search-tempo | Same search with health weight 1.5 instead of 3, isolated policy experiment.                     |
+| burst        | Alias for greedy's offense policy, not an independent reasoning algorithm.                       |
+| resource     | Plays affordable energy generators first, then follows greedy.                                   |
+| stall        | Avoids damage cards, plays non-damage effects, then ends. A termination probe, not a win policy. |
 
 Search is bounded, not optimal. Speculative draws are belief samples, not future
 knowledge. The original planner policies retain their defaults and historical
@@ -162,8 +162,7 @@ telemetry change policy decisions or rules.
 - Damage received and blocked use actual enemy-effect snapshots. First interaction
   means first attack/drain, not a PvP response window. Block, target selection and
   kills are the game's main interaction proxies.
-- Non-game signal means at least three consecutive pass-only turns or loss by turn
-  2. It includes intentional random/stall passes. Forced-pass turns separately mean
+- Non-game signal means at least three consecutive pass-only turns or loss by turn 2. It includes intentional random/stall passes. Forced-pass turns separately mean
   no legal card play was available at any decision of that completed turn.
 - Repeated-state warnings intentionally omit some state and do not prove loops.
   Current free energy/draw generators exhaust; ordinary draw costs energy. Individual
@@ -203,14 +202,14 @@ unit tests, six selected detailed replays, and 18 twice-executed regression case
 No campaign engine error, invariant failure, benchmark timeout, repeated-state
 warning, or per-card draw-accounting mismatch occurred.
 
-| Campaign | Games | Seed prefix and sample |
-|---|---:|---|
-| Baseline ladder | 3,600 | `lab-baseline-v1:0` through `:99`, 100 per 36 cells |
-| Random stress | 10,080 | `lab-stress-v1:0` through `:1119`, 1,120 per 9 cells |
-| Adversarial | 1,080 | `lab-exploit-v1:0` through `:39`, 40 per 27 cells |
-| Rule/deck experiments | 1,050 | `lab-experiment-v1:0` through `:49`, 50 per 21 cells |
-| Tempo policy intervention | 900 | Same 100 baseline seeds across 9 cells |
-| Journeys | 80 | `lab-journey-v1:0` through `:19`, four combat bots |
+| Campaign                  |  Games | Seed prefix and sample                               |
+| ------------------------- | -----: | ---------------------------------------------------- |
+| Baseline ladder           |  3,600 | `lab-baseline-v1:0` through `:99`, 100 per 36 cells  |
+| Random stress             | 10,080 | `lab-stress-v1:0` through `:1119`, 1,120 per 9 cells |
+| Adversarial               |  1,080 | `lab-exploit-v1:0` through `:39`, 40 per 27 cells    |
+| Rule/deck experiments     |  1,050 | `lab-experiment-v1:0` through `:49`, 50 per 21 cells |
+| Tempo policy intervention |    900 | Same 100 baseline seeds across 9 cells               |
+| Journeys                  |     80 | `lab-journey-v1:0` through `:19`, four combat bots   |
 
 Planning streams are `policy:<complete-game-seed>:<action-index>` for benchmark
 fights, domain-separated from gameplay RNG. Match deck, encounter, seed and budget
@@ -219,13 +218,13 @@ progression policy was fixed while combat policies changed.
 
 ### Decisions matter, but benchmark victories saturate
 
-| Policy | Benchmark wins / 900 | Mean final HP, including losses | Journey wins / 20 |
-|---|---:|---:|---:|
-| Random | 85 | 1.82 | not run |
-| Greedy | 900 | 46.72 | 5 |
-| Strategic | 900 | 51.51 | 16 |
-| Search | 898 | 49.65 | 18 |
-| Search-tempo, intervention | 900 | 48.99 | 18 |
+| Policy                     | Benchmark wins / 900 | Mean final HP, including losses | Journey wins / 20 |
+| -------------------------- | -------------------: | ------------------------------: | ----------------: |
+| Random                     |                   85 |                            1.82 |           not run |
+| Greedy                     |                  900 |                           46.72 |                 5 |
+| Strategic                  |                  900 |                           51.51 |                16 |
+| Search                     |                  898 |                           49.65 |                18 |
+| Search-tempo, intervention |                  900 |                           48.99 |                18 |
 
 The gap from random to purposeful play is large. Strategic preserves more health
 than Greedy, and both planners substantially outperform Greedy on these full
@@ -235,10 +234,10 @@ easy for victory alone to discriminate capable policies.
 
 Search's deck-versus-encounter matrix, each cell 100 games:
 
-| Deck | Fury | Reinforce | Ward |
-|---|---|---|---|
-| Quiet | 100 wins, HP 40.06 | 100 wins, HP 44.85 | 100 wins, HP 33.22 |
-| Exposed | 100 wins, HP 56.43 | 98 wins, HP 26.79 | 100 wins, HP 45.93 |
+| Deck    | Fury               | Reinforce          | Ward               |
+| ------- | ------------------ | ------------------ | ------------------ |
+| Quiet   | 100 wins, HP 40.06 | 100 wins, HP 44.85 | 100 wins, HP 33.22 |
+| Exposed | 100 wins, HP 56.43 | 98 wins, HP 26.79  | 100 wins, HP 45.93 |
 | Defense | 100 wins, HP 68.51 | 100 wins, HP 66.89 | 100 wins, HP 64.21 |
 
 A 100/100 cell has Wilson 95% interval approximately 96.3–100%, not certainty of
@@ -416,12 +415,12 @@ All 200 journeys completed, with zero errors, timeouts or invariant failures.
 Every rollout root completed all three belief samples. No incomplete-candidate
 exclusion affected this campaign. Seeds were not used to retune either policy.
 
-| Policy | Budget | Wins / journeys | Mean final HP, including deaths | Mean speculative calls |
-|---|---:|---:|---:|---:|
-| Original Search | 256 | 49/50 | 52.24 | 15,446 |
-| Original Search | 4096 | 49/50 | 52.12 | 15,563 |
-| One-phase rollout | 4096 | 44/50 | 45.14 | 34,574 |
-| Two-phase rollout | 4096 | 40/50 | 32.08 | 81,328 |
+| Policy            | Budget | Wins / journeys | Mean final HP, including deaths | Mean speculative calls |
+| ----------------- | -----: | --------------: | ------------------------------: | ---------------------: |
+| Original Search   |    256 |           49/50 |                           52.24 |                 15,446 |
+| Original Search   |   4096 |           49/50 |                           52.12 |                 15,563 |
+| One-phase rollout |   4096 |           44/50 |                           45.14 |                 34,574 |
+| Two-phase rollout |   4096 |           40/50 |                           32.08 |                 81,328 |
 
 Against Search/256, the two-phase policy lost ten seeds that Search won and rescued
 one Search loss. Its paired HP difference was -20.16, approximate 95% interval
@@ -449,18 +448,18 @@ replayed final HP and outcomes matched the saved records. Public before/after
 observations, legal choices and first-divergence evaluations are preserved in
 `.amp/in/artifacts/horizon/replay-{4,5,13}.json`.
 
-* Seed `:4`: two-phase predicts a two-turn kill in all three beliefs after opening
+- Seed `:4`: two-phase predicts a two-turn kill in all three beliefs after opening
   with Hold the pass against a howling stag. Its score is 100,210 versus 66,803 for
   True shot. Actual replanning takes four turns and loses 4 HP; Search takes two
   turns without health loss. Two-phase eventually loses the journey, Search wins
   with 43 HP. The huge terminal bonus makes small sampled kill-frequency changes
   dominate ordinary damage/health values. This is a plausible policy weakness,
   not proof that this opening alone caused the final loss.
-* Seed `:5`: two-phase rescues Search's only lost journey, finishing with 30 HP.
+- Seed `:5`: two-phase rescues Search's only lost journey, finishing with 30 HP.
   Its first fight actually ends with 67 HP versus Search's 70 HP. Later decks,
   rewards and routes diverge, so this is not evidence that sacrificing 3 HP in
   the opening caused the rescue.
-* Seed `:13`: two-phase loses to the Marshal after repeatedly passing on guard
+- Seed `:13`: two-phase loses to the Marshal after repeatedly passing on guard
   turns, including turns 2, 5 and 8 with all 3 energy. At turn 2, index 119, it
   scores passing at 0 and attacking roots at -31 or -38 under greedy continuation.
   It cannot choose a different continuation sequence for the same root action.
@@ -534,11 +533,11 @@ Search, `search-two` and `search-sequence`, each with a 32,768-call ceiling.
 The lab budget cap was raised to support this experiment; defaults and the
 historical headless CLI budget limit are unchanged.
 
-| Policy | Wins / journeys | Mean final HP | Mean speculative calls |
-|---|---:|---:|---:|
-| Original Search | 20/20 | 55.95 | 14,572 |
-| Greedy two-phase | 15/20 | 30.40 | 75,342 |
-| Sequence two-phase | 20/20 | 46.05 | 674,334 |
+| Policy             | Wins / journeys | Mean final HP | Mean speculative calls |
+| ------------------ | --------------: | ------------: | ---------------------: |
+| Original Search    |           20/20 |         55.95 |                 14,572 |
+| Greedy two-phase   |           15/20 |         30.40 |                 75,342 |
+| Sequence two-phase |           20/20 |         46.05 |                674,334 |
 
 Sequence rescues all five greedy-rollout losses with no new loss. Its paired HP
 gain is 15.65, approximate 95% interval [3.00, 28.30]; paired win p=0.0625,
@@ -580,11 +579,11 @@ fixed. This is independent of the sequence-continuation experiment.
 
 Thirty fresh matched seeds, `lab-utility-v4:0` through `:29`, budget 4096:
 
-| Policy | Wins / journeys | Mean final HP | Mean speculative calls |
-|---|---:|---:|---:|
-| Original Search | 30/30 | 56.37 | 15,070 |
-| Greedy two-phase | 21/30 | 30.90 | 78,657 |
-| Material two-phase | 26/30 | 48.43 | 80,545 |
+| Policy             | Wins / journeys | Mean final HP | Mean speculative calls |
+| ------------------ | --------------: | ------------: | ---------------------: |
+| Original Search    |           30/30 |         56.37 |                 15,070 |
+| Greedy two-phase   |           21/30 |         30.90 |                 78,657 |
+| Material two-phase |           26/30 |         48.43 |                 80,545 |
 
 Material rescued eight greedy-rollout losses and introduced three losses. Paired
 HP improved 17.53, approximate 95% interval [7.07, 27.99]. The paired win sign-test
@@ -618,10 +617,10 @@ unchanged. This tests a specific payoff preference, not general deck optimizatio
 
 Fifty matched seeds `lab-shield-v5:0` through `:49`, original Search at budget 256:
 
-| Progression | Wins / journeys | Mean final HP | Mean action change |
-|---|---:|---:|---:|
-| Static | 47/50 | 48.70 | reference |
-| One Iron Answer | 47/50 | 49.40 | -3.96 |
+| Progression     | Wins / journeys | Mean final HP | Mean action change |
+| --------------- | --------------: | ------------: | -----------------: |
+| Static          |           47/50 |         48.70 |          reference |
+| One Iron Answer |           47/50 |         49.40 |              -3.96 |
 
 The candidate rescues two losses and introduces two others. Paired HP difference
 is +0.70, approximate 95% interval [-5.79, 7.19]; paired win p=1.0. There is no
@@ -650,11 +649,11 @@ claims or examples of normal pacing.
 definitions without an invariant or bound violation. Observed chain lengths:
 
 | Copies | Upgraded | Min / median / p95 / max plays | Peak observed energy |
-|---|---|---|---:|
-| 1 | No | 2 / 8 / 11 / 14 | 7 |
-| 3 | No | 2 / 7 / 12 / 18 | 10 |
-| 1 | Yes | 2 / 8 / 13 / 17 | 9 |
-| 3 | Yes | 2 / 8 / 14 / 20 | 14 |
+| ------ | -------- | ------------------------------ | -------------------: |
+| 1      | No       | 2 / 8 / 11 / 14                |                    7 |
+| 3      | No       | 2 / 7 / 12 / 18                |                   10 |
+| 1      | Yes      | 2 / 8 / 13 / 17                |                    9 |
+| 3      | Yes      | 2 / 8 / 14 / 20                |                   14 |
 
 The longest observed chain is `lab-chains-v1:987`. It chains Spark, Sacrifice,
 Scout and draw effects, then spends its finite energy. It is not an infinite

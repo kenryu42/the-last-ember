@@ -3,22 +3,15 @@ import { HeadlessFight } from "../../src/lab/runner";
 import { PlaytestProtocol } from "../../src/lab/protocol";
 import { configSchema } from "../../src/lab/headless-config";
 
-const write = (value: unknown) =>
-  process.stdout.write(JSON.stringify(value) + "\n");
+const write = (value: unknown) => process.stdout.write(JSON.stringify(value) + "\n");
 const protocol = new PlaytestProtocol();
 const mode = process.argv[2];
 try {
   if (mode === "fight") {
-    if (process.argv.length !== 4)
-      throw new Error("fight expects one JSON config argument");
-    write(
-      new HeadlessFight(
-        configSchema.parse(JSON.parse(process.argv[3] ?? "")),
-      ).auto(),
-    );
+    if (process.argv.length !== 4) throw new Error("fight expects one JSON config argument");
+    write(new HeadlessFight(configSchema.parse(JSON.parse(process.argv[3] ?? ""))).auto());
   } else if (mode === "batch" || mode === "protocol") {
-    if (process.argv.length !== 3)
-      throw new Error(`${mode} reads JSON lines from stdin`);
+    if (process.argv.length !== 3) throw new Error(`${mode} reads JSON lines from stdin`);
     for await (const line of createInterface({
       input: process.stdin,
       crlfDelay: Infinity,

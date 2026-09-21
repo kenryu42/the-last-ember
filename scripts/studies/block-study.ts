@@ -13,13 +13,9 @@ const seeds = [
   ...Array.from({ length: 5 }, (_, i) => `block-study-v1:${i}`),
   process.argv[2] ?? crypto.randomUUID(),
 ];
-const study = z
-  .enum(["block", "concealment"])
-  .parse(process.argv[3] ?? "block");
+const study = z.enum(["block", "concealment"]).parse(process.argv[3] ?? "block");
 const cards =
-  study === "block"
-    ? ["shield", "break-formation"]
-    : ["needle", "silence", "fading-strike"];
+  study === "block" ? ["shield", "break-formation"] : ["needle", "silence", "fading-strike"];
 const rows = [];
 for (const deck of ["quiet", "exposed", "defense"] as const)
   for (const encounter of ["fury", "escape"] as const)

@@ -34,11 +34,6 @@ test("non-attack frames do not select a Pixi attack", () => {
   expect(frameAttack({ run, cue: "enemy", target: 999, text: "" })).toBeNull();
   expect(frameAttack(null)).toBeNull();
 });
-test.each(["blade", "arrow", "spell"] as const)(
-  "%s cards select their own effect",
-  (cue) => {
-    expect(
-      frameAttack({ run: newRun("card-attack"), cue, target: 1, text: "" }),
-    ).toBe(cue);
-  },
-);
+test.each(["blade", "arrow", "spell"] as const)("%s cards select their own effect", (cue) => {
+  expect(frameAttack({ run: newRun("card-attack"), cue, target: 1, text: "" })).toBe(cue);
+});

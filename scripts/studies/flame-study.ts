@@ -25,8 +25,7 @@ for (const formation of ["solo", "group", "escape"] as const)
               ember: true,
               ...(relic ? { startingRelic: relic } : {}),
             });
-            if (run.scene.kind !== "combat")
-              throw new Error("Missing encounter");
+            if (run.scene.kind !== "combat") throw new Error("Missing encounter");
             const c = run.scene;
             run.deck = [
               branch,
@@ -57,11 +56,7 @@ for (const formation of ["solo", "group", "escape"] as const)
               step < 160 && run.scene.kind === "combat" && run.scene.turn < 30;
               step++
             ) {
-              const plan = planV2(
-                observe(run, "recurring"),
-                `branch-policy:${seed}:${step}`,
-                256,
-              );
+              const plan = planV2(observe(run, "recurring"), `branch-policy:${seed}:${step}`, 256);
               const result = resolve(run, plan.action, "recurring", {
                 captureFrames: false,
               });

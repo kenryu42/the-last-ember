@@ -29,20 +29,20 @@ No gameplay files were edited by this assignment. The supervisor's 12 v0.2 files
 
 Greedy policy, 72 starting cases in every row. Wins are unconditional two-fight wins, not wins divided only by first-fight survivors. HP is mean final HP including deaths. Turns include both fights.
 
-| Starting HP | Follow-up | Camp | First losses | Second losses | Wins / 72 | Final HP | Turns |
-|---|---|---|---:|---:|---:|---:|---:|
-| 70 | battle | rest | 0 | 0 | 72 | 52.28 | 10.33 |
-| 70 | battle | primary | 0 | 1 | 71 | 42.92 | 9.79 |
-| 70 | battle | bread | 0 | 1 | 71 | 42.01 | 10.32 |
-| 70 | elite | rest | 0 | 2 | 70 | 39.86 | 11.46 |
-| 70 | elite | primary | 0 | 10 | 62 | 31.06 | 10.88 |
-| 70 | elite | bread | 0 | 10 | 62 | 29.35 | 11.18 |
-| 45 | battle | rest | 2 | 0 | 70 | 36.61 | 10.00 |
-| 45 | battle | primary | 2 | 11 | 59 | 22.65 | 9.21 |
-| 45 | battle | bread | 2 | 11 | 59 | 22.67 | 9.68 |
-| 45 | elite | rest | 2 | 11 | 59 | 24.65 | 10.72 |
-| 45 | elite | primary | 2 | 30 | 40 | 15.39 | 9.99 |
-| 45 | elite | bread | 2 | 33 | 37 | 15.26 | 10.15 |
+| Starting HP | Follow-up | Camp    | First losses | Second losses | Wins / 72 | Final HP | Turns |
+| ----------- | --------- | ------- | -----------: | ------------: | --------: | -------: | ----: |
+| 70          | battle    | rest    |            0 |             0 |        72 |    52.28 | 10.33 |
+| 70          | battle    | primary |            0 |             1 |        71 |    42.92 |  9.79 |
+| 70          | battle    | bread   |            0 |             1 |        71 |    42.01 | 10.32 |
+| 70          | elite     | rest    |            0 |             2 |        70 |    39.86 | 11.46 |
+| 70          | elite     | primary |            0 |            10 |        62 |    31.06 | 10.88 |
+| 70          | elite     | bread   |            0 |            10 |        62 |    29.35 | 11.18 |
+| 45          | battle    | rest    |            2 |             0 |        70 |    36.61 | 10.00 |
+| 45          | battle    | primary |            2 |            11 |        59 |    22.65 |  9.21 |
+| 45          | battle    | bread   |            2 |            11 |        59 |    22.67 |  9.68 |
+| 45          | elite     | rest    |            2 |            11 |        59 |    24.65 | 10.72 |
+| 45          | elite     | primary |            2 |            30 |        40 |    15.39 |  9.99 |
+| 45          | elite     | bread   |            2 |            33 |        37 |    15.26 | 10.15 |
 
 Heal-first gives identical win counts except injured/battle/bread rises from 59 to 60. Its mean HP changes range from +0.07 to +0.57. This narrow alternative does not overturn the camp result. No run timed out under either policy.
 
@@ -63,13 +63,13 @@ Representative seed 1 cases, greedy policy, tested as regressions:
 48 runs use `newRun` with seed suffix `/adventure`, unchanged generated routes/rewards/events/shops/relics/boss healing, the normal starter deck, starting HP70 or HP45, and the existing journey/combat pilot. HP45 is an experimental initial condition; every subsequent action is legal. There are no RNG resets. Camp policies are the existing adaptive rule, always rest, or always upgrade the highest-rated unupgraded card. Action bound is 3,000 per adventure.
 
 | Starting HP | Camp policy | Wins / 8 | Losses | Mean final HP | Mean turns | Rest / upgrade actions |
-|---|---|---:|---:|---:|---:|---:|
-| 70 | adaptive | 8 | 0 | 37.875 | 40.25 | 10 / 30 |
-| 70 | rest | 7 | 1 | 47.75 | 47.50 | 40 / 0 |
-| 70 | upgrade | 7 | 1 | 35.00 | 36.25 | 0 / 38 |
-| 45 | adaptive | 7 | 1 | 39.00 | 40.50 | 13 / 25 |
-| 45 | rest | 6 | 2 | 18.25 | 41.625 | 36 / 0 |
-| 45 | upgrade | 5 | 3 | 34.875 | 34.125 | 0 / 41 |
+| ----------- | ----------- | -------: | -----: | ------------: | ---------: | ---------------------: |
+| 70          | adaptive    |        8 |      0 |        37.875 |      40.25 |                10 / 30 |
+| 70          | rest        |        7 |      1 |         47.75 |      47.50 |                 40 / 0 |
+| 70          | upgrade     |        7 |      1 |         35.00 |      36.25 |                 0 / 38 |
+| 45          | adaptive    |        7 |      1 |         39.00 |      40.50 |                13 / 25 |
+| 45          | rest        |        6 |      2 |         18.25 |     41.625 |                 36 / 0 |
+| 45          | upgrade     |        5 |      3 |        34.875 |     34.125 |                 0 / 41 |
 
 Zero timeouts. Adaptive uses both choices and wins 15/16, versus 13/16 always-rest and 12/16 always-upgrade. These are small policy-level comparisons. Routes are HP-sensitive, actions alter RNG consumption, and later encounters/rewards need not match across arms. They do not estimate a controlled causal camp effect or population win rate. Adventure victories provide counterevidence to a blanket downward-spiral diagnosis, not proof every recovery state is balanced.
 

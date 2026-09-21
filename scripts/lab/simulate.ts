@@ -3,9 +3,7 @@ import { resolve } from "../../src/game/engine/resolve";
 import { parseSave } from "../../src/game/validation/save";
 import { journeyAction } from "../../tests/support/pilot";
 const seeds = process.argv.slice(2);
-for (const seed of seeds.length
-  ? seeds
-  : ["lantern", "briar", "warmth", "beacon", "home"]) {
+for (const seed of seeds.length ? seeds : ["lantern", "briar", "warmth", "beacon", "home"]) {
   let run = newRun(seed),
     actions = 0;
   while (run.scene.kind !== "ending" && actions < 2000) {
@@ -20,12 +18,7 @@ for (const seed of seeds.length
   console.log(
     JSON.stringify({
       seed,
-      ending:
-        run.scene.kind === "ending"
-          ? run.scene.won
-            ? "win"
-            : "loss"
-          : "timeout",
+      ending: run.scene.kind === "ending" ? (run.scene.won ? "win" : "loss") : "timeout",
       act: run.act + 1,
       hp: run.hp,
       actions,

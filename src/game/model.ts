@@ -2,14 +2,10 @@ import { z } from "zod";
 
 export const heroSchema = z.enum(["Mara", "Eryn", "Aldren"]);
 export type Hero = z.infer<typeof heroSchema>;
-export const startingRelicSchema = z.enum([
-  "shieldfire",
-  "hushed-coal",
-  "black-lantern",
-]);
+export const startingRelicSchema = z.enum(["shieldfire", "hushed-coal", "black-lantern"]);
 export type StartingRelic = z.infer<typeof startingRelicSchema>;
 export const flameBranchSchema = z.enum(["veiled-flame", "wildfire"]);
-export type FlameBranch = z.infer<typeof flameBranchSchema>;
+type FlameBranch = z.infer<typeof flameBranchSchema>;
 export const combatActionSchema = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("end") }),
   z.strictObject({ type: z.literal("bearer"), hero: heroSchema }),
@@ -38,7 +34,7 @@ const emberSchema = z.discriminatedUnion("window", [
   }),
 ]);
 
-export const cardSchema = z.object({
+const cardSchema = z.object({
   uid: z.number().int().nonnegative(),
   def: z.string(),
   upgraded: z.boolean(),
@@ -69,14 +65,7 @@ const enemySchema = z.object({
   joinsOn: z.number().int().nonnegative(),
 });
 export type Enemy = z.infer<typeof enemySchema>;
-export const nodeKindSchema = z.enum([
-  "battle",
-  "elite",
-  "event",
-  "camp",
-  "shop",
-  "boss",
-]);
+const nodeKindSchema = z.enum(["battle", "elite", "event", "camp", "shop", "boss"]);
 export type NodeKind = z.infer<typeof nodeKindSchema>;
 const nodeSchema = z.object({
   id: z.string(),
@@ -100,9 +89,7 @@ const combatSchema = z.object({
   fired: z.array(z.number()).optional(),
   dreadResponse: z.literal("fury").optional(),
   ember: emberSchema.optional(),
-  relicTurn: z
-    .object({ coalUsed: z.boolean(), lanternUsed: z.boolean() })
-    .optional(),
+  relicTurn: z.object({ coalUsed: z.boolean(), lanternUsed: z.boolean() }).optional(),
   objective: z
     .object({
       kind: z.literal("escape"),
@@ -185,7 +172,6 @@ export const runSchema = z.strictObject({
   }),
 });
 export type Run = z.infer<typeof runSchema>;
-export type Scene = Run["scene"];
 export type Action =
   | CombatAction
   | { type: "travel"; node: string }

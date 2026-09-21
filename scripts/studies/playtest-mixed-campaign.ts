@@ -1,10 +1,6 @@
 import { HeadlessFight } from "../../src/lab/runner";
 import { chooseAction } from "../../src/lab/policies/planner";
-import {
-  configSchema,
-  POLICY_VERSION,
-  policySchema,
-} from "../../src/lab/headless-config";
+import { configSchema, POLICY_VERSION, policySchema } from "../../src/lab/headless-config";
 import { PLAYTEST_ENCOUNTERS } from "../../src/lab/fixtures/combat";
 
 // Follow-up declared after the original campaign. Policies remain frozen.
@@ -20,14 +16,10 @@ const budget = {
 };
 type Result = ReturnType<HeadlessFight["result"]>;
 function summary(rows: Result[]) {
-  const mean = (f: (r: Result) => number) =>
-    rows.reduce((n, r) => n + f(r), 0) / rows.length;
+  const mean = (f: (r: Result) => number) => rows.reduce((n, r) => n + f(r), 0) / rows.length;
   const survivors = rows.filter((r) => r.outcome === "win");
   const events = (event: string) =>
-    rows.reduce(
-      (n, r) => n + r.dreadEvents.filter((e) => e.event === event).length,
-      0,
-    );
+    rows.reduce((n, r) => n + r.dreadEvents.filter((e) => e.event === event).length, 0);
   return {
     n: rows.length,
     wins: survivors.length,
@@ -40,31 +32,20 @@ function summary(rows: Result[]) {
     turns: mean((r) => r.playerTurns),
     actions: mean((r) => r.actionCount),
     draws: mean((r) => r.metrics.drawn),
-    killedBeforeFirstAction: rows.reduce(
-      (n, r) => n + r.metrics.killedBeforeFirstAction,
-      0,
-    ),
-    reached4: rows.filter((r) =>
-      r.telemetry.some((a) => Math.max(a.dreadStart, a.dreadEnd) >= 4),
-    ).length,
-    reached8: rows.filter((r) =>
-      r.telemetry.some((a) => Math.max(a.dreadStart, a.dreadEnd) >= 8),
-    ).length,
-    unlocked4: rows.filter((r) =>
-      r.dreadEvents.some((e) => e.at === 4 && e.event === "unlock"),
-    ).length,
-    unlocked8: rows.filter((r) =>
-      r.dreadEvents.some((e) => e.at === 8 && e.event === "unlock"),
-    ).length,
+    killedBeforeFirstAction: rows.reduce((n, r) => n + r.metrics.killedBeforeFirstAction, 0),
+    reached4: rows.filter((r) => r.telemetry.some((a) => Math.max(a.dreadStart, a.dreadEnd) >= 4))
+      .length,
+    reached8: rows.filter((r) => r.telemetry.some((a) => Math.max(a.dreadStart, a.dreadEnd) >= 8))
+      .length,
+    unlocked4: rows.filter((r) => r.dreadEvents.some((e) => e.at === 4 && e.event === "unlock"))
+      .length,
+    unlocked8: rows.filter((r) => r.dreadEvents.some((e) => e.at === 8 && e.event === "unlock"))
+      .length,
     suppressions: events("suppressed"),
     reactivations: events("reactivate"),
-    fightsWithSuppression: rows.filter((r) =>
-      r.dreadEvents.some((e) => e.event === "suppressed"),
-    ).length,
-    suppressedPreBlockDamage: rows.reduce(
-      (n, r) => n + r.metrics.suppressedAttackDamage,
-      0,
-    ),
+    fightsWithSuppression: rows.filter((r) => r.dreadEvents.some((e) => e.event === "suppressed"))
+      .length,
+    suppressedPreBlockDamage: rows.reduce((n, r) => n + r.metrics.suppressedAttackDamage, 0),
   };
 }
 function crossReplay(result: Result, rules: "control" | "candidate") {
@@ -84,9 +65,7 @@ function crossReplay(result: Result, rules: "control" | "candidate") {
   }
   return {
     status:
-      fight.result().actionCount === result.actionCount
-        ? "complete-sequence"
-        : "terminal-prefix",
+      fight.result().actionCount === result.actionCount ? "complete-sequence" : "terminal-prefix",
     ...brief(fight.result()),
   };
 }
@@ -113,12 +92,7 @@ function divergence(control: Result, candidate: Result) {
   const a = left.view().observation,
     b = right.view().observation;
   const planningSeed = `${budget.planningSeed}:${index}`;
-  const auditedControl = chooseAction(
-    a,
-    control.config.policy,
-    planningSeed,
-    budget.searchBudget,
-  );
+  const auditedControl = chooseAction(a, control.config.policy, planningSeed, budget.searchBudget);
   const auditedCandidate = chooseAction(
     b,
     candidate.config.policy,
@@ -186,16 +160,11 @@ for (const encounter of PLAYTEST_ENCOUNTERS)
         policy,
         ...budget,
       };
-      const a = new HeadlessFight(
-        configSchema.parse({ ...common, rules: "control" }),
-      ).auto();
-      const b = new HeadlessFight(
-        configSchema.parse({ ...common, rules: "candidate" }),
-      ).auto();
+      const a = new HeadlessFight(configSchema.parse({ ...common, rules: "control" })).auto();
+      const b = new HeadlessFight(configSchema.parse({ ...common, rules: "candidate" })).auto();
       control.push(a);
       candidate.push(b);
-      const differentTrace =
-        JSON.stringify(a.trace) !== JSON.stringify(b.trace);
+      const differentTrace = JSON.stringify(a.trace) !== JSON.stringify(b.trace);
       const controlUnderCandidate = crossReplay(a, "candidate");
       const candidateUnderControl = crossReplay(b, "control");
       pairs.push({
@@ -209,9 +178,7 @@ for (const encounter of PLAYTEST_ENCOUNTERS)
       if (
         examples.length < 6 &&
         b.metrics.suppressedAttackDamage > 0 &&
-        !examples.some(
-          (e) => e.encounter === encounter.id && e.policy === policy,
-        )
+        !examples.some((e) => e.encounter === encounter.id && e.policy === policy)
       ) {
         examples.push({
           encounter: encounter.id,
@@ -226,8 +193,7 @@ for (const encounter of PLAYTEST_ENCOUNTERS)
       }
     }
     const delta = (f: (r: Result) => number) =>
-      candidate.reduce((n, r, i) => n + f(r) - f(control[i] ?? r), 0) /
-      seeds.length;
+      candidate.reduce((n, r, i) => n + f(r) - f(control[i] ?? r), 0) / seeds.length;
     cells.push({
       encounter: encounter.id,
       policy,
@@ -237,12 +203,8 @@ for (const encounter of PLAYTEST_ENCOUNTERS)
         health: delta((r) => r.finalHealth),
         turns: delta((r) => r.playerTurns),
         actions: delta((r) => r.actionCount),
-        betterHealth: pairs.filter(
-          (p) => p.candidate.finalHealth > p.control.finalHealth,
-        ).length,
-        worseHealth: pairs.filter(
-          (p) => p.candidate.finalHealth < p.control.finalHealth,
-        ).length,
+        betterHealth: pairs.filter((p) => p.candidate.finalHealth > p.control.finalHealth).length,
+        worseHealth: pairs.filter((p) => p.candidate.finalHealth < p.control.finalHealth).length,
         differentTraces: pairs.filter((p) => p.differentTrace).length,
       },
       pairs,

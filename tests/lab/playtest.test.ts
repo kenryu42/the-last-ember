@@ -1,9 +1,6 @@
 import { expect, test } from "bun:test";
 import { cardDef } from "../../src/game/content/cards";
-import {
-  intention,
-  thresholdStrength,
-} from "../../src/game/selectors/intentions";
+import { intention, thresholdStrength } from "../../src/game/selectors/intentions";
 import { makeCard } from "../../src/game/engine/rewards";
 import { makeEnemy } from "../../src/game/engine/combat/enemy";
 import { newRun } from "../../src/game/engine/run";
@@ -54,9 +51,7 @@ test("default adventure and explicit control combat resolve identically", () => 
     expect(resolve(adventure.run, { type: "end" }, "control")).toEqual(
       resolve(adventure.run, { type: "end" }),
     );
-    expect(c.enemies[0]?.strength).toBe(
-      reaction === "fury" ? 5 : reaction === "ward" ? 4 : 3,
-    );
+    expect(c.enemies[0]?.strength).toBe(reaction === "fury" ? 5 : reaction === "ward" ? 4 : 3);
   }
 });
 
@@ -69,24 +64,16 @@ test("candidate exact boundaries, both unlocks and independent suppression with 
       const next = resolve(run, { type: "end" }, "candidate").run;
       const c = combat(next);
       expect(c.fired).toEqual(
-        dread < 4 + shift
-          ? []
-          : dread < 8 + shift
-            ? [4 + shift]
-            : [4 + shift, 8 + shift],
+        dread < 4 + shift ? [] : dread < 8 + shift ? [4 + shift] : [4 + shift, 8 + shift],
       );
       expect(c.enemies[0]?.strength).toBe(0);
-      expect(next.hp).toBe(
-        dread < 4 + shift ? 63 : dread < 8 + shift ? 61 : 58,
-      );
+      expect(next.hp).toBe(dread < 4 + shift ? 63 : dread < 8 + shift ? 61 : 58);
       c.dread = 3 + shift;
       expect(thresholdStrength(next, c)).toBe(0);
       c.dread = 4 + shift;
       expect(thresholdStrength(next, c)).toBe(dread >= 4 + shift ? 2 : 0);
       c.dread = 8 + shift;
-      expect(thresholdStrength(next, c)).toBe(
-        dread >= 8 + shift ? 5 : dread >= 4 + shift ? 2 : 0,
-      );
+      expect(thresholdStrength(next, c)).toBe(dread >= 8 + shift ? 5 : dread >= 4 + shift ? 2 : 0);
     }
 });
 
@@ -128,9 +115,7 @@ test("Howl reactivates unlocked strength for later enemies but cannot unlock mid
     expect(combat(preview.run).dread).toBe(5);
     expect(combat(preview.run).fired).toEqual(unlocked ? [4] : []);
     expect(preview.frames[0]?.text).toContain("+2 Dread");
-    expect(preview.frames[1]?.text).toContain(
-      unlocked ? "9 health lost" : "7 health lost",
-    );
+    expect(preview.frames[1]?.text).toContain(unlocked ? "9 health lost" : "7 health lost");
   }
 });
 
@@ -144,10 +129,9 @@ test("Weak floors after candidate strength, half-health boss and Hollow Dread mo
   c.dread = 8;
   c.fired = [4, 8];
   expect(intention(boss, c, thresholdStrength(run, c)).amount).toBe(24); // floor((21+3+4+4)*.75)
-  expect(
-    intention({ ...boss, hp: boss.maxHp / 2 + 1 }, c, thresholdStrength(run, c))
-      .amount,
-  ).toBe(21);
+  expect(intention({ ...boss, hp: boss.maxHp / 2 + 1 }, c, thresholdStrength(run, c)).amount).toBe(
+    21,
+  );
   c.dread = 7;
   expect(intention(boss, c, thresholdStrength(run, c)).amount).toBe(21);
   c.dread = 5;
@@ -209,11 +193,7 @@ test("candidate preserves Vulnerable floor before block, Dread clamp and rejects
   c.hand = [makeCard(run, "cinder")];
   const card = c.hand[0];
   if (!card) throw Error();
-  const next = resolve(
-    run,
-    { type: "play", uid: card.uid, target: enemy.uid },
-    "candidate",
-  ).run;
+  const next = resolve(run, { type: "play", uid: card.uid, target: enemy.uid }, "candidate").run;
   expect(combat(next).dread).toBe(10);
   expect(combat(next).enemies[0]?.hp).toBe(8); // 24 - (floor(12*1.5)-2)
   expect(resolve(run, { type: "reward", card: null }, "candidate").error).toBe(
@@ -224,13 +204,7 @@ test("candidate preserves Vulnerable floor before block, Dread clamp and rejects
   const silence = combat(next).hand[0];
   if (!silence) throw Error();
   expect(
-    combat(
-      resolve(
-        next,
-        { type: "play", uid: silence.uid, target: null },
-        "candidate",
-      ).run,
-    ).dread,
+    combat(resolve(next, { type: "play", uid: silence.uid, target: null }, "candidate").run).dread,
   ).toBe(0);
 });
 
@@ -251,14 +225,7 @@ test("final kill wins immediately without pending threshold, keeps winning turn 
   expect(result.run.stats.thresholds).toBe(0);
   expect(result.run.stats.turns).toBe(2);
   expect(result.run.gold).toBe(run.gold);
-  const record = recordAction(
-    beginRecord(config, run),
-    run,
-    action,
-    result,
-    120,
-    600,
-  );
+  const record = recordAction(beginRecord(config, run), run, action, result, 120, 600);
   expect(record.result).toEqual({
     outcome: "win",
     finalHealth: 70,
@@ -273,13 +240,13 @@ test("final kill wins immediately without pending threshold, keeps winning turn 
     killedBeforeFirstAction: 1,
     dreadEnd: 8,
   });
-  expect(
-    JSON.parse(exportFight(record, { surprise: "none" })).questionnaire,
-  ).toEqual({ surprise: "none" });
+  expect(JSON.parse(exportFight(record, { surprise: "none" })).questionnaire).toEqual({
+    surprise: "none",
+  });
   expect(exportFightCsv(record)).toContain('"a,""b"');
-  expect(
-    exportFightCsv({ ...record, config: { ...record.config, player: "=1+1" } }),
-  ).toContain('"\'=1+1"');
+  expect(exportFightCsv({ ...record, config: { ...record.config, player: "=1+1" } })).toContain(
+    '"\'=1+1"',
+  );
 });
 
 test("draw counts obey cap, exclude retain, and distinguish losing end from next turn", () => {
@@ -290,14 +257,7 @@ test("draw counts obey cap, exclude retain, and distinguish losing end from next
   const result = resolve(run, { type: "end" }, "candidate");
   expect(result.accounting.drawn).toBe(2);
   expect(combat(result.run).hand.length).toBe(10);
-  const record = recordAction(
-    beginRecord(config, run),
-    run,
-    { type: "end" },
-    result,
-    100,
-    200,
-  );
+  const record = recordAction(beginRecord(config, run), run, { type: "end" }, result, 100, 200);
   expect(record.actions[0]?.retained.length).toBe(8);
   expect(record.actions[0]?.unplayed.length).toBe(8);
   expect(record.actions[0]?.unusedEnergy).toBe(3);
@@ -305,8 +265,8 @@ test("draw counts obey cap, exclude retain, and distinguish losing end from next
   const loss = resolve(run, { type: "end" }, "candidate");
   expect(loss.accounting.drawn).toBe(0);
   expect(
-    recordAction(beginRecord(config, run), run, { type: "end" }, loss, 100, 200)
-      .result?.playerTurns,
+    recordAction(beginRecord(config, run), run, { type: "end" }, loss, 100, 200).result
+      ?.playerTurns,
   ).toBe(1);
 });
 
@@ -314,17 +274,8 @@ test("telemetry records unlock, suppression and Howl reactivation in order", () 
   const run = setup();
   combat(run).dread = 4;
   const unlock = resolve(run, { type: "end" }, "candidate");
-  let record = recordAction(
-    beginRecord(config, run),
-    run,
-    { type: "end" },
-    unlock,
-    1,
-    1,
-  );
-  expect(record.actions[0]?.thresholdEvents).toEqual([
-    { at: 4, event: "unlock", dread: 4 },
-  ]);
+  let record = recordAction(beginRecord(config, run), run, { type: "end" }, unlock, 1, 1);
+  expect(record.actions[0]?.thresholdEvents).toEqual([{ at: 4, event: "unlock", dread: 4 }]);
   const next = unlock.run;
   const c = combat(next);
   c.hand = [makeCard(next, "unseen")];
@@ -333,19 +284,13 @@ test("telemetry records unlock, suppression and Howl reactivation in order", () 
   const action: Action = { type: "play", uid: card.uid, target: null };
   const lower = resolve(next, action, "candidate");
   record = recordAction(record, next, action, lower, 1, 2);
-  expect(record.actions[1]?.thresholdEvents).toEqual([
-    { at: 4, event: "suppressed", dread: 2 },
-  ]);
+  expect(record.actions[1]?.thresholdEvents).toEqual([{ at: 4, event: "suppressed", dread: 2 }]);
   const low = lower.run;
   combat(low).enemies = [makeEnemy(low, "stag"), makeEnemy(low, "wolf")];
   const howl = resolve(low, { type: "end" }, "candidate");
   record = recordAction(record, low, { type: "end" }, howl, 1, 3);
-  expect(record.actions[2]?.thresholdEvents).toEqual([
-    { at: 4, event: "reactivate", dread: 4 },
-  ]);
-  expect(thresholdState(low, combat(low), "candidate")[0]?.state).toBe(
-    "suppressed",
-  );
+  expect(record.actions[2]?.thresholdEvents).toEqual([{ at: 4, event: "reactivate", dread: 4 }]);
+  expect(thresholdState(low, combat(low), "candidate")[0]?.state).toBe("suppressed");
 });
 
 test("clock excludes hidden, paused and resolution intervals and drains once per accepted action", () => {
@@ -375,19 +320,13 @@ test("diagnostic ablations replace slots before shuffle without changing IDs or 
       variant: "ablation",
     });
     expect(variant.rng).toBe(base.rng);
-    expect(combat(variant).hand.map((c) => c.uid)).toEqual(
-      combat(base).hand.map((c) => c.uid),
-    );
+    expect(combat(variant).hand.map((c) => c.uid)).toEqual(combat(base).hand.map((c) => c.uid));
     expect(variant.deck.filter((c) => c.def === "strike").length).toBe(2);
-    expect(variant.deck.filter((c) => c.def === "bash").length).toBe(
-      deckId === "defense" ? 2 : 0,
-    );
+    expect(variant.deck.filter((c) => c.def === "bash").length).toBe(deckId === "defense" ? 2 : 0);
     const replaced = base.deck
       .filter((card, i) => card.def !== variant.deck[i]?.def)
       .map((card) => card.def);
-    expect(replaced).toEqual(
-      deckId === "defense" ? ["shield", "shield"] : ["spark", "sacrifice"],
-    );
+    expect(replaced).toEqual(deckId === "defense" ? ["shield", "shield"] : ["spark", "sacrifice"]);
   }
 });
 

@@ -15,11 +15,7 @@ test("lab-baseline-v1:39 preserves the original search failure and tempo recover
   const control = simulate(config);
   const tempo = simulate({ ...config, bot: "search-tempo" });
   expect([control.outcome, control.turns]).toEqual(["loss", 12]);
-  expect([tempo.outcome, tempo.finalHealth, tempo.turns]).toEqual([
-    "win",
-    21,
-    13,
-  ]);
+  expect([tempo.outcome, tempo.finalHealth, tempo.turns]).toEqual(["win", 21, 13]);
 });
 
 test("lab-experiment-v1:9 isolates Dread recovery on exactly the same legal sequence", () => {
@@ -57,7 +53,12 @@ test("lab-experiment-v1:16 preserves shield sequencing as a pacing diagnostic", 
   });
   expect([control.finalHealth, control.turns]).toEqual([69, 7]);
   expect([ablation.finalHealth, ablation.turns]).toEqual([27, 19]);
-  expect(
-    control.history.filter((h) => h.turn === 2).map((h) => h.card),
-  ).toEqual(["pass", "pass", "guard", "rally", "shield", null]);
+  expect(control.history.filter((h) => h.turn === 2).map((h) => h.card)).toEqual([
+    "pass",
+    "pass",
+    "guard",
+    "rally",
+    "shield",
+    null,
+  ]);
 });

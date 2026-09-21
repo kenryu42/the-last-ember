@@ -2,21 +2,12 @@ import { parseArgs } from "node:util";
 import { createInterface } from "node:readline";
 import { z } from "zod";
 import { labConfigSchema } from "../../src/lab/config";
-import {
-  simulate as simulateGame,
-  summarizeLab,
-} from "../../src/lab/simulation";
-import {
-  PLAYTEST_DECKS,
-  PLAYTEST_ENCOUNTERS,
-} from "../../src/lab/fixtures/combat";
+import { simulate as simulateGame, summarizeLab } from "../../src/lab/simulation";
+import { PLAYTEST_DECKS, PLAYTEST_ENCOUNTERS } from "../../src/lab/fixtures/combat";
 import { progressionSchema, simulateJourney } from "../../src/lab/journey";
 
 const write = (x: unknown) => process.stdout.write(JSON.stringify(x) + "\n");
-function simulate(
-  config: Parameters<typeof simulateGame>[0],
-  detailed = false,
-) {
+function simulate(config: Parameters<typeof simulateGame>[0], detailed = false) {
   try {
     return simulateGame(config, detailed);
   } catch (error) {
@@ -50,14 +41,7 @@ try {
   if (command !== "journey" && values.progression !== "static")
     throw new Error("--progression applies only to journey simulations");
   const prototype = z
-    .enum([
-      "escape",
-      "bearer",
-      "branches",
-      "conversion",
-      "concealment",
-      "late-escape",
-    ])
+    .enum(["escape", "bearer", "branches", "conversion", "concealment", "late-escape"])
     .optional()
     .parse(values.prototype);
   if (prototype && (command !== "journey" || values.rules !== "recurring"))
@@ -132,12 +116,7 @@ try {
   } else if (command === "simulate") {
     for (let i = 0; i < count; i++) write(simulate(config(i)));
   } else if (command === "replay") {
-    write(
-      simulate(
-        config(0, { seed: values.seed, planningSeed: `policy:${values.seed}` }),
-        true,
-      ),
-    );
+    write(simulate(config(0, { seed: values.seed, planningSeed: `policy:${values.seed}` }), true));
   } else if (command === "analyze") {
     // Validate persisted metrics at the file boundary, retaining only report inputs.
     const rowSchema = z.object({
@@ -165,14 +144,7 @@ try {
     write(summarizeLab(rows));
   } else if (command === "suite") {
     const suite = z
-      .enum([
-        "smoke",
-        "balance",
-        "stress",
-        "exploit",
-        "regression",
-        "experiments",
-      ])
+      .enum(["smoke", "balance", "stress", "exploit", "regression", "experiments"])
       .parse(values.suite);
     const bots =
       suite === "stress"
@@ -235,9 +207,7 @@ try {
             }
           }
           if (!values.quiet)
-            process.stderr.write(
-              `${suite}: ${deck.id}/${encounter.id}/${bot} completed\n`,
-            );
+            process.stderr.write(`${suite}: ${deck.id}/${encounter.id}/${bot} completed\n`);
         }
   } else
     throw new Error(

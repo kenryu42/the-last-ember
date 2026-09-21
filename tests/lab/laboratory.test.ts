@@ -1,10 +1,6 @@
+import { changeHiddenState } from "../support/combat";
 import { expect, test } from "bun:test";
-import {
-  assertInvariants,
-  distribution,
-  simulate,
-  summarizeLab,
-} from "../../src/lab/simulation";
+import { assertInvariants, distribution, simulate, summarizeLab } from "../../src/lab/simulation";
 import { botSchema, labConfigSchema } from "../../src/lab/config";
 import { selectAction } from "../../src/lab/policies/selection";
 import { createHeadlessRun } from "../../src/lab/fixtures/headless";
@@ -30,17 +26,10 @@ test("omitting animation snapshots preserves legal and illegal benchmark transit
           encounterId,
           fixture: { deckId, variant: "base" },
         });
-        for (
-          let index = 0;
-          index < 80 && run.scene.kind === "combat";
-          index++
-        ) {
+        for (let index = 0; index < 80 && run.scene.kind === "combat"; index++) {
           const o = observe(run, rules);
           const legal = legalActions(o);
-          for (const action of [
-            ...legal,
-            { type: "play", uid: -1, target: null } as const,
-          ]) {
+          for (const action of [...legal, { type: "play", uid: -1, target: null } as const]) {
             const full = resolve(run, action, rules);
             const compact = resolve(run, action, rules, {
               captureFrames: false,
@@ -48,11 +37,7 @@ test("omitting animation snapshots preserves legal and illegal benchmark transit
             expect(compact).toEqual({ ...full, frames: [] });
             frames += full.frames.length;
           }
-          run = resolve(
-            run,
-            selectAction(o, legal, "random", `frames:${index}`, 96),
-            rules,
-          ).run;
+          run = resolve(run, selectAction(o, legal, "random", `frames:${index}`, 96), rules).run;
         }
       }
   expect(frames).toBeGreaterThan(100);
@@ -76,15 +61,9 @@ test("all lab policies obey public observation and replay deterministic legal ou
     }
     expect(result.finalHealth).toBe(run.hp);
     expect(result.drawn).toBe(draws);
-    expect(Object.values(result.cards).reduce((n, c) => n + c.drawn, 0)).toBe(
-      draws,
-    );
-    expect(Object.values(result.cards).reduce((n, c) => n + c.played, 0)).toBe(
-      run.stats.cards,
-    );
-    expect(result.generated).toBeGreaterThanOrEqual(
-      result.spent + result.unused,
-    );
+    expect(Object.values(result.cards).reduce((n, c) => n + c.drawn, 0)).toBe(draws);
+    expect(Object.values(result.cards).reduce((n, c) => n + c.played, 0)).toBe(run.stats.cards);
+    expect(result.generated).toBeGreaterThanOrEqual(result.spent + result.unused);
     if (run.scene.kind === "ending")
       expect(resolve(run, { type: "end" }, c.rules).error).not.toBeNull();
   }
@@ -108,9 +87,7 @@ test("random legal fuzz covers every fixture and validates all available actions
           for (const action of step.legal)
             expect(resolve(step.before, action, c.rules).error).toBeNull();
           expect(JSON.stringify(step.before)).toBe(before);
-          expect(resolve(step.before, step.selected, c.rules).run).toEqual(
-            step.after,
-          );
+          expect(resolve(step.before, step.selected, c.rules).run).toEqual(step.after);
         }
       }
 });
@@ -134,12 +111,8 @@ test("invariants reject missing, duplicated and altered card instances", () => {
 });
 
 test("hidden order/RNG do not influence any new policy", () => {
-  const a = createHeadlessRun(config),
-    b = structuredClone(a);
-  if (b.scene.kind !== "combat") throw new Error("fixture");
-  b.scene.draw.reverse();
-  b.rng = 17;
-  b.seed = "hidden";
+  const a = createHeadlessRun(config);
+  const b = changeHiddenState(a, 17, "hidden");
   const oa = observe(a, "control"),
     ob = observe(b, "control");
   expect(oa).toEqual(ob);
@@ -182,34 +155,17 @@ test("CLI seed replay reproduces the selected simulation and rejects invalid opt
   ]);
   expect(batch.exitCode).toBe(0);
   const result = JSON.parse(batch.stdout.toString());
-  const replay = Bun.spawnSync([
-    ...args,
-    "replay",
-    "--seed",
-    "cli-check:0",
-    "--bot",
-    "random",
-  ]);
+  const replay = Bun.spawnSync([...args, "replay", "--seed", "cli-check:0", "--bot", "random"]);
   expect(replay.exitCode).toBe(0);
   expect(JSON.parse(replay.stdout.toString()).trace).toEqual(result.trace);
   const report = Bun.spawnSync([...args, "analyze"], { stdin: batch.stdout });
   expect(report.exitCode).toBe(0);
   expect(JSON.parse(report.stdout.toString())[0].n).toBe(1);
   expect(Bun.spawnSync([...args, "simulate", "--games", "0"]).exitCode).toBe(1);
-  const wrongRules = Bun.spawnSync([
-    ...args,
-    "journey",
-    "--games",
-    "1",
-    "--rules",
-    "candidate",
-  ]);
+  const wrongRules = Bun.spawnSync([...args, "journey", "--games", "1", "--rules", "candidate"]);
   expect(wrongRules.exitCode).toBe(1);
   expect(wrongRules.stderr.toString()).toContain("benchmark-only");
-  expect(
-    Bun.spawnSync([...args, "simulate", "--progression", "shield-aware"])
-      .exitCode,
-  ).toBe(1);
+  expect(Bun.spawnSync([...args, "simulate", "--progression", "shield-aware"]).exitCode).toBe(1);
 });
 
 test("report pairs configurations rather than matching file order", () => {
@@ -253,9 +209,7 @@ test("report pairs configurations rather than matching file order", () => {
   expect(report.stdout.toString()).toContain("2 matched pairs");
   expect(report.stdout.toString()).toContain("Mean HP delta 5.000");
   const duplicate = Bun.spawnSync(command, {
-    stdin: Buffer.from(
-      [...rows, rows[0]].map((r) => JSON.stringify(r)).join("\n"),
-    ),
+    stdin: Buffer.from([...rows, rows[0]].map((r) => JSON.stringify(r)).join("\n")),
   });
   expect(duplicate.exitCode).not.toBe(0);
 });

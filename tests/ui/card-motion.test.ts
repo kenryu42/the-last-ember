@@ -1,3 +1,4 @@
+import type { Combat, Frame } from "../../src/game/model";
 import { expect, test } from "bun:test";
 import { draw, startCombat } from "../../src/game/engine/combat/setup";
 import { makeCard } from "../../src/game/engine/rewards";
@@ -56,21 +57,12 @@ for (const map of [false, true]) {
     let presented = discardedHand(combat);
     const moves: string[] = [];
     const deals: number[][] = [];
-    for (const frame of result.frames) {
-      if (frame.run.scene.kind !== "combat") continue;
-      const sequence = drawSequence(presented, frame.run.scene);
+    for (const { frame, sequence } of presentationSequences(presented, result.frames)) {
       for (const step of sequence.steps) {
         moves.push(step.kind);
-        if (step.kind === "draw")
-          deals.push(step.cards.map((card) => card.uid));
-        const zones = [
-          ...step.combat.hand,
-          ...step.combat.draw,
-          ...step.combat.discard,
-        ];
-        expect(new Set(zones.map((card) => card.uid)).size).toBe(
-          run.deck.length,
-        );
+        if (step.kind === "draw") deals.push(step.cards.map((card) => card.uid));
+        const zones = [...step.combat.hand, ...step.combat.draw, ...step.combat.discard];
+        expect(new Set(zones.map((card) => card.uid)).size).toBe(run.deck.length);
         expect(zones).toHaveLength(run.deck.length);
       }
       const final = sequence.steps.at(-1)?.combat ?? sequence.initial;
@@ -86,9 +78,7 @@ for (const map of [false, true]) {
         : [],
     );
     expect(deals.map((cards) => cards.length)).toEqual([2, map ? 4 : 3]);
-    expect(deals.flat()).toEqual(
-      presented.hand.slice(1).map((card) => card.uid),
-    );
+    expect(deals.flat()).toEqual(presented.hand.slice(1).map((card) => card.uid));
     expect(presented.hand).toHaveLength(map ? 7 : 6);
     expect(run).toEqual(original);
   });
@@ -130,11 +120,8 @@ test("mid-turn draw uses actual card identities and cannot recycle the resolving
     target: target.uid,
   });
   expect(result.error).toBeNull();
-  let presented = combat;
   const moves = [];
-  for (const frame of result.frames) {
-    if (frame.run.scene.kind !== "combat") continue;
-    const sequence = drawSequence(presented, frame.run.scene);
+  for (const { sequence } of presentationSequences(combat, result.frames)) {
     for (const step of sequence.steps) {
       moves.push(step.kind);
       expect(
@@ -143,7 +130,6 @@ test("mid-turn draw uses actual card identities and cannot recycle the resolving
         ),
       ).toBe(false);
     }
-    presented = frame.run.scene;
   }
   expect(moves).toEqual(["shuffle", "draw"]);
 });
@@ -161,3 +147,16 @@ test("a fatal enemy phase does not deal a new hand", () => {
     presented = frame.run.scene;
   }
 });
+
+function* presentationSequences(initial: Combat, frames: Frame[]) {
+  let presented = initial;
+  for (const frame of frames) {
+    const scene = frame.run.scene;
+    if (scene.kind !== "combat") continue;
+    yield {
+      frame: { ...frame, run: { ...frame.run, scene } },
+      sequence: drawSequence(presented, scene),
+    };
+    presented = scene;
+  }
+}

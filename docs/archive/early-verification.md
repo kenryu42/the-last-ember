@@ -53,18 +53,18 @@ Two accidental collisions were corrected:
 
 The remaining close comparisons have useful differences and were preserved:
 
-| Cards reviewed, by ID | Distinction retained |
-| --- | --- |
-| `strike`, `guard` | Simple starter baselines. Both are excluded from reward and merchant offers; stronger acquired replacements are intentional progression. |
+| Cards reviewed, by ID                                      | Distinction retained                                                                                                                                                           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `strike`, `guard`                                          | Simple starter baselines. Both are excluded from reward and merchant offers; stronger acquired replacements are intentional progression.                                       |
 | `arrow`, `flame`, `cinder`, `defiance`, `needle`, `double` | Draw versus raw damage, energy/Dread costs, opposite Dread payoff windows, and per-hit relic bonuses. Conditional and repeated damage cannot be reduced to one printed number. |
-| `volley`, `inferno` | Quiet area damage versus a larger area burst that attracts Dread. |
-| `pass`, `oath`, `ward`, `resolve` | Immediate defense with different exposure costs, retained defense, or defense scaling with existing Dread. |
-| `unseen`, `courage`, `home` | Free small retained defense versus paid concealment/Block and a larger two-energy retained package. |
-| `bash`, `shield`, `stand` | Mixed attack/Block, payoff for previously built Block, or a larger high-Dread attack/defense commitment. |
-| `challenge`, `feint` | Weak reduces incoming damage; Vulnerable amplifies subsequent attacks. |
-| `trail`, `scout`, `silence`, `remember`, `lantern` | One-shot free draw versus repeatable paid draw, different concealment depths, and extra draw in exchange for exposure. |
-| `rally`, `spark`, `sacrifice` | Safe small energy plus Block versus escalating energy/exposure bursts. Gaining Dread can help an existing payoff, so it is not universally a penalty. |
-| `bread`, `sunrise` | Cheaper heal-and-draw versus a larger single-card heal at higher energy/exposure cost. |
+| `volley`, `inferno`                                        | Quiet area damage versus a larger area burst that attracts Dread.                                                                                                              |
+| `pass`, `oath`, `ward`, `resolve`                          | Immediate defense with different exposure costs, retained defense, or defense scaling with existing Dread.                                                                     |
+| `unseen`, `courage`, `home`                                | Free small retained defense versus paid concealment/Block and a larger two-energy retained package.                                                                            |
+| `bash`, `shield`, `stand`                                  | Mixed attack/Block, payoff for previously built Block, or a larger high-Dread attack/defense commitment.                                                                       |
+| `challenge`, `feint`                                       | Weak reduces incoming damage; Vulnerable amplifies subsequent attacks.                                                                                                         |
+| `trail`, `scout`, `silence`, `remember`, `lantern`         | One-shot free draw versus repeatable paid draw, different concealment depths, and extra draw in exchange for exposure.                                                         |
+| `rally`, `spark`, `sacrifice`                              | Safe small energy plus Block versus escalating energy/exposure bursts. Gaining Dread can help an existing payoff, so it is not universally a penalty.                          |
+| `bread`, `sunrise`                                         | Cheaper heal-and-draw versus a larger single-card heal at higher energy/exposure cost.                                                                                         |
 
 No further same-tier, same-cost exact effect packages remain. A regression test
 ignores names, artwork and keywords and normalizes the commuting Block/Dread/energy

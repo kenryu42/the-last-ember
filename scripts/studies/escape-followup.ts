@@ -21,22 +21,13 @@ const seeds = [
   ...Array.from({ length: count }, (_, index) => `${prefix}:${index}`),
   `fresh:${freshSeed}`,
 ];
-const planners = [
-  "work-first",
-  "threat-first",
-  "health-weighted",
-  "fast-kill",
-] as const;
+const planners = ["work-first", "threat-first", "health-weighted", "fast-kill"] as const;
 type Planner = (typeof planners)[number];
 const relics = [null, ...startingRelicSchema.options] as const;
 const deckIds = ["quiet", "exposed", "defense"] as const;
 const targets = [4, 5] as const;
 
-function selectAction(
-  run: Run,
-  planner: Planner,
-  planningSeed: string,
-): CombatAction {
+function selectAction(run: Run, planner: Planner, planningSeed: string): CombatAction {
   const observation = observe(run, "recurring");
   const legal = legalActions(observation);
   if (planner === "work-first") {
@@ -44,8 +35,7 @@ function selectAction(
     if (work) return work;
     return planV2(observation, planningSeed, 256, 3).action;
   }
-  if (planner === "health-weighted")
-    return planV2(observation, planningSeed, 256, 8).action;
+  if (planner === "health-weighted") return planV2(observation, planningSeed, 256, 8).action;
   const combatOnly =
     observation.kind === "combat"
       ? { ...observation, objective: null, victoryCondition: "kill-all" }
@@ -131,9 +121,7 @@ function simulateOne({
       .filter((s) => s.kind === "combat")
       .at(-1);
     if (finalCombat?.kind === "combat") {
-      lastLivingEnemies = finalCombat.enemies.filter(
-        (enemy) => enemy.hp > 0,
-      ).length;
+      lastLivingEnemies = finalCombat.enemies.filter((enemy) => enemy.hp > 0).length;
       lastProgress = finalCombat.objective?.progress ?? 0;
     }
     run = result.run;
@@ -189,10 +177,7 @@ const cells = targets.flatMap((target) =>
   relics.flatMap((relic) =>
     planners.map((planner) => {
       const selected = rows.filter(
-        (row) =>
-          row.target === target &&
-          row.relic === relic &&
-          row.planner === planner,
+        (row) => row.target === target && row.relic === relic && row.planner === planner,
       );
       return {
         target,
@@ -214,21 +199,14 @@ const comparisons = targets.flatMap((target) =>
       .filter((planner) => planner !== "work-first")
       .map((planner) => {
         const rush = rows.filter(
-          (row) =>
-            row.target === target &&
-            row.relic === relic &&
-            row.planner === "work-first",
+          (row) => row.target === target && row.relic === relic && row.planner === "work-first",
         );
         const alternatives = rows.filter(
-          (row) =>
-            row.target === target &&
-            row.relic === relic &&
-            row.planner === planner,
+          (row) => row.target === target && row.relic === relic && row.planner === planner,
         );
         const pairs = rush.flatMap((left) => {
           const right = alternatives.find(
-            (candidate) =>
-              candidate.seed === left.seed && candidate.deckId === left.deckId,
+            (candidate) => candidate.seed === left.seed && candidate.deckId === left.deckId,
           );
           return right ? [{ left, right }] : [];
         });
@@ -237,15 +215,10 @@ const comparisons = targets.flatMap((target) =>
           relic,
           alternative: planner,
           pairs: pairs.length,
-          rushDominates: pairs.filter(({ left, right }) =>
-            dominates(left, right),
-          ).length,
-          alternativeDominates: pairs.filter(({ left, right }) =>
-            dominates(right, left),
-          ).length,
+          rushDominates: pairs.filter(({ left, right }) => dominates(left, right)).length,
+          alternativeDominates: pairs.filter(({ left, right }) => dominates(right, left)).length,
           incomparableOrEqual: pairs.filter(
-            ({ left, right }) =>
-              !dominates(left, right) && !dominates(right, left),
+            ({ left, right }) => !dominates(left, right) && !dominates(right, left),
           ).length,
         };
       }),
@@ -291,6 +264,5 @@ writeFileSync(
   ) + "\n",
 );
 process.stdout.write(
-  JSON.stringify({ base, rows: rows.length, cells, comparisons }, null, 2) +
-    "\n",
+  JSON.stringify({ base, rows: rows.length, cells, comparisons }, null, 2) + "\n",
 );

@@ -25,9 +25,7 @@ export function createAttackTextures() {
       for (let x = 0; x < 64; x++) {
         const i = (y * 64 + x) * 4,
           r = Math.hypot((x - 32) / 31, (y - 32) / 31),
-          n =
-            0.83 +
-            0.17 * Math.sin(x * 0.8 + Math.sin(y * 0.5)) * Math.sin(y * 0.7);
+          n = 0.83 + 0.17 * Math.sin(x * 0.8 + Math.sin(y * 0.5)) * Math.sin(y * 0.7);
         im.data[i] = im.data[i + 1] = im.data[i + 2] = 255;
         im.data[i + 3] = 255 * Math.pow(Math.max(0, 1 - r), 1.6) * n;
       }
@@ -41,15 +39,9 @@ export function createAttackTextures() {
           v = y / 96,
           center = 32 + Math.sin(v * 7) * 6 * (1 - v),
           r = Math.hypot((x - center) / (8 + v * 22), (y - 60) / 50),
-          n =
-            0.75 +
-            0.25 *
-              Math.sin(x * 0.55 + Math.sin(y * 0.22) * 3) *
-              Math.sin(y * 0.4);
+          n = 0.75 + 0.25 * Math.sin(x * 0.55 + Math.sin(y * 0.22) * 3) * Math.sin(y * 0.4);
         im.data[i] = im.data[i + 1] = im.data[i + 2] = 255;
-        im.data[i + 3] = Math.round(
-          255 * Math.pow(Math.max(0, 1 - r), 1.05) * n,
-        );
+        im.data[i + 3] = Math.round(255 * Math.pow(Math.max(0, 1 - r), 1.05) * n);
       }
     c.putImageData(im, 0, 0);
   });
@@ -84,10 +76,7 @@ export function createAttackTextures() {
           dx = (x - 48) / 43,
           dy = (y - 48) / 43,
           r = Math.hypot(dx, dy),
-          noise =
-            Math.sin(x * 0.43 + Math.sin(y * 0.31) * 2) *
-            Math.sin(y * 0.47) *
-            0.035,
+          noise = Math.sin(x * 0.43 + Math.sin(y * 0.31) * 2) * Math.sin(y * 0.47) * 0.035,
           edge = r + noise,
           hot = C(1 - r);
         im.data[i] = 255;

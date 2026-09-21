@@ -8,8 +8,7 @@ export function loadRun(): Loaded {
   } catch {
     return {
       kind: "error",
-      message:
-        "Browser storage is unavailable. You can play, but progress cannot be saved here.",
+      message: "Browser storage is unavailable. You can play, but progress cannot be saved here.",
     };
   }
 }

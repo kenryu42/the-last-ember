@@ -24,8 +24,7 @@ export function StopScene({
   const art = encounterArt(run);
   const heading = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
-    if (!document.querySelector("dialog[open]"))
-      heading.current?.focus({ preventScroll: true });
+    if (!document.querySelector("dialog[open]")) heading.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, []);
   const pendingUpgrade = s.kind === "event" ? s.pendingUpgrade : undefined;
@@ -35,9 +34,7 @@ export function StopScene({
     </button>
   );
   return (
-    <section
-      className={`stop-scene scene-enter ${art ? `illustrated-stop ${s.kind}-stop` : ""}`}
-    >
+    <section className={`stop-scene scene-enter ${art ? `illustrated-stop ${s.kind}-stop` : ""}`}>
       {art && <EncounterIllustration key={art.src} art={art} />}
       <div className="stop-content">
         {s.kind === "reward" && (
@@ -55,8 +52,7 @@ export function StopScene({
               </span>
               {s.relic && (
                 <span title={RELICS.find((r) => r.id === s.relic)?.text}>
-                  <Icon name="elite" />{" "}
-                  {RELICS.find((r) => r.id === s.relic)?.name}
+                  <Icon name="elite" /> {RELICS.find((r) => r.id === s.relic)?.name}
                   <small>{RELICS.find((r) => r.id === s.relic)?.text}</small>
                 </span>
               )}
@@ -70,17 +66,13 @@ export function StopScene({
                 />
               ))}
             </div>
-            <button
-              className="secondary"
-              onClick={() => dispatch({ type: "reward", card: null })}
-            >
+            <button className="secondary" onClick={() => dispatch({ type: "reward", card: null })}>
               Skip card{s.boss ? " & enter the next act" : " & continue"}{" "}
               <Icon name="arrow" size={17} />
             </button>
             {s.boss && (
               <p className="muted">
-                Your relic is kept even if you skip. Restore 20% health on the
-                road ahead.
+                Your relic is kept even if you skip. Restore 20% health on the road ahead.
               </p>
             )}
           </>
@@ -101,9 +93,7 @@ export function StopScene({
             </p>
             {s.used ? (
               <>
-                <p className="resolved-copy">
-                  Rested, mended, and ready for the road.
-                </p>
+                <p className="resolved-copy">Rested, mended, and ready for the road.</p>
                 {leave}
               </>
             ) : (
@@ -113,9 +103,8 @@ export function StopScene({
                   <span>
                     <b>Rest by the fire</b>
                     <small>
-                      Restore{" "}
-                      {Math.ceil(run.maxHp * 0.25) + (has(run, "bowl") ? 3 : 0)}{" "}
-                      health, up to {run.maxHp}.
+                      Restore {Math.ceil(run.maxHp * 0.25) + (has(run, "bowl") ? 3 : 0)} health, up
+                      to {run.maxHp}.
                     </small>
                   </span>
                 </button>
@@ -126,9 +115,7 @@ export function StopScene({
                   <Icon name="deck" />
                   <span>
                     <b>Prepare for tomorrow</b>
-                    <small>
-                      Improve one card. Preview the change before choosing.
-                    </small>
+                    <small>Improve one card. Preview the change before choosing.</small>
                   </span>
                 </button>
               </div>
@@ -149,9 +136,7 @@ export function StopScene({
               <>
                 <p className="resolved-copy">
                   {s.resolved}
-                  {pendingUpgrade !== undefined
-                    ? " Choose how to improve Ancient flame."
-                    : ""}
+                  {pendingUpgrade !== undefined ? " Choose how to improve Ancient flame." : ""}
                 </p>
                 {pendingUpgrade !== undefined ? (
                   <div className="upgrade-compare">
@@ -210,8 +195,7 @@ export function StopScene({
               Something for the long road.
             </h1>
             <p className="story-copy">
-              “Take what you need. Leave a light in the window when you get
-              home.”
+              “Take what you need. Leave a light in the window when you get home.”
             </p>
             <div className="shop-layout">
               <div className="card-choices">
@@ -221,9 +205,7 @@ export function StopScene({
                       <CardView
                         card={{ uid: i, def: id, upgraded: false }}
                         disabled={run.gold < 40}
-                        onClick={() =>
-                          dispatch({ type: "buy", item: "card", index: i })
-                        }
+                        onClick={() => dispatch({ type: "buy", item: "card", index: i })}
                       />
                     ) : (
                       <div className="sold-card">
@@ -232,39 +214,27 @@ export function StopScene({
                         <small>Travel safely.</small>
                       </div>
                     )}
-                    <span className="price">
-                      {id ? "40 gold" : "Purchased"}
-                    </span>
+                    <span className="price">{id ? "40 gold" : "Purchased"}</span>
                   </div>
                 ))}
               </div>
               <div className="shop-services">
                 <button
                   disabled={!s.relic || run.gold < 85}
-                  onClick={() =>
-                    dispatch({ type: "buy", item: "relic", index: 0 })
-                  }
+                  onClick={() => dispatch({ type: "buy", item: "relic", index: 0 })}
                 >
                   <Icon name="elite" />
-                  <b>
-                    {s.relic
-                      ? RELICS.find((r) => r.id === s.relic)?.name
-                      : "Relic sold"}
-                  </b>
+                  <b>{s.relic ? RELICS.find((r) => r.id === s.relic)?.name : "Relic sold"}</b>
                   <small>{RELICS.find((r) => r.id === s.relic)?.text}</small>
                   <span>85 gold</span>
                 </button>
                 <button
                   disabled={s.healed || run.gold < 30 || run.hp === run.maxHp}
-                  onClick={() =>
-                    dispatch({ type: "buy", item: "heal", index: 0 })
-                  }
+                  onClick={() => dispatch({ type: "buy", item: "heal", index: 0 })}
                 >
                   <Icon name="heart" />
                   <b>{s.healed ? "Tonic purchased" : "A warming tonic"}</b>
-                  <small>
-                    Restore {20 + (has(run, "bowl") ? 3 : 0)} health.
-                  </small>
+                  <small>Restore {20 + (has(run, "bowl") ? 3 : 0)} health.</small>
                   <span>30 gold</span>
                 </button>
                 <button
@@ -283,9 +253,7 @@ export function StopScene({
         )}
         {choose && (
           <Modal
-            title={
-              choose === "upgrade" ? "Improve one card" : "Set down a burden"
-            }
+            title={choose === "upgrade" ? "Improve one card" : "Set down a burden"}
             close={() => {
               setChoose(null);
               setCandidate(null);
@@ -329,9 +297,7 @@ export function StopScene({
                   )}
                 </div>
                 <div className="dialog-actions">
-                  <button onClick={() => setCandidate(null)}>
-                    Choose another
-                  </button>
+                  <button onClick={() => setCandidate(null)}>Choose another</button>
                   {choose === "upgrade" &&
                   candidate.def === "flame" &&
                   run.prototype?.branchUpgrades ? (
@@ -353,9 +319,7 @@ export function StopScene({
                         setCandidate(null);
                       }}
                     >
-                      {choose === "upgrade"
-                        ? "Confirm improvement"
-                        : "Remove · 45 gold"}
+                      {choose === "upgrade" ? "Confirm improvement" : "Remove · 45 gold"}
                     </button>
                   )}
                 </div>
@@ -365,11 +329,7 @@ export function StopScene({
                 {run.deck
                   .filter((c) => choose === "remove" || !c.upgraded)
                   .map((c) => (
-                    <CardView
-                      key={c.uid}
-                      card={c}
-                      onClick={() => setCandidate(c)}
-                    />
+                    <CardView key={c.uid} card={c} onClick={() => setCandidate(c)} />
                   ))}
               </div>
             )}
@@ -377,9 +337,7 @@ export function StopScene({
         )}
         <button
           className="text-button deck-stop"
-          onClick={() =>
-            inspect({ title: "Your permanent deck", cards: run.deck })
-          }
+          onClick={() => inspect({ title: "Your permanent deck", cards: run.deck })}
         >
           Inspect your deck · {run.deck.length} cards
         </button>

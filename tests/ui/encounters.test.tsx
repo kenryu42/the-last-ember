@@ -21,20 +21,14 @@ test("encounter artwork follows the actual formation without mutating enemy orde
   run.act = 2;
   startCombat(run, "elite");
   const before = structuredClone(run);
-  expect(encounterArt(run)?.src).toBe(
-    "/assets/encounters/mountain/crow-wraith-wraith.webp",
-  );
+  expect(encounterArt(run)?.src).toBe("/assets/encounters/mountain/crow-wraith-wraith.webp");
   expect(run).toEqual(before);
   if (run.scene.kind !== "combat") throw new Error("Expected combat");
   run.scene.enemies.reverse();
-  expect(encounterArt(run)?.src).toBe(
-    "/assets/encounters/mountain/crow-wraith-wraith.webp",
-  );
+  expect(encounterArt(run)?.src).toBe("/assets/encounters/mountain/crow-wraith-wraith.webp");
   run.scene.enemies = [makeEnemy(run, "wolf"), makeEnemy(run, "crow")];
   run.act = 1;
-  expect(encounterArt(run)?.src).toBe(
-    "/assets/encounters/ruins/crow-wolf.webp",
-  );
+  expect(encounterArt(run)?.src).toBe("/assets/encounters/ruins/crow-wolf.webp");
 });
 
 test("every reachable encounter formation, Act stop and story has bundled full-scene art", async () => {
@@ -163,16 +157,12 @@ test("pending battle introduction survives save parsing without rerolling the en
 test("noncombat illustrations expose real choices without an extra continue gate", () => {
   const run = newRun("stop-art");
   run.scene = { kind: "camp", used: false };
-  let html = renderToStaticMarkup(
-    <StopScene run={run} dispatch={() => {}} inspect={() => {}} />,
-  );
+  let html = renderToStaticMarkup(<StopScene run={run} dispatch={() => {}} inspect={() => {}} />);
   expect(html).toContain("/assets/encounters/forest/camp.webp");
   expect(html).toContain("Rest by the fire");
   expect(html).not.toContain("Prepare for battle");
   run.scene = { kind: "event", event: 4, resolved: null };
-  html = renderToStaticMarkup(
-    <StopScene run={run} dispatch={() => {}} inspect={() => {}} />,
-  );
+  html = renderToStaticMarkup(<StopScene run={run} dispatch={() => {}} inspect={() => {}} />);
   expect(html).toContain("/assets/encounters/events/crossing.webp");
   expect(html).toContain("Follow her path");
   expect(html).toContain("Repair the ropeway");

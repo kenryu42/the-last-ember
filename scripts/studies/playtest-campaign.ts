@@ -1,23 +1,13 @@
 import { HeadlessFight } from "../../src/lab/runner";
-import {
-  POLICY_VERSION,
-  configSchema,
-  policySchema,
-} from "../../src/lab/headless-config";
-import {
-  PLAYTEST_DECKS,
-  PLAYTEST_ENCOUNTERS,
-} from "../../src/lab/fixtures/combat";
+import { POLICY_VERSION, configSchema, policySchema } from "../../src/lab/headless-config";
+import { PLAYTEST_DECKS, PLAYTEST_ENCOUNTERS } from "../../src/lab/fixtures/combat";
 
 // Frozen before the first campaign. Held-out seeds are not policy development inputs.
 const stages = [
   { id: "opening", seeds: ["ember-v02-a", "ember-v02-b"] },
   {
     id: "held-out",
-    seeds: Array.from(
-      { length: 100 },
-      (_, i) => `ember-v02-heldout-${String(i).padStart(3, "0")}`,
-    ),
+    seeds: Array.from({ length: 100 }, (_, i) => `ember-v02-heldout-${String(i).padStart(3, "0")}`),
   },
 ];
 const budget = {
@@ -41,27 +31,19 @@ function totals(results: Result[]) {
     meanTurns: mean(results, (r) => r.playerTurns),
     meanActions: mean(results, (r) => r.actionCount),
     meanDraws: mean(results, (r) => r.metrics.drawn),
-    killedBeforeFirstAction: results.reduce(
-      (n, r) => n + r.metrics.killedBeforeFirstAction,
-      0,
-    ),
-    suppressedPreBlockDamage: results.reduce(
-      (n, r) => n + r.metrics.suppressedAttackDamage,
-      0,
-    ),
+    killedBeforeFirstAction: results.reduce((n, r) => n + r.metrics.killedBeforeFirstAction, 0),
+    suppressedPreBlockDamage: results.reduce((n, r) => n + r.metrics.suppressedAttackDamage, 0),
     dreadEvents: {
       unlock: results.reduce(
         (n, r) => n + r.dreadEvents.filter((e) => e.event === "unlock").length,
         0,
       ),
       suppressed: results.reduce(
-        (n, r) =>
-          n + r.dreadEvents.filter((e) => e.event === "suppressed").length,
+        (n, r) => n + r.dreadEvents.filter((e) => e.event === "suppressed").length,
         0,
       ),
       reactivate: results.reduce(
-        (n, r) =>
-          n + r.dreadEvents.filter((e) => e.event === "reactivate").length,
+        (n, r) => n + r.dreadEvents.filter((e) => e.event === "reactivate").length,
         0,
       ),
     },
@@ -103,8 +85,7 @@ for (const stage of stages) {
               examples.length < 4 &&
               !examples.some(
                 (e) =>
-                  e.control.config.fixture.deckId === deck.id &&
-                  e.control.config.policy === policy,
+                  e.control.config.fixture.deckId === deck.id && e.control.config.policy === policy,
               )
             )
               examples.push({
@@ -115,8 +96,7 @@ for (const stage of stages) {
               });
           }
           const delta = (f: (r: Result) => number) =>
-            candidate.reduce((n, r, i) => n + f(r) - f(control[i] ?? r), 0) /
-            candidate.length;
+            candidate.reduce((n, r, i) => n + f(r) - f(control[i] ?? r), 0) / candidate.length;
           cells.push({
             stage: stage.id,
             variant,
@@ -131,12 +111,10 @@ for (const stage of stages) {
               turns: delta((r) => r.playerTurns),
               actions: delta((r) => r.actionCount),
               betterHealth: candidate.filter(
-                (r, i) =>
-                  r.finalHealth > (control[i]?.finalHealth ?? r.finalHealth),
+                (r, i) => r.finalHealth > (control[i]?.finalHealth ?? r.finalHealth),
               ).length,
               worseHealth: candidate.filter(
-                (r, i) =>
-                  r.finalHealth < (control[i]?.finalHealth ?? r.finalHealth),
+                (r, i) => r.finalHealth < (control[i]?.finalHealth ?? r.finalHealth),
               ).length,
             },
           });

@@ -21,9 +21,7 @@ try {
       upgraded = i % 4 >= 2;
     try {
       process.stdout.write(
-        JSON.stringify(
-          probeChain(seed, copies, upgraded, { turnLimit, encounterId }),
-        ) + "\n",
+        JSON.stringify(probeChain(seed, copies, upgraded, { turnLimit, encounterId })) + "\n",
       );
     } catch (error) {
       process.stdout.write(

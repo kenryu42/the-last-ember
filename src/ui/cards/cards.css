@@ -1,3 +1,7 @@
+.hand-card {
+  --card-inspection-transform: translate(var(--inspect-shift), -100px) scale(var(--inspect-scale));
+  --card-inspection-shadow: 0 0 0 2px #edc4786b, 0 12px 26px #051014b0;
+}
 .hand-area {
   display: grid;
   grid-template-columns: 112px minmax(0, 1fr) 128px;
@@ -57,23 +61,18 @@
 .hand .hand-card:has(:focus-visible) .game-card,
 .hand .hand-card.inspected .game-card,
 .hand .hand-card.targeting .game-card {
-  transform: translate(var(--inspect-shift), -100px) scale(var(--inspect-scale));
+  transform: var(--card-inspection-transform);
   border-color: #efcc83;
-  box-shadow:
-    0 0 0 2px #edc4786b,
-    0 12px 26px #051014b0;
+  box-shadow: var(--card-inspection-shadow);
 }
 @media (hover: hover) {
   .hand-card:hover {
     z-index: 21;
   }
   .hand .hand-card:hover .game-card {
-    transform: translate(var(--inspect-shift), -100px)
-      scale(var(--inspect-scale));
+    transform: var(--card-inspection-transform);
     border-color: #efcc83;
-    box-shadow:
-      0 0 0 2px #edc4786b,
-      0 12px 26px #051014b0;
+    box-shadow: var(--card-inspection-shadow);
   }
 }
 .game-card {

@@ -3,11 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
-import {
-  journeyLegalActions,
-  journeyObservation,
-  simulateJourney,
-} from "../../src/lab/journey";
+import { journeyLegalActions, journeyObservation, simulateJourney } from "../../src/lab/journey";
 import { newRun } from "../../src/game/engine/run";
 import { resolve } from "../../src/game/engine/resolve";
 import { runSchema } from "../../src/game/model";
@@ -26,9 +22,10 @@ test("public-only journey completes all stops and replays through canonical save
     for (const field of ['"rng":', '"seed":', '"nextId":'])
       expect(observation).not.toContain(field);
     const full = resolve(run, action);
-    expect(resolve(run, action, "adventure", { captureFrames: false })).toEqual(
-      { ...full, frames: [] },
-    );
+    expect(resolve(run, action, "adventure", { captureFrames: false })).toEqual({
+      ...full,
+      frames: [],
+    });
     run = full.run;
     expect(parseSave(JSON.stringify(run)).kind).toBe("valid");
   }
@@ -43,17 +40,11 @@ test("shield-aware progression changes the first eligible reward, takes one payo
   const seed = "shield-development:5";
   const control = simulateJourney(seed, "strategic", 96);
   const candidate = simulateJourney(seed, "strategic", 96, "shield-aware");
-  const rewards = candidate.trace.filter(
-    (a) => a.type === "reward" && a.card === "shield",
-  );
+  const rewards = candidate.trace.filter((a) => a.type === "reward" && a.card === "shield");
   expect(rewards).toHaveLength(1);
-  const first = candidate.trace.findIndex(
-    (a) => a.type === "reward" && a.card === "shield",
-  );
+  const first = candidate.trace.findIndex((a) => a.type === "reward" && a.card === "shield");
   expect(first).toBeGreaterThan(0);
-  expect(control.trace.slice(0, first)).toEqual(
-    candidate.trace.slice(0, first),
-  );
+  expect(control.trace.slice(0, first)).toEqual(candidate.trace.slice(0, first));
   expect(control.trace[first]).not.toEqual(candidate.trace[first]);
   expect(candidate.decisions.some((d) => d.card === "shield")).toBe(true);
   expect(candidate.progression).toBe("shield-aware");
@@ -133,7 +124,7 @@ test("checkpoint CLI uses explicit experiment settings and rejects missing rules
       .parse(JSON.parse(replay.stdout.toString()));
     expect(result.checkpoint).toEqual(checkpoint);
     expect(result.outcome).not.toBe("timeout");
-    const { dreadRules, ...missingRules } = record;
+    const { dreadRules: _dreadRules, ...missingRules } = record;
     writeFileSync(path, JSON.stringify(missingRules) + "\n");
     expect(Bun.spawnSync(command).exitCode).toBe(1);
   } finally {
@@ -156,9 +147,7 @@ test("machine choices include every legal camp, shop and event selection", () =>
   expect(journeyLegalActions(run)).toEqual([{ type: "leave" }]);
   run.gold = 100;
   run.hp = 50;
-  expect(journeyLegalActions(run)).toHaveLength(
-    1 + 2 + 1 + 1 + run.deck.length,
-  );
+  expect(journeyLegalActions(run)).toHaveLength(1 + 2 + 1 + 1 + run.deck.length);
   for (let event = 0; event < 8; event++) {
     run.scene = { kind: "event", event, resolved: null };
     const actions = journeyLegalActions(run);
@@ -180,12 +169,7 @@ test("journey reports pair seeds and budgets, retain losses, and reject inconsis
     unusedEnergy: 2,
     generatorUnusedUpperBound: 1,
   });
-  const rows = [
-    row("b", 256, 20),
-    row("a", 4096, 0),
-    row("a", 256, 10),
-    row("b", 4096, 24),
-  ];
+  const rows = [row("b", 256, 20), row("a", 4096, 0), row("a", 256, 10), row("b", 4096, 24)];
   const report = (records: typeof rows) =>
     Bun.spawnSync(["python3", "scripts/reports/lab-report.py", "--journeys"], {
       stdin: Buffer.from(records.map((r) => JSON.stringify(r)).join("\n")),
@@ -194,14 +178,9 @@ test("journey reports pair seeds and budgets, retain losses, and reject inconsis
   expect(result.exitCode).toBe(0);
   expect(result.stdout.toString()).toContain("2 pairs, 0 unmatched records");
   expect(result.stdout.toString()).toContain("Mean HP delta -3.00");
-  expect(result.stdout.toString()).toContain(
-    "Control-only/candidate-only wins: 1/0",
-  );
+  expect(result.stdout.toString()).toContain("Control-only/candidate-only wins: 1/0");
   expect(report([...rows, row("a", 256, 10)]).exitCode).not.toBe(0);
-  expect(
-    report([{ ...row("a", 256, 10), decisions: [{ engineCalls: 8 }] }])
-      .exitCode,
-  ).not.toBe(0);
+  expect(report([{ ...row("a", 256, 10), decisions: [{ engineCalls: 8 }] }]).exitCode).not.toBe(0);
   const progressionRows = [
     row("a", 256, 10),
     { ...row("a", 256, 14), progression: "shield-aware" },
@@ -209,7 +188,5 @@ test("journey reports pair seeds and budgets, retain losses, and reject inconsis
   const progressionReport = report(progressionRows);
   expect(progressionReport.exitCode).toBe(0);
   expect(progressionReport.stdout.toString()).toContain("Mean HP delta 4.00");
-  expect(progressionReport.stdout.toString()).toContain(
-    "search/256/shield-aware",
-  );
+  expect(progressionReport.stdout.toString()).toContain("search/256/shield-aware");
 });

@@ -1,5 +1,5 @@
 import { z } from "zod";
-export const SETTINGS_KEY = "last-ember.settings.v1";
+const SETTINGS_KEY = "last-ember.settings.v1";
 export const settingsSchema = z.strictObject({
   music: z.number().min(0).max(1),
   effects: z.number().min(0).max(1),

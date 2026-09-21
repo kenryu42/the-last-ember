@@ -24,13 +24,11 @@ test("crossroads show only three current paths without leaking encounters", asyn
       run.row = row;
       run.location = row === -1 ? null : `${act}-${row}-0`;
       const render = () =>
-        renderToStaticMarkup(
-          <JourneyCrossroads run={run} dispatch={() => {}} />,
-        );
+        renderToStaticMarkup(<JourneyCrossroads run={run} dispatch={() => {}} />);
       const html = render();
-      expect(
-        [...html.matchAll(/data-node="([^"]+)"/g)].map((match) => match[1]),
-      ).toEqual([0, 1, 2].map((lane) => `${act}-${row + 1}-${lane}`));
+      expect([...html.matchAll(/data-node="([^"]+)"/g)].map((match) => match[1])).toEqual(
+        [0, 1, 2].map((lane) => `${act}-${row + 1}-${lane}`),
+      );
       expect(html).not.toContain("data-kind");
       expect(html).not.toContain("disabled");
       expect(html).not.toContain("route-map");
@@ -41,14 +39,10 @@ test("crossroads show only three current paths without leaking encounters", asyn
       expect(html).toContain("Choose a path in the landscape.");
       expect(html).not.toContain("crossroads-decision");
       const regions = [
-        ...html.matchAll(
-          /class="crossroads-path" style="left:([\d.]+)%;width:([\d.]+)%"/g,
-        ),
+        ...html.matchAll(/class="crossroads-path" style="left:([\d.]+)%;width:([\d.]+)%"/g),
       ];
       const markers = [
-        ...html.matchAll(
-          /class="path-marker" style="left:([\d.]+)%;top:([\d.]+)%"/g,
-        ),
+        ...html.matchAll(/class="path-marker" style="left:([\d.]+)%;top:([\d.]+)%"/g),
       ];
       expect(regions).toHaveLength(3);
       expect(markers).toHaveLength(3);
@@ -80,11 +74,9 @@ test("crossroads show only three current paths without leaking encounters", asyn
       changed.route.forEach((node) => {
         node.kind = "elite";
       });
-      expect(
-        renderToStaticMarkup(
-          <JourneyCrossroads run={changed} dispatch={() => {}} />,
-        ),
-      ).toBe(html);
+      expect(renderToStaticMarkup(<JourneyCrossroads run={changed} dispatch={() => {}} />)).toBe(
+        html,
+      );
     }
   }
   expect(images.size).toBe(18);
@@ -92,11 +84,7 @@ test("crossroads show only three current paths without leaking encounters", asyn
   for (const image of images) {
     const asset = Bun.file(`public${image}`);
     expect(await asset.exists()).toBe(true);
-    hashes.add(
-      new Bun.CryptoHasher("sha256")
-        .update(await asset.arrayBuffer())
-        .digest("hex"),
-    );
+    hashes.add(new Bun.CryptoHasher("sha256").update(await asset.arrayBuffer()).digest("hex"));
   }
   expect(hashes.size).toBe(18);
 });
@@ -109,17 +97,14 @@ test.each([
   ["spell", true, 630, 480],
   ["draw", false, 90, 135],
   ["shield", false, 90, 390],
-] as const)(
-  "%s timing scales travel and impact together",
-  (cue, powerful, travel, impact) => {
-    for (const speed of [0.5, 1, 1.25, 2]) {
-      expect(attackTiming(cue, powerful, speed)).toEqual({
-        travel: travel / speed,
-        impact: impact / speed,
-      });
-    }
-  },
-);
+] as const)("%s timing scales travel and impact together", (cue, powerful, travel, impact) => {
+  for (const speed of [0.5, 1, 1.25, 2]) {
+    expect(attackTiming(cue, powerful, speed)).toEqual({
+      travel: travel / speed,
+      impact: impact / speed,
+    });
+  }
+});
 
 test("auto-end requires zero energy and no playable free cards", () => {
   const run = newRun("auto-end");
@@ -213,9 +198,7 @@ test("all 32 cards have distinct base and improved illustrations", async () => {
   const art = new Set<string>();
   for (const def of CARDS) {
     for (const upgraded of [false, true]) {
-      const html = renderToStaticMarkup(
-        <CardView card={{ uid: 1, def: def.id, upgraded }} />,
-      );
+      const html = renderToStaticMarkup(<CardView card={{ uid: 1, def: def.id, upgraded }} />);
       const image = html.match(/background-image:url\(([^)]+)\)/)?.[1];
       const position = html.match(/background-position:([^";]+)/)?.[1];
       expect(image).toBeDefined();
@@ -230,14 +213,10 @@ test("all 32 cards have distinct base and improved illustrations", async () => {
     }
   }
   expect(art.size).toBe(64);
-  const flame = renderToStaticMarkup(
-    <CardView card={{ uid: 1, def: "flame", upgraded: true }} />,
-  );
+  const flame = renderToStaticMarkup(<CardView card={{ uid: 1, def: "flame", upgraded: true }} />);
   expect(flame).toContain("card-pairs-01.webp");
   expect(flame).toContain("background-position:100% 100%");
-  const home = renderToStaticMarkup(
-    <CardView card={{ uid: 1, def: "home", upgraded: false }} />,
-  );
+  const home = renderToStaticMarkup(<CardView card={{ uid: 1, def: "home", upgraded: false }} />);
   expect(home).toContain("card-pairs-16.webp");
   expect(home).toContain("background-position:0% 100%");
 });
@@ -263,20 +242,14 @@ test("Wayfarer draw back remains decorative and distinguishes an empty pile", as
       />,
     );
   expect(combat.draw.length).toBeGreaterThan(0);
-  expect(render()).toContain(
-    'class="pile-stack" aria-hidden="true" data-empty="false"',
-  );
+  expect(render()).toContain('class="pile-stack" aria-hidden="true" data-empty="false"');
   combat.discard.push(...combat.draw);
   combat.draw = [];
   const empty = render();
-  expect(empty).toContain(
-    'class="pile-stack" aria-hidden="true" data-empty="true"',
-  );
+  expect(empty).toContain('class="pile-stack" aria-hidden="true" data-empty="true"');
   expect(empty).toContain("Draw <b>0</b>");
   for (const asset of ["face", "back"]) {
-    expect(
-      await Bun.file(`public/assets/wayfarer-${asset}.webp`).exists(),
-    ).toBe(true);
+    expect(await Bun.file(`public/assets/wayfarer-${asset}.webp`).exists()).toBe(true);
   }
 });
 
@@ -286,9 +259,7 @@ test("physical piles hide draw order and show the latest discarded card", () => 
     { uid: 42, def: "guard", upgraded: true },
   ];
   const render = (kind: "draw" | "discard", pile = cards) =>
-    renderToStaticMarkup(
-      <CardPile kind={kind} cards={pile} onClick={() => {}} />,
-    );
+    renderToStaticMarkup(<CardPile kind={kind} cards={pile} onClick={() => {}} />);
   const draw = render("draw");
   expect(draw).toBe(render("draw", [...cards].reverse()));
   expect(draw).toContain('aria-label="Draw pile, 2 cards, order hidden"');
@@ -302,9 +273,7 @@ test("physical piles hide draw order and show the latest discarded card", () => 
   expect(discard).toContain("card-pairs-02.webp");
   expect(discard).toContain("background-position:100% 0%");
   expect(discard.match(/<button/g)).toHaveLength(1);
-  expect(render("discard", [...cards].reverse())).toContain(
-    'data-top-card="41"',
-  );
+  expect(render("discard", [...cards].reverse())).toContain('data-top-card="41"');
   for (const kind of ["draw", "discard"] as const) {
     const empty = render(kind, []);
     expect(empty).toContain('data-empty="true"');

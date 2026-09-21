@@ -33,36 +33,23 @@ try {
     .split("\n")
     .map((line) => schema.parse(JSON.parse(line)));
   const matches = records.filter((r) => r.seed === seed);
-  if (matches.length > 1)
-    throw new Error("Ambiguous seed: provide a single policy arm");
+  if (matches.length > 1) throw new Error("Ambiguous seed: provide a single policy arm");
   const record = matches[0];
-  if (!record || index >= record.trace.length)
-    throw new Error("Checkpoint not found");
-  let run = newRun(
-    seed,
-    record.dreadRules,
-    record.prototype,
-    record.startingRelic,
-  );
+  if (!record || index >= record.trace.length) throw new Error("Checkpoint not found");
+  let run = newRun(seed, record.dreadRules, record.prototype, record.startingRelic);
   for (const raw of record.trace.slice(0, index)) {
-    const action = journeyLegalActions(run).find(
-      (a) => JSON.stringify(a) === JSON.stringify(raw),
-    );
+    const action = journeyLegalActions(run).find((a) => JSON.stringify(a) === JSON.stringify(raw));
     if (!action) throw new Error("Illegal recorded action");
     const result = resolve(run, action);
     if (result.error) throw new Error(result.error);
     run = result.run;
     assertInvariants(run);
   }
-  if (run.scene.kind !== "combat")
-    throw new Error("Checkpoint is not in combat");
+  if (run.scene.kind !== "combat") throw new Error("Checkpoint is not in combat");
   const checkpoint = structuredClone(run);
   const steps = [];
   while (run.scene.kind === "combat" && steps.length < 500) {
-    const observation = observe(
-      run,
-      run.dreadRules === "recurring" ? "recurring" : "control",
-    );
+    const observation = observe(run, run.dreadRules === "recurring" ? "recurring" : "control");
     const legal = legalActions(observation);
     const action = selectAction(
       observation,
@@ -92,8 +79,7 @@ try {
       budget,
       checkpoint,
       outcome:
-        run.scene.kind === "reward" ||
-        (run.scene.kind === "ending" && run.scene.won)
+        run.scene.kind === "reward" || (run.scene.kind === "ending" && run.scene.won)
           ? "win"
           : run.scene.kind === "ending"
             ? "loss"

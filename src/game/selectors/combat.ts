@@ -21,17 +21,11 @@ export function empowerTargets(
   def: CardDef,
   target: number | null,
 ) {
-  if (
-    combat.ember?.bearer !== "Aldren" ||
-    combat.ember.used ||
-    !def.tags?.includes("Spell")
-  )
+  if (combat.ember?.bearer !== "Aldren" || combat.ember.used || !def.tags?.includes("Spell"))
     return [];
   if (def.effects.some((e) => e.kind === "all"))
     return combat.enemies.filter((e) => e.hp > 0).map((e) => e.uid);
   return def.effects.some((e) => e.kind === "hit") && target !== null
-    ? combat.enemies
-        .filter((e) => e.hp > 0 && e.uid === target)
-        .map((e) => e.uid)
+    ? combat.enemies.filter((e) => e.hp > 0 && e.uid === target).map((e) => e.uid)
     : [];
 }

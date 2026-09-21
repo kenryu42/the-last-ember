@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { ACTS, EVENTS } from "../../game/content/world";
 import { enemyDef } from "../../game/content/enemies";
@@ -62,16 +56,11 @@ export function EncounterIllustration({
   return (
     <div className="encounter-illustration">
       {failed ? (
-        <p className="art-status" role="status">
+        <output className="art-status" style={{ display: "block" }}>
           Illustration unavailable. You can still continue.
-        </p>
+        </output>
       ) : (
-        <img
-          src={art.src}
-          alt={art.alt}
-          fetchPriority="high"
-          onError={() => setFailed(true)}
-        />
+        <img src={art.src} alt={art.alt} fetchPriority="high" onError={() => setFailed(true)} />
       )}
     </div>
   );
@@ -132,16 +121,14 @@ export function ArrivalTransition({
             src={`/assets/journey/${act?.file}-${from.row + 2}.webp`}
             alt=""
             style={{
-              transformOrigin: anchor
-                ? `${anchor[0]}% ${anchor[1]}%`
-                : undefined,
+              transformOrigin: anchor ? `${anchor[0]}% ${anchor[1]}%` : undefined,
             }}
           />
         </div>
         <div className="arrival-shade" />
       </div>
       <div className="arrival-copy">
-        <p id="arrival-title" role="status">
+        <output id="arrival-title" style={{ display: "block" }}>
           {
             [
               "Following the left trail…",
@@ -149,7 +136,7 @@ export function ArrivalTransition({
               "Following the right trail…",
             ][node.lane]
           }
-        </p>
+        </output>
         <button ref={skip} className="secondary" onClick={finish}>
           Skip approach
         </button>
@@ -170,15 +157,11 @@ export function EncounterIntro({
   const heading = useRef<HTMLHeadingElement>(null);
   const art = encounterArt(run);
   useLayoutEffect(() => {
-    if (!document.querySelector("dialog[open]"))
-      heading.current?.focus({ preventScroll: true });
+    if (!document.querySelector("dialog[open]")) heading.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, []);
   return (
-    <section
-      className="encounter-intro scene-enter"
-      aria-labelledby="encounter-title"
-    >
+    <section className="encounter-intro scene-enter" aria-labelledby="encounter-title">
       {art && <EncounterIllustration key={art.src} art={art} />}
       <div className="encounter-copy">
         <header>

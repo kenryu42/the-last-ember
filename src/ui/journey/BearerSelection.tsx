@@ -27,22 +27,18 @@ export function BearerSelection({
         <h1 id="bearer-heading" ref={sceneHeading} tabIndex={-1}>
           Who carries the Ember?
         </h1>
-        <p className="eyebrow">
-          Act {["I", "II", "III"][run.act]} · Locked for this Act
-        </p>
+        <p className="eyebrow">Act {["I", "II", "III"][run.act]} · Locked for this Act</p>
       </header>
       <div className="bearer-choices">
         {heroSchema.options.map((hero) => {
           const profile = {
             Mara: {
               ability: "Shelter the Flame",
-              effect:
-                "Each turn, your first Block effect from a played card grants +3 Block.",
+              effect: "Each turn, your first Block effect from a played card grants +3 Block.",
             },
             Eryn: {
               ability: "Conceal the Flame",
-              effect:
-                "Each turn, your first Dread-lowering card lowers it by 2 more.",
+              effect: "Each turn, your first Dread-lowering card lowers it by 2 more.",
             },
             Aldren: {
               ability: "Wield the Flame",
@@ -81,8 +77,7 @@ export function BearerSelection({
       </div>
       <footer className="bearer-context">
         <p className="bearer-lock-note">
-          All three stay with you. Your bearer cannot change until you clear
-          this Act.
+          All three stay with you. Your bearer cannot change until you clear this Act.
         </p>
       </footer>
     </section>

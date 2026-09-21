@@ -14,8 +14,7 @@ export const ACTS = [
           [50, 64],
           [82, 59],
         ],
-        description:
-          "The road thins beneath the trees. Three trails disappear into the green.",
+        description: "The road thins beneath the trees. Three trails disappear into the green.",
       },
       {
         name: "The silver brook",
@@ -34,8 +33,7 @@ export const ACTS = [
           [57, 61],
           [90, 43],
         ],
-        description:
-          "An old oak lies across the hollow. New paths have grown around its roots.",
+        description: "An old oak lies across the hollow. New paths have grown around its roots.",
       },
       {
         name: "The white stones",
@@ -73,8 +71,7 @@ export const ACTS = [
     name: "What the stones remember",
     place: "The drowned city of Avel",
     file: "ruins",
-    intro:
-      "Reeds grow through the king's road. The water remembers every stone.",
+    intro: "Reeds grow through the king's road. The water remembers every stone.",
     boss: "marshal",
     crossroads: [
       {
@@ -84,8 +81,7 @@ export const ACTS = [
           [51, 66],
           [86, 69],
         ],
-        description:
-          "Broken roads rise above the marsh. Avel's empty windows watch from the mist.",
+        description: "Broken roads rise above the marsh. Avel's empty windows watch from the mist.",
       },
       {
         name: "The sunken square",
@@ -94,8 +90,7 @@ export const ACTS = [
           [48, 71],
           [92, 65],
         ],
-        description:
-          "Still water fills the old square. Three dry ways remain between the stones.",
+        description: "Still water fills the old square. Three dry ways remain between the stones.",
       },
       {
         name: "The willow bridges",
@@ -114,8 +109,7 @@ export const ACTS = [
           [52, 65],
           [85, 48],
         ],
-        description:
-          "Water gathers beneath the old arches. Your footsteps echo against the stone.",
+        description: "Water gathers beneath the old arches. Your footsteps echo against the stone.",
       },
       {
         name: "The drowned garden",
@@ -134,8 +128,7 @@ export const ACTS = [
           [52, 67],
           [85, 51],
         ],
-        description:
-          "No banners hang above the gates. The last light settles on the empty walls.",
+        description: "No banners hang above the gates. The last light settles on the empty walls.",
       },
     ],
   },
@@ -153,8 +146,7 @@ export const ACTS = [
           [50, 78],
           [86, 62],
         ],
-        description:
-          "The trees give way to open sky. Three trails climb beyond their shelter.",
+        description: "The trees give way to open sky. Three trails climb beyond their shelter.",
       },
       {
         name: "The glass tarn",
@@ -163,8 +155,7 @@ export const ACTS = [
           [62, 64],
           [91, 66],
         ],
-        description:
-          "A still lake holds the morning sky. The paths divide along its stony shore.",
+        description: "A still lake holds the morning sky. The paths divide along its stony shore.",
       },
       {
         name: "The wind-carved pass",

@@ -19,6 +19,7 @@ export function Modal({
     return () => dialog?.close();
   }, []);
   return (
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- Native dialog handles Escape via onCancel; clicks dismiss its backdrop.
     <dialog
       ref={ref}
       className={wide ? "modal wide" : "modal"}
@@ -32,12 +33,7 @@ export function Modal({
     >
       <div className="modal-heading">
         <h2>{title}</h2>
-        <button
-          autoFocus
-          className="icon-button"
-          onClick={close}
-          aria-label="Close dialog"
-        >
+        <button autoFocus className="icon-button" onClick={close} aria-label="Close dialog">
           <Icon name="close" />
         </button>
       </div>

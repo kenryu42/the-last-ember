@@ -20,12 +20,7 @@ export function draw(run: Run, combat: Combat, count: number) {
 export function startCombat(run: Run, type: Combat["type"]) {
   const normal: EnemyKind[][][] = [
     [["wolf", "crow"], ["raider"], ["stag"], ["wolf", "wolf"]],
-    [
-      ["soldier", "shade"],
-      ["sentinel"],
-      ["raider", "crow"],
-      ["shade", "shade"],
-    ],
+    [["soldier", "shade"], ["sentinel"], ["raider", "crow"], ["shade", "shade"]],
     [
       ["wraith", "crow"],
       ["sentinel", "shade"],
@@ -45,9 +40,7 @@ export function startCombat(run: Run, type: Combat["type"]) {
       : type === "elite"
         ? (elites[run.act] ?? ["wolf"])
         : pick(run, normal[run.act] ?? [["wolf"]]);
-  const reaction = kinds.some((k) =>
-    ["soldier", "raider", "marshal", "roots"].includes(k),
-  )
+  const reaction = kinds.some((k) => ["soldier", "raider", "marshal", "roots"].includes(k))
     ? "reinforce"
     : kinds.some((k) => ["sentinel", "hollow"].includes(k))
       ? "ward"
@@ -58,18 +51,15 @@ export function startCombat(run: Run, type: Combat["type"]) {
       type === "boss"
         ? enemyDef(act.boss).name
         : type === "elite"
-          ? (["The thorn court", "The unbroken watch", "Those lost to winter"][
-              run.act
-            ] ?? "The watch")
+          ? (["The thorn court", "The unbroken watch", "Those lost to winter"][run.act] ??
+            "The watch")
           : "The road is not empty",
     type,
     turn: 1,
     energy: 3 + (has(run, "flint") ? 1 : 0),
     block: has(run, "buckler") ? 8 : 0,
     dread: 0,
-    ...(run.dreadRules === "recurring"
-      ? { dreadResponse: "fury" as const }
-      : { fired: [] }),
+    ...(run.dreadRules === "recurring" ? { dreadResponse: "fury" as const } : { fired: [] }),
     draw: shuffle(run, run.deck),
     hand: [],
     discard: [],
@@ -93,9 +83,5 @@ export function startCombat(run: Run, type: Combat["type"]) {
   if (has(run, "hushed-coal") || has(run, "black-lantern"))
     combat.relicTurn = { coalUsed: false, lanternUsed: false };
   run.scene = combat;
-  draw(
-    run,
-    combat,
-    5 + (has(run, "map") ? 1 : 0) + (has(run, "feather") ? 1 : 0),
-  );
+  draw(run, combat, 5 + (has(run, "map") ? 1 : 0) + (has(run, "feather") ? 1 : 0));
 }

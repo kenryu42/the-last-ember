@@ -18,8 +18,7 @@ function setup() {
 }
 test("setup hooks apply once, including first-turn energy and bonus cards", () => {
   const run = newRun("hooks");
-  for (const id of ["ribbon", "buckler", "flint", "map", "feather"])
-    grantRelic(run, id);
+  for (const id of ["ribbon", "buckler", "flint", "map", "feather"]) grantRelic(run, id);
   expect(run.maxHp).toBe(80);
   expect(run.hp).toBe(80);
   grantRelic(run, "ribbon");
@@ -47,8 +46,7 @@ test("damage relics use exact Dread boundaries and apply before Vulnerable", () 
     [6, 15],
     [10, 15],
   ]) {
-    if (dread === undefined || expected === undefined)
-      throw new Error("bad fixture");
+    if (dread === undefined || expected === undefined) throw new Error("bad fixture");
     c.dread = dread;
     expect(hitDamage(run, c, enemy, 7)).toBe(expected);
   }
@@ -96,9 +94,7 @@ test("kettle and purse trigger on victory, not on every kill or reward claim", (
 test("boss phase changes and Hollow high-Dread behavior are included in intent", () => {
   const run = setup(),
     c = combat(run);
-  for (const kind of ["roots", "marshal", "hollow"] satisfies (
-    "roots" | "marshal" | "hollow"
-  )[]) {
+  for (const kind of ["roots", "marshal", "hollow"] satisfies ("roots" | "marshal" | "hollow")[]) {
     const e = makeEnemy(run, kind);
     e.step = kind === "marshal" ? 0 : 1;
     c.dread = 0;
@@ -108,9 +104,7 @@ test("boss phase changes and Hollow high-Dread behavior are included in intent",
     e.hp = Math.floor(e.maxHp / 2);
     expect(intention(e, c).amount).toBe(normal + 3);
     c.dread = 6;
-    expect(intention(e, c).amount).toBe(
-      normal + 3 + (kind === "hollow" ? 4 : 0),
-    );
+    expect(intention(e, c).amount).toBe(normal + 3 + (kind === "hollow" ? 4 : 0));
   }
 });
 test("upgrades have independently calculated damage, block, healing and energy", () => {
@@ -169,12 +163,12 @@ test("upgrades have independently calculated damage, block, healing and energy",
         target: enemy.uid,
       }).run,
       n = combat(next);
-    expect([
-      100 - (n.enemies[0]?.hp ?? 0),
-      n.block,
-      next.hp - 30,
-      n.energy,
-      n.dread,
-    ]).toEqual([damage, block, healing, energy, dread]);
+    expect([100 - (n.enemies[0]?.hp ?? 0), n.block, next.hp - 30, n.energy, n.dread]).toEqual([
+      damage,
+      block,
+      healing,
+      energy,
+      dread,
+    ]);
   }
 });

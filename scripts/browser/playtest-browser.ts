@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { browserSession } from "./agent-browser";
 import { mkdir } from "node:fs/promises";
 import { cardDef, needsTarget } from "../../src/game/content/cards";
 import { resolve } from "../../src/game/engine/resolve";
@@ -7,28 +8,9 @@ import { combatAction } from "../../tests/support/pilot";
 
 // Two actual UI fights, not human pacing evidence. No injected game state.
 const session = "v02-check";
-const response = z.object({
-  success: z.boolean(),
-  data: z.object({ result: z.unknown().optional() }).optional(),
-  error: z.unknown().optional(),
-});
-async function browser(...args: string[]) {
-  const proc = Bun.spawn(
-    ["agent-browser", "--session", session, "--restore", ...args, "--json"],
-    { stdout: "pipe", stderr: "pipe" },
-  );
-  const output = await new Response(proc.stdout).text();
-  const error = await new Response(proc.stderr).text();
-  if (await proc.exited) throw Error(`${args.join(" ")}: ${error} ${output}`);
-  const parsed = response.parse(JSON.parse(output));
-  if (!parsed.success) throw Error(JSON.stringify(parsed.error));
-  return parsed.data?.result;
-}
+const browser = browserSession(session);
 const settle = () =>
-  browser(
-    "eval",
-    "new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))",
-  );
+  browser("eval", "new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))");
 async function click(text: string) {
   await browser(
     "eval",
@@ -75,10 +57,7 @@ try {
     await browser("fill", "input[maxlength='80']", "ember-v02-a");
     await click("Start benchmark fight");
     assert(
-      await browser(
-        "eval",
-        "document.getAnimations().every(a=>a.playState!=='running')",
-      ),
+      await browser("eval", "document.getAnimations().every(a=>a.playState!=='running')"),
       "Benchmark animation counted as decision time",
     );
     const hand = await browser(
@@ -115,8 +94,7 @@ try {
     for (let i = 0; i < 200 && run.scene.kind === "combat"; i++) {
       const c = run.scene;
       turns = c.turn;
-      const action =
-        rules === "control" ? ({ type: "end" } as const) : combatAction(run);
+      const action = rules === "control" ? ({ type: "end" } as const) : combatAction(run);
       if (action.type === "end") {
         const projection = resolve(run, action, rules);
         assert(
@@ -132,10 +110,7 @@ try {
         const card = c.hand.find((card) => card.uid === action.uid);
         if (!card) throw Error("Missing card");
         await clickSelector(`.hand [data-card="${card.uid}"]`);
-        if (
-          needsTarget(cardDef(card.def)) &&
-          c.enemies.filter((e) => e.hp > 0).length > 1
-        )
+        if (needsTarget(cardDef(card.def)) && c.enemies.filter((e) => e.hp > 0).length > 1)
           await clickSelector(`[data-enemy="${action.target}"]`);
       }
       const result = resolve(run, action, rules);
@@ -156,11 +131,7 @@ try {
       "eval",
       "(()=>{window.__exports=[];window.__originalCreateURL??=URL.createObjectURL.bind(URL);URL.createObjectURL=(blob)=>{window.__exports.push(blob);return window.__originalCreateURL(blob)}})()",
     );
-    await browser(
-      "fill",
-      "textarea",
-      "Automated UI smoke, not human observation.",
-    );
+    await browser("fill", "textarea", "Automated UI smoke, not human observation.");
     await click("Export fight JSON + notes");
     await click("Export summary CSV");
     const exported = z
@@ -177,15 +148,9 @@ try {
         config: z.object({ rules: z.string(), variant: z.string() }),
         questionnaire: z.record(z.string(), z.string()),
       })
-      .parse(
-        await browser(
-          "eval",
-          "(async()=>JSON.parse(await window.__exports[0].text()))()",
-        ),
-      );
+      .parse(await browser("eval", "(async()=>JSON.parse(await window.__exports[0].text()))()"));
     assert(
-      exported.summary.finalHealth === run.hp &&
-        exported.summary.playerTurns === turns,
+      exported.summary.finalHealth === run.hp && exported.summary.playerTurns === turns,
       "Result accounting mismatch",
     );
     assert(
@@ -203,9 +168,7 @@ try {
       "Export identity mismatch",
     );
     assert(
-      Object.values(exported.questionnaire).includes(
-        "Automated UI smoke, not human observation.",
-      ),
+      Object.values(exported.questionnaire).includes("Automated UI smoke, not human observation."),
       "Questionnaire missing",
     );
     assert(
@@ -275,9 +238,7 @@ try {
     )) === storageBefore,
     "Restoration changed normal storage",
   );
-  console.log(
-    "Paired start, independent reset/abandon, normal run restoration PASS",
-  );
+  console.log("Paired start, independent reset/abandon, normal run restoration PASS");
 } finally {
   await browser("close");
 }

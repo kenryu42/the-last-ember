@@ -6,11 +6,7 @@ import { newRun } from "../../src/game/engine/run";
 import { resolve } from "../../src/game/engine/resolve";
 import { startCombat } from "../../src/game/engine/combat/setup";
 import { flameBranchSchema } from "../../src/game/model";
-import {
-  evaluateFlameBranches,
-  journeyLegalActions,
-  simulateJourney,
-} from "../../src/lab/journey";
+import { evaluateFlameBranches, journeyLegalActions, simulateJourney } from "../../src/lab/journey";
 import { parseSave } from "../../src/game/validation/save";
 
 test.each(flameBranchSchema.options)(
@@ -68,12 +64,9 @@ test.each(flameBranchSchema.options)(
 );
 
 test("unbranched control upgrades Ancient flame numerically; non-Flame cannot branch", () => {
-  expect(
-    value(
-      cardDef("flame").effects[0] ?? { kind: "hit", amount: 0, upgrade: 0 },
-      true,
-    ),
-  ).toBe(24);
+  expect(value(cardDef("flame").effects[0] ?? { kind: "hit", amount: 0, upgrade: 0 }, true)).toBe(
+    24,
+  );
   const run = newRun("wrong-branch", "recurring", {
     kind: "escape",
     target: 4,
@@ -82,9 +75,7 @@ test("unbranched control upgrades Ancient flame numerically; non-Flame cannot br
   run.scene = { kind: "camp", used: false };
   const card = run.deck[0];
   if (!card) throw new Error("Missing card");
-  expect(
-    resolve(run, { type: "upgrade", uid: card.uid, branch: "wildfire" }).error,
-  ).not.toBeNull();
+  expect(resolve(run, { type: "upgrade", uid: card.uid, branch: "wildfire" }).error).not.toBeNull();
 });
 
 test.each(flameBranchSchema.options)(
@@ -99,8 +90,7 @@ test.each(flameBranchSchema.options)(
     const event = EVENTS.findIndex((e) => e.choices.some((c) => c.upgrade));
     const index = EVENTS[event]?.choices.findIndex((c) => c.upgrade);
     const flame = run.deck.find((c) => c.def === "flame");
-    if (!node || index === undefined || !flame)
-      throw new Error("Missing fixture");
+    if (!node || index === undefined || !flame) throw new Error("Missing fixture");
     run.location = node.id;
     run.row = node.row;
     run.scene = { kind: "event", event, resolved: null };
@@ -121,9 +111,7 @@ test.each(flameBranchSchema.options)(
     );
     expect(resolve(chosen.run, { type: "leave" }).error).not.toBeNull();
     expect(resolve(chosen.run, { type: "choice", index }).error).not.toBeNull();
-    expect(
-      resolve(chosen.run, { type: "upgrade", uid: flame.uid }).error,
-    ).not.toBeNull();
+    expect(resolve(chosen.run, { type: "upgrade", uid: flame.uid }).error).not.toBeNull();
     const done = resolve(chosen.run, {
       type: "upgrade",
       uid: flame.uid,
@@ -137,9 +125,7 @@ test.each(flameBranchSchema.options)(
       upgraded: true,
     });
     expect(parseSave(JSON.stringify(done.run)).kind).toBe("valid");
-    expect(
-      resolve(done.run, { type: "upgrade", uid: flame.uid, branch }).error,
-    ).not.toBeNull();
+    expect(resolve(done.run, { type: "upgrade", uid: flame.uid, branch }).error).not.toBeNull();
     expect(resolve(done.run, { type: "leave" }).error).toBeNull();
     if (chosen.run.scene.kind !== "event") throw new Error("Missing event");
     chosen.run.scene.pendingUpgrade = 99999;
@@ -167,17 +153,11 @@ test("branch continuations share formations, preserve input, and ignore live hid
   expect(trials.map((t) => t.trials.map((s) => s.formation))[0]).toEqual(
     trials.map((t) => t.trials.map((s) => s.formation))[1],
   );
-  expect(
-    trials.every(
-      (t) => t.trials.length === 4 && t.trials.every((s) => !s.timeout),
-    ),
-  ).toBe(true);
-  expect(trials.some((t) => t.trials.some((s) => s.formation.length > 1))).toBe(
+  expect(trials.every((t) => t.trials.length === 4 && t.trials.every((s) => !s.timeout))).toBe(
     true,
   );
-  expect(
-    trials.every((t) => t.trials.every((s) => s.actBearer === "Aldren")),
-  ).toBe(true);
+  expect(trials.some((t) => t.trials.some((s) => s.formation.length > 1))).toBe(true);
+  expect(trials.every((t) => t.trials.every((s) => s.actBearer === "Aldren"))).toBe(true);
   // Distinct decks must produce distinct evaluations; their ranking is not a rule.
   expect(trials.map((t) => t.branch)).toEqual(["veiled-flame", "wildfire"]);
   expect(trials[0]?.utility).not.toBe(trials[1]?.utility);
@@ -209,8 +189,7 @@ test("continuation policy changes the branch, not the preceding upgrade decision
     "black-lantern",
   );
   const first = candidate.trace.findIndex(
-    (action, index) =>
-      JSON.stringify(action) !== JSON.stringify(control.trace[index]),
+    (action, index) => JSON.stringify(action) !== JSON.stringify(control.trace[index]),
   );
   expect(first).toBeGreaterThan(0);
   expect(control.trace[first]).toEqual({

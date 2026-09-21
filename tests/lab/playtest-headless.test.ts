@@ -49,17 +49,11 @@ test("CLI-only mixed diagnostic preserves slots/RNG, exact content and original 
     ]);
     expect(mixed.rng).toBe(original.rng);
     expect(mixed.nextId).toBe(original.nextId);
-    expect(mixed.deck.map((c) => c.uid)).toEqual(
-      original.deck.map((c) => c.uid),
-    );
+    expect(mixed.deck.map((c) => c.uid)).toEqual(original.deck.map((c) => c.uid));
     if (mixed.scene.kind !== "combat" || original.scene.kind !== "combat")
       throw new Error("Fixture");
-    expect(mixed.scene.hand.map((c) => c.uid)).toEqual(
-      original.scene.hand.map((c) => c.uid),
-    );
-    expect(mixed.scene.draw.map((c) => c.uid)).toEqual(
-      original.scene.draw.map((c) => c.uid),
-    );
+    expect(mixed.scene.hand.map((c) => c.uid)).toEqual(original.scene.hand.map((c) => c.uid));
+    expect(mixed.scene.draw.map((c) => c.uid)).toEqual(original.scene.draw.map((c) => c.uid));
     expect(mixed.scene.enemies).toEqual(original.scene.enemies);
     expect(original.deck.filter((c) => c.def === "guard")).toHaveLength(2);
     expect(
@@ -171,16 +165,8 @@ test("hidden draw order, shuffle RNG and route state cannot influence policy cho
   const a = createHeadlessRun(config);
   if (a.scene.kind !== "combat") throw new Error("Fixture");
   // Force draw options so the test exercises speculative draws, not only attacks.
-  a.scene.hand = [
-    makeCard(a, "remember"),
-    makeCard(a, "spark"),
-    makeCard(a, "cinder"),
-  ];
-  a.scene.draw = [
-    makeCard(a, "guard"),
-    makeCard(a, "defiance"),
-    makeCard(a, "bread"),
-  ];
+  a.scene.hand = [makeCard(a, "remember"), makeCard(a, "spark"), makeCard(a, "cinder")];
+  a.scene.draw = [makeCard(a, "guard"), makeCard(a, "defiance"), makeCard(a, "bread")];
   const b = structuredClone(a);
   if (b.scene.kind !== "combat") throw new Error("Fixture");
   b.scene.draw.reverse();
@@ -192,38 +178,18 @@ test("hidden draw order, shuffle RNG and route state cannot influence policy cho
     ob = observe(b, "candidate");
   expect(ob).toEqual(oa);
   const encoded = JSON.stringify(oa);
-  for (const key of [
-    '"rng"',
-    '"seed"',
-    '"nextId"',
-    '"route"',
-    '"draw"',
-    '"log"',
-  ])
+  for (const key of ['"rng"', '"seed"', '"nextId"', '"route"', '"draw"', '"log"'])
     expect(encoded).not.toContain(key + ":");
   for (const policy of policies)
     for (const seed of ["belief-v1", "belief-v2"])
-      expect(chooseAction(oa, policy, seed, 96)).toEqual(
-        chooseAction(ob, policy, seed, 96),
-      );
+      expect(chooseAction(oa, policy, seed, 96)).toEqual(chooseAction(ob, policy, seed, 96));
   // Actual draws differ. Equality above is not a fixture with irrelevant hidden state.
   const card = a.scene.hand[0];
   if (!card) throw new Error("Fixture");
-  const drawnA = resolve(
-    a,
-    { type: "play", uid: card.uid, target: null },
-    "candidate",
-  ).run.scene;
-  const drawnB = resolve(
-    b,
-    { type: "play", uid: card.uid, target: null },
-    "candidate",
-  ).run.scene;
-  if (drawnA.kind !== "combat" || drawnB.kind !== "combat")
-    throw new Error("Fixture");
-  expect(drawnA.hand.map((c) => c.def)).not.toEqual(
-    drawnB.hand.map((c) => c.def),
-  );
+  const drawnA = resolve(a, { type: "play", uid: card.uid, target: null }, "candidate").run.scene;
+  const drawnB = resolve(b, { type: "play", uid: card.uid, target: null }, "candidate").run.scene;
+  if (drawnA.kind !== "combat" || drawnB.kind !== "combat") throw new Error("Fixture");
+  expect(drawnA.hand.map((c) => c.def)).not.toEqual(drawnB.hand.map((c) => c.def));
 });
 
 test("turn/action limits stop accepted actions and terminal wins take precedence", () => {
@@ -238,10 +204,9 @@ test("turn/action limits stop accepted actions and terminal wins take precedence
   expect(turns.outcome()).toBe("timeout");
   expect(turns.view().legalActions).toEqual([]);
   const full = new HeadlessFight(config).auto();
-  expect(
-    new HeadlessFight({ ...config, maxActions: full.actionCount }).auto()
-      .outcome,
-  ).toBe(full.outcome);
+  expect(new HeadlessFight({ ...config, maxActions: full.actionCount }).auto().outcome).toBe(
+    full.outcome,
+  );
 });
 
 test("legal actions match engine acceptance and reject null attack targets without mutation", () => {
@@ -249,9 +214,7 @@ test("legal actions match engine acceptance and reject null attack targets witho
   for (const action of legalActions(observe(run, config.rules)))
     expect(resolve(run, action, config.rules).error).toBeNull();
   const fight = new HeadlessFight(config);
-  const attack = fight
-    .view()
-    .legalActions.find((a) => a.type === "play" && a.target !== null);
+  const attack = fight.view().legalActions.find((a) => a.type === "play" && a.target !== null);
   if (!attack || attack.type !== "play") throw new Error("Missing attack");
   const before = fight.result();
   expect(() => fight.step({ ...attack, target: null })).toThrow();
@@ -285,20 +248,15 @@ test("crafted diagnostic: planner sees block-then-Iron-answer lethal missed by o
   const shield = run.scene.hand[2];
   if (!shield) throw new Error("Fixture");
   expect(
-    resolve(
-      blocked,
-      { type: "play", uid: shield.uid, target: enemy.uid },
-      "control",
-    ).run.scene,
+    resolve(blocked, { type: "play", uid: shield.uid, target: enemy.uid }, "control").run.scene,
   ).toEqual({ kind: "ending", won: true });
 });
 
 test("CLI malformed JSON recovers in protocol and batch reports errors with nonzero exit", () => {
   const input = `oops\n${JSON.stringify({ op: "start", config })}\n${JSON.stringify({ op: "observe" })}\n`;
-  const protocol = Bun.spawnSync(
-    ["bun", "scripts/lab/playtest-cli.ts", "protocol"],
-    { stdin: Buffer.from(input) },
-  );
+  const protocol = Bun.spawnSync(["bun", "scripts/lab/playtest-cli.ts", "protocol"], {
+    stdin: Buffer.from(input),
+  });
   expect(protocol.exitCode).toBe(0);
   const lines = protocol.stdout
     .toString()
@@ -308,9 +266,7 @@ test("CLI malformed JSON recovers in protocol and batch reports errors with nonz
   expect(lines[0]).toMatchObject({ outcome: "error" });
   expect(lines[1]).toEqual(lines[2]);
   const batch = Bun.spawnSync(["bun", "scripts/lab/playtest-cli.ts", "batch"], {
-    stdin: Buffer.from(
-      `null\n${JSON.stringify({ ...config, maxActions: 1 })}\n`,
-    ),
+    stdin: Buffer.from(`null\n${JSON.stringify({ ...config, maxActions: 1 })}\n`),
   });
   expect(batch.exitCode).toBe(1);
   expect(batch.stdout.toString()).toContain('"outcome":"timeout"');
@@ -327,19 +283,11 @@ test("crafted diagnostic: free energy and draw chain is finite and pays exposure
     sacrifice = makeCard(run, "sacrifice"),
     remember = makeCard(run, "remember");
   run.scene.hand = [spark, sacrifice, remember];
-  run.scene.draw = [
-    makeCard(run, "guard"),
-    makeCard(run, "cinder"),
-    makeCard(run, "defiance"),
-  ];
+  run.scene.draw = [makeCard(run, "guard"), makeCard(run, "cinder"), makeCard(run, "defiance")];
   run.scene.discard = [];
   let draws = 0;
   for (const card of [spark, sacrifice, remember]) {
-    const result = resolve(
-      run,
-      { type: "play", uid: card.uid, target: null },
-      "candidate",
-    );
+    const result = resolve(run, { type: "play", uid: card.uid, target: null }, "candidate");
     expect(result.error).toBeNull();
     draws += result.accounting.drawn;
     run = result.run;
@@ -351,8 +299,7 @@ test("crafted diagnostic: free energy and draw chain is finite and pays exposure
   expect(run.scene.exhaust.map((c) => c.def)).toEqual(["spark", "sacrifice"]);
   expect(run.scene.discard.map((c) => c.def)).toEqual(["remember"]);
   expect(
-    resolve(run, { type: "play", uid: spark.uid, target: null }, "candidate")
-      .error,
+    resolve(run, { type: "play", uid: spark.uid, target: null }, "candidate").error,
   ).not.toBeNull();
 });
 
@@ -379,11 +326,7 @@ test("crafted diagnostic: delaying lethal for bread trades a turn and Dread for 
     const immediate = resolve(run, lethal, rules).run;
     expect(immediate.scene).toEqual({ kind: "ending", won: true });
     expect(immediate.hp).toBe(60);
-    const healed = resolve(
-      run,
-      { type: "play", uid: bread.uid, target: null },
-      rules,
-    ).run;
+    const healed = resolve(run, { type: "play", uid: bread.uid, target: null }, rules).run;
     const waited = resolve(healed, { type: "end" }, rules).run;
     if (waited.scene.kind !== "combat") throw new Error("Fixture");
     expect(waited.scene.turn).toBe(2);
@@ -393,11 +336,7 @@ test("crafted diagnostic: delaying lethal for bread trades a turn and Dread for 
     expect(delayed.hp).toBe(65);
     // Change only the public enemy phase from Howl to its first attack.
     wolf.step = 0;
-    const unsafeHeal = resolve(
-      run,
-      { type: "play", uid: bread.uid, target: null },
-      rules,
-    ).run;
+    const unsafeHeal = resolve(run, { type: "play", uid: bread.uid, target: null }, rules).run;
     const unsafeWait = resolve(unsafeHeal, { type: "end" }, rules).run;
     expect(unsafeWait.hp).toBe(56); // 60 + 5 - (7 base + 2 Act II strength).
   }
@@ -488,9 +427,7 @@ test("planner-v2 end phase respects Howl reactivation, locked thresholds, Weak, 
   run.scene.dread = 8;
   expect(planV2(observe(run, "candidate"), "phase-test", 3).value).toBe(-39); // Ward8 unlocks +4 before 13-damage attack.
   run.hp = 5;
-  expect(planV2(observe(run, "candidate"), "phase-test", 3).value).toBe(
-    -100000,
-  );
+  expect(planV2(observe(run, "candidate"), "phase-test", 3).value).toBe(-100000);
 });
 
 test("planner-v2 can extend a presently lethal phase into a surviving multi-card defense", () => {
@@ -506,11 +443,7 @@ test("planner-v2 can extend a presently lethal phase into a surviving multi-card
   expect(result.action).toEqual({ type: "play", uid: rally.uid, target: null });
   expect(result.value).toBeGreaterThan(-1);
   const first = resolve(run, result.action, "candidate").run;
-  const second = resolve(
-    first,
-    { type: "play", uid: guard.uid, target: null },
-    "candidate",
-  ).run;
+  const second = resolve(first, { type: "play", uid: guard.uid, target: null }, "candidate").run;
   expect(resolve(second, { type: "end" }, "candidate").run.hp).toBe(5);
 });
 
@@ -523,19 +456,13 @@ test("reachable Ward8 line suppresses strength without repeating the ward, and v
     policy: "defense",
   });
   const source = new HeadlessFight(c).auto();
-  expect(source.telemetry[9]?.thresholdEvents).toEqual([
-    { at: 8, event: "unlock", dread: 9 },
-  ]);
-  expect(source.telemetry[15]?.thresholdEvents).toEqual([
-    { at: 8, event: "suppressed", dread: 7 },
-  ]);
+  expect(source.telemetry[9]?.thresholdEvents).toEqual([{ at: 8, event: "unlock", dread: 9 }]);
+  expect(source.telemetry[15]?.thresholdEvents).toEqual([{ at: 8, event: "suppressed", dread: 7 }]);
   for (const rules of ["control", "candidate"] as const) {
     const exact = new HeadlessFight({ ...c, rules });
     source.trace.forEach((action) => exact.step(action));
     expect(exact.result().finalHealth).toBe(rules === "control" ? 25 : 36);
-    expect(
-      exact.result().dreadEvents.filter((e) => e.event === "unlock"),
-    ).toHaveLength(2);
+    expect(exact.result().dreadEvents.filter((e) => e.event === "unlock")).toHaveLength(2);
     const branch = new HeadlessFight({
       ...c,
       rules,
@@ -557,8 +484,6 @@ test("reachable Ward8 line suppresses strength without repeating the ward, and v
       rules === "control" ? 44 : 48,
       6,
     ]);
-    expect(result.metrics.suppressedAttackDamage).toBe(
-      rules === "control" ? 0 : 4,
-    );
+    expect(result.metrics.suppressedAttackDamage).toBe(rules === "control" ? 0 : 4);
   }
 });

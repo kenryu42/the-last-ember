@@ -1,11 +1,4 @@
-import {
-  Application,
-  Container,
-  Graphics,
-  Sprite,
-  ParticleContainer,
-  Particle,
-} from "pixi.js";
+import { Application, Container, Graphics, Sprite, ParticleContainer, Particle } from "pixi.js";
 import type { Texture, BLEND_MODES } from "pixi.js";
 import { createAttackTimeline } from "./attack-timeline";
 import type { AttackKind, AttackStage } from "./attack-timeline";
@@ -55,12 +48,7 @@ function sprite(tex: Texture, parent: Container, w: number, h: number) {
   parent.addChild(s);
   return s;
 }
-function particleLayer(
-  parent: Container,
-  tex: Texture,
-  count: number,
-  blend: BLEND_MODES = "add",
-) {
+function particleLayer(parent: Container, tex: Texture, count: number, blend: BLEND_MODES = "add") {
   const pc = new ParticleContainer({
     dynamicProperties: {
       position: true,
@@ -84,10 +72,7 @@ function particleLayer(
   });
   return { pc, ps };
 }
-async function createModel(
-  id: AttackKind,
-  textures: ReturnType<typeof createAttackTextures>,
-) {
+async function createModel(id: AttackKind, textures: ReturnType<typeof createAttackTextures>) {
   const color = colors[id],
     root = new Container(),
     choreography = new Container(),
@@ -96,8 +81,7 @@ async function createModel(
   choreography.addChild(body);
   root.visible = false;
   const parts: { s: Sprite; cls: string }[] = [];
-  if (id === "blade")
-    parts.push({ s: sprite(textures.swordTex, body, 94, 166), cls: "weapon" });
+  if (id === "blade") parts.push({ s: sprite(textures.swordTex, body, 94, 166), cls: "weapon" });
   else if (id === "arrow")
     parts.push({ s: sprite(textures.arrowTex, body, 218, 41), cls: "arrow" });
   else if (id !== "spell")
@@ -133,10 +117,8 @@ async function createModel(
   root.addChild(shield);
   shield.visible = false;
   const ambient = particleLayer(body, textures.soft, 32, "normal");
-  const fire =
-    id === "spell" ? particleLayer(body, textures.flameTex, 110) : null;
-  const core =
-    id === "spell" ? sprite(textures.fireballTex, body, 54, 54) : null;
+  const fire = id === "spell" ? particleLayer(body, textures.flameTex, 110) : null;
+  const core = id === "spell" ? sprite(textures.fireballTex, body, 54, 54) : null;
   if (core) core.blendMode = "add";
   const tex =
     id === "crow"
@@ -233,8 +215,7 @@ export async function createAttackRenderer(host: HTMLElement) {
         request.duration,
       );
       active = animation;
-      const scale =
-        (request.powerful ? 1.05 : 0.8) * Math.min(1, window.innerWidth / 600);
+      const scale = (request.powerful ? 1.05 : 0.8) * Math.min(1, window.innerWidth / 600);
       model.root.visible = true;
       model.root.scale.set(scale);
       const projectile = request.kind === "arrow" || request.kind === "spell";
@@ -244,12 +225,8 @@ export async function createAttackRenderer(host: HTMLElement) {
         // Arrow broadhead, rather than shaft midpoint, reaches the target.
         const offset = request.kind === "arrow" ? 88 * scale : 0;
         model.root.position.set(
-          geometry.x +
-            geometry.dx * progress -
-            Math.cos(model.root.rotation) * offset,
-          geometry.y +
-            geometry.dy * progress -
-            Math.sin(model.root.rotation) * offset,
+          geometry.x + geometry.dx * progress - Math.cos(model.root.rotation) * offset,
+          geometry.y + geometry.dy * progress - Math.sin(model.root.rotation) * offset,
         );
         draw(model, animation.motion, stage);
         model.shield.visible = request.blocked && stage === "impact";
@@ -305,8 +282,7 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
       if (cls === "trail") p.alpha *= 0.18;
     }
     if (id === "arrow") {
-      p.rotation =
-        age > 0 ? Math.sin(age * 0.08) * Math.exp(-age / 110) * 0.018 : 0;
+      p.rotation = age > 0 ? Math.sin(age * 0.08) * Math.exp(-age / 110) * 0.018 : 0;
     }
     if (id === "wolf") {
       p.y = (cls === "jaw-upper" ? -1 : 1) * L(20, -8, k);
@@ -328,11 +304,7 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
     if (id === "crow") {
       p.y = L(-35, 8, k);
       p.rotation =
-        cls === "wing-left"
-          ? L(0.5, -0.25, k)
-          : cls === "wing-right"
-            ? L(-0.5, 0.25, k)
-            : 0;
+        cls === "wing-left" ? L(0.5, -0.25, k) : cls === "wing-right" ? L(-0.5, 0.25, k) : 0;
     }
     if (id === "wraith") {
       p.y = cls.includes("one") ? L(-42, 9, k) : 0;
@@ -344,9 +316,7 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
       p.y = (1 - grow) * 70;
     }
     if (id === "marshal") {
-      p.rotation =
-        (i ? 1 : -1) *
-        L(-0.4, 0.08, Math.pow(C((t - wind - i * 45) / strike), 3));
+      p.rotation = (i ? 1 : -1) * L(-0.4, 0.08, Math.pow(C((t - wind - i * 45) / strike), 3));
     }
     if (id === "shade") {
       if (cls === "spectral-coil") {
@@ -358,10 +328,7 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
       if (cls === "void-ring") {
         p.rotation = sec * 0.001;
         p.scale.set(
-          0.375 *
-            (age < 0
-              ? L(0.6, 1.1, w) * (1 - k * 0.8)
-              : Math.max(0.02, 1 - E(age / 180))),
+          0.375 * (age < 0 ? L(0.6, 1.1, w) * (1 - k * 0.8) : Math.max(0.02, 1 - E(age / 180))),
         );
       } else p.alpha = age >= 0 ? 1 - C(age / 300) : 0;
     }
@@ -409,9 +376,7 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
       } else {
         const tail = q * (t >= wind ? 112 : 25);
         p.x = -18 - tail - burst * 12;
-        p.y =
-          Math.sin(i * 1.7 + q * 7) * (7 + q * 7) +
-          Math.sin(sec * 0.008 - q * 5) * 5 * q;
+        p.y = Math.sin(i * 1.7 + q * 7) * (7 + q * 7) + Math.sin(sec * 0.008 - q * 5) * 5 * q;
         p.rotation = -Math.PI / 2 + Math.sin(q * 5 + i) * 0.17;
         p.scaleX = (0.24 + (i % 3) * 0.07) * (1 - q * 0.5) * charge;
         p.scaleY = (0.5 + (i % 4) * 0.12) * (1 - q * 0.35) * charge;
@@ -437,24 +402,9 @@ function draw(m: Model, motion: Motion, stage: AttackStage) {
     p.alpha = a > 0 && a < 750 ? (1 - q) * 0.85 : 0;
     p.tint = m.color;
     p.x = Math.cos(angle) * dist;
-    p.y =
-      Math.sin(angle) * dist * 0.6 + (id === "spell" ? -q * 55 : q * q * 25);
+    p.y = Math.sin(angle) * dist * 0.6 + (id === "spell" ? -q * 55 : q * q * 25);
     p.rotation = angle + q * (id === "crow" ? 4 : 0);
-    p.scaleX =
-      id === "crow"
-        ? 0.23
-        : id === "wraith"
-          ? 0.2
-          : id === "spell"
-            ? 0.05
-            : 0.13;
-    p.scaleY =
-      id === "crow"
-        ? 0.23
-        : id === "wraith"
-          ? 0.25
-          : id === "spell"
-            ? 0.05
-            : 0.28;
+    p.scaleX = id === "crow" ? 0.23 : id === "wraith" ? 0.2 : id === "spell" ? 0.05 : 0.13;
+    p.scaleY = id === "crow" ? 0.23 : id === "wraith" ? 0.25 : id === "spell" ? 0.05 : 0.28;
   });
 }

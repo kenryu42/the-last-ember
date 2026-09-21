@@ -1,3 +1,4 @@
+import { changeHiddenState } from "../support/combat";
 import { expect, test } from "bun:test";
 import { makeCard } from "../../src/game/engine/rewards";
 import { makeEnemy } from "../../src/game/engine/combat/enemy";
@@ -28,24 +29,19 @@ test("two-phase rollout plays the next drawn defense before a second enemy phase
   const o = observe(run, "control");
   const one = planHorizon(o, "independent", 4096, 1);
   const two = planHorizon(o, "independent", 4096, 2);
-  expect(one.evaluations).toEqual([
-    { action: { type: "end" }, value: 0, completedSamples: 3 },
-  ]);
+  expect(one.evaluations).toEqual([{ action: { type: "end" }, value: 0, completedSamples: 3 }]);
   // 17 incoming minus 7 block = 10 health lost, valued at 3. Not -51
   // from blindly passing the second turn, nor 0 from omitting that phase.
-  expect(two.evaluations).toEqual([
-    { action: { type: "end" }, value: -30, completedSamples: 3 },
-  ]);
+  expect(two.evaluations).toEqual([{ action: { type: "end" }, value: -30, completedSamples: 3 }]);
   expect(one.engineCalls).toBe(6);
   expect(two.engineCalls).toBe(21);
   const sequence = planHorizon(o, "independent", 32768, 2, "sequence");
   expect(sequence.evaluations).toEqual(two.evaluations);
   expect(sequence.engineCalls).toBeGreaterThan(two.engineCalls);
   run.hp = 5;
-  expect(
-    planHorizon(observe(run, "control"), "independent", 4096, 2).evaluations[0]
-      ?.value,
-  ).toBe(-100000);
+  expect(planHorizon(observe(run, "control"), "independent", 4096, 2).evaluations[0]?.value).toBe(
+    -100000,
+  );
 });
 
 test("horizon budgets count continuation evaluations and fallback without comparing partial trials", () => {
@@ -58,25 +54,17 @@ test("horizon budgets count continuation evaluations and fallback without compar
       expect(plan.evaluations.filter((e) => e.value !== null).length).toBe(
         plan.completedCandidates,
       );
-      expect(
-        plan.evaluations.every(
-          (e) => e.value === null || e.completedSamples === 3,
-        ),
-      ).toBe(true);
+      expect(plan.evaluations.every((e) => e.value === null || e.completedSamples === 3)).toBe(
+        true,
+      );
       if (!plan.completedCandidates)
-        expect(plan.action).toEqual(
-          planV2(o, "budget", Math.min(256, budget)).action,
-        );
+        expect(plan.action).toEqual(planV2(o, "budget", Math.min(256, budget)).action);
     }
 });
 
 test("horizon policy cannot see actual draw order or engine RNG and leaves its observation unchanged", () => {
-  const a = createHeadlessRun(config),
-    b = structuredClone(a);
-  if (b.scene.kind !== "combat") throw new Error("fixture");
-  b.scene.draw.reverse();
-  b.rng = 42;
-  b.seed = "private";
+  const a = createHeadlessRun(config);
+  const b = changeHiddenState(a, 42, "private");
   const oa = observe(a, "control"),
     ob = observe(b, "control");
   const before = structuredClone(oa);
@@ -94,25 +82,12 @@ test("sequence continuations stay public, deterministic and inside nested call b
   other.scene.draw.reverse();
   other.rng = 1;
   for (const budget of [1, 96, 4096, 32768]) {
-    const plan = planHorizon(
-      observe(run, "control"),
-      "sequence",
-      budget,
-      2,
-      "sequence",
-    );
+    const plan = planHorizon(observe(run, "control"), "sequence", budget, 2, "sequence");
     expect(plan.engineCalls).toBeLessThanOrEqual(budget);
-    expect(plan).toEqual(
-      planHorizon(observe(other, "control"), "sequence", budget, 2, "sequence"),
-    );
+    expect(plan).toEqual(planHorizon(observe(other, "control"), "sequence", budget, 2, "sequence"));
     expect(legalActions(observe(run, "control"))).toContainEqual(plan.action);
-    expect(
-      plan.evaluations.every(
-        (e) => e.value === null || e.completedSamples === 3,
-      ),
-    ).toBe(true);
-    if (budget === 32768)
-      expect(plan.completedCandidates).toBe(plan.candidates);
+    expect(plan.evaluations.every((e) => e.value === null || e.completedSamples === 3)).toBe(true);
+    if (budget === 32768) expect(plan.completedCandidates).toBe(plan.candidates);
   }
 }, 20000);
 
@@ -141,13 +116,7 @@ test("material terminal utility uses removed HP and threats rather than an arbit
   run.hp = 1;
   run.scene.hand = [];
   expect(
-    planHorizon(
-      observe(run, "control"),
-      "terminal",
-      4096,
-      1,
-      "offense",
-      "material",
-    ).evaluations[0]?.value,
+    planHorizon(observe(run, "control"), "terminal", 4096, 1, "offense", "material").evaluations[0]
+      ?.value,
   ).toBe(-100000);
 });

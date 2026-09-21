@@ -29,20 +29,17 @@ test.each([
   [7, "minor", 7, 15],
   [8, "major", 4, 19],
   [10, "major", 6, 19],
-] as const)(
-  "Dread %i resolves only %s and leaves %i",
-  (dread, band, after, damage) => {
-    const run = setup(dread);
-    expect(dreadResponse(combat(run)).band).toBe(band);
-    const result = resolve(run, { type: "end" });
-    expect(result.error).toBeNull();
-    expect(result.run.hp).toBe(70 - damage);
-    expect(combat(result.run).dread).toBe(after);
-    expect(combat(result.run).fired).toBeUndefined();
-    expect(combat(result.run).enemies.map((e) => e.strength)).toEqual([0, 0]);
-    expect(result.run.stats.thresholds).toBe(band === "none" ? 0 : 1);
-  },
-);
+] as const)("Dread %i resolves only %s and leaves %i", (dread, band, after, damage) => {
+  const run = setup(dread);
+  expect(dreadResponse(combat(run)).band).toBe(band);
+  const result = resolve(run, { type: "end" });
+  expect(result.error).toBeNull();
+  expect(result.run.hp).toBe(70 - damage);
+  expect(combat(result.run).dread).toBe(after);
+  expect(combat(result.run).fired).toBeUndefined();
+  expect(combat(result.run).enemies.map((e) => e.strength)).toEqual([0, 0]);
+  expect(result.run.stats.thresholds).toBe(band === "none" ? 0 : 1);
+});
 test("minor repeats, targets frontmost living, and expires before next phase", () => {
   let run = setup(4);
   combat(run).enemies.unshift({ ...makeEnemy(run, "raider"), hp: 0 });
@@ -99,11 +96,7 @@ test("7 plus 1 triggers major; reducing before end avoids it", () => {
 test("Fury does not buff guard or Howl and respects Weak on Drain", () => {
   const run = setup(8),
     c = combat(run);
-  c.enemies = [
-    makeEnemy(run, "soldier"),
-    makeEnemy(run, "stag"),
-    makeEnemy(run, "shade"),
-  ];
+  c.enemies = [makeEnemy(run, "soldier"), makeEnemy(run, "stag"), makeEnemy(run, "shade")];
   const shade = c.enemies[2];
   if (!shade) throw new Error("Missing shade");
   shade.weak = 1;
@@ -138,11 +131,7 @@ test("Work discards instead of playing or exhausting and limits each turn", () =
   const run = setup(7),
     c = combat(run);
   c.objective = { kind: "escape", progress: 0, target: 6, worked: 0 };
-  c.hand = [
-    makeCard(run, "spark"),
-    makeCard(run, "flame"),
-    makeCard(run, "bread"),
-  ];
+  c.hand = [makeCard(run, "spark"), makeCard(run, "flame"), makeCard(run, "bread")];
   const [spark, flame, bread] = c.hand;
   if (!spark || !flame || !bread) throw new Error("Missing cards");
   let next = resolve(run, { type: "work", uid: spark.uid }).run;
@@ -154,9 +143,7 @@ test("Work discards instead of playing or exhausting and limits each turn", () =
   expect(combat(next).objective?.progress).toBe(1);
   next = resolve(next, { type: "work", uid: flame.uid }).run;
   expect(next.stats.damage).toBe(0);
-  expect(resolve(next, { type: "work", uid: bread.uid }).error).toContain(
-    "twice",
-  );
+  expect(resolve(next, { type: "work", uid: bread.uid }).error).toContain("twice");
   next = resolve(next, { type: "end" }).run;
   expect(combat(next).objective?.worked).toBe(0);
   expect(combat(next).objective?.progress).toBe(2);
@@ -185,9 +172,7 @@ test("Work completes with enemies alive and grants exactly one reward", () => {
   expect(result.run.stats.battles).toBe(1);
   expect(result.run.stats.kills).toBe(0);
   expect(result.run.gold).toBe(75);
-  expect(
-    resolve(result.run, { type: "work", uid: card.uid }).error,
-  ).not.toBeNull();
+  expect(resolve(result.run, { type: "work", uid: card.uid }).error).not.toBeNull();
   const claimed = resolve(result.run, { type: "reward", card: null }).run;
   expect(claimed.gold).toBe(75);
   expect(resolve(claimed, { type: "reward", card: null }).error).not.toBeNull();
@@ -224,7 +209,5 @@ test("JSON CLI completes Escape using legal Work commands", () => {
   expect(child.exitCode).toBe(0);
   const result = JSON.parse(child.stdout.toString());
   expect(result.outcome).toBe("win");
-  expect(result.trace.some((a: { type: string }) => a.type === "work")).toBe(
-    true,
-  );
+  expect(result.trace.some((a: { type: string }) => a.type === "work")).toBe(true);
 });

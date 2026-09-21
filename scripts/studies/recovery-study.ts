@@ -7,17 +7,10 @@ import {
   PLAYTEST_DECKS,
   PLAYTEST_ENCOUNTERS,
 } from "../../src/lab/fixtures/combat";
-import {
-  cardRating,
-  combatAction,
-  journeyAction,
-} from "../../tests/support/pilot";
+import { cardRating, combatAction, journeyAction } from "../../tests/support/pilot";
 
 // Frozen before evaluation. No seed filtering or balance changes.
-export const SEEDS = Array.from(
-  { length: 8 },
-  (_, i) => `recovery-v03-${i + 1}`,
-);
+export const SEEDS = Array.from({ length: 8 }, (_, i) => `recovery-v03-${i + 1}`);
 export const CAMPS = ["rest", "primary", "bread"] as const;
 export const POLICIES = ["greedy", "heal-first"] as const;
 type Policy = (typeof POLICIES)[number];
@@ -90,10 +83,7 @@ export function fight(
 
 function describe(run: Run, action: Action): string {
   if (run.scene.kind !== "combat") return action.type;
-  const card =
-    action.type === "play"
-      ? run.scene.hand.find((c) => c.uid === action.uid)
-      : null;
+  const card = action.type === "play" ? run.scene.hand.find((c) => c.uid === action.uid) : null;
   return `t${run.scene.turn} hp${run.hp} ${card ? `${card.def}${card.upgraded ? "+" : ""}#${card.uid}` : action.type}${action.type === "play" ? ` -> ${action.target}` : ""}`;
 }
 
@@ -119,9 +109,7 @@ export function shortStart(
 export function campAction(run: Run, camp: Camp, deck: Deck): Action {
   if (camp === "rest") return { type: "rest" };
   const id =
-    camp === "bread"
-      ? "bread"
-      : { quiet: "needle", exposed: "cinder", defense: "shield" }[deck];
+    camp === "bread" ? "bread" : { quiet: "needle", exposed: "cinder", defense: "shield" }[deck];
   const card = run.deck.find((c) => c.def === id && !c.upgraded);
   if (!card) throw new Error(`Missing upgrade target ${id}`);
   return { type: "upgrade", uid: card.uid };
@@ -142,9 +130,7 @@ export function followup(
   // Experimental intervention, not a legal full-adventure continuation.
   // Equal deck lengths and explicit stream give equal encounter and shuffle inputs.
   run.rng = newRun(stream).rng;
-  run.route = run.route.map((n) =>
-    n.id === "second" ? { ...n, kind: pressure } : n,
-  );
+  run.route = run.route.map((n) => (n.id === "second" ? { ...n, kind: pressure } : n));
   run = step(run, { type: "travel", node: "second" });
   return { run, campHp };
 }
@@ -178,8 +164,7 @@ function summarize(rows: Row[]) {
     wins: rows.filter((r) => r.second === "win").length,
     // Unconditional endpoint includes deaths at zero. Timeouts remain explicit unknowns.
     meanFinalHp: rows.reduce((n, r) => n + r.finalHp, 0) / rows.length,
-    meanTurns:
-      rows.reduce((n, r) => n + r.firstTurns + r.secondTurns, 0) / rows.length,
+    meanTurns: rows.reduce((n, r) => n + r.firstTurns + r.secondTurns, 0) / rows.length,
     restNetLoss: rows.filter(
       (r) => r.camp === "rest" && r.second === "win" && r.finalHp < r.firstHp,
     ).length,
@@ -216,11 +201,7 @@ export function study() {
     const delayed = step(run, { type: "end" });
     if (delayed.scene.kind !== "combat") return;
     const result = fight(delayed, "heal-first", 30);
-    if (
-      result.outcome === "win" &&
-      result.run.hp > fast.hp &&
-      result.turns <= run.scene.turn + 2
-    ) {
+    if (result.outcome === "win" && result.run.hp > fast.hp && result.turns <= run.scene.turn + 2) {
       healingTrace = {
         context,
         prefix: [...prefix],
@@ -253,11 +234,8 @@ export function study() {
               hp,
               policy,
             };
-            const first = fight(
-              shortStart(seed, deck.id, encounter.id, hp),
-              policy,
-              500,
-              (r, t) => observe(r, t, { ...context, phase: 1 }),
+            const first = fight(shortStart(seed, deck.id, encounter.id, hp), policy, 500, (r, t) =>
+              observe(r, t, { ...context, phase: 1 }),
             );
             for (const pressure of ["battle", "elite"] as const)
               for (const camp of CAMPS) {
@@ -288,8 +266,7 @@ export function study() {
                   pressure,
                   `${seed}/second/${pressure}`,
                 );
-                if (next.run.scene.kind !== "combat")
-                  throw new Error("Missing follow-up combat");
+                if (next.run.scene.kind !== "combat") throw new Error("Missing follow-up combat");
                 const second = fight(next.run, policy, 500, (r, t) =>
                   observe(r, t, {
                     ...context,
@@ -323,10 +300,7 @@ export function study() {
             ...summarize(
               rows.filter(
                 (r) =>
-                  r.hp === hp &&
-                  r.policy === policy &&
-                  r.pressure === pressure &&
-                  r.camp === camp,
+                  r.hp === hp && r.policy === policy && r.pressure === pressure && r.camp === camp,
               ),
             ),
           });
@@ -399,9 +373,7 @@ export function adventures() {
               const card = run.deck
                 .filter((c) => !c.upgraded)
                 .sort((a, b) => cardRating(b.def) - cardRating(a.def))[0];
-              action = card
-                ? { type: "upgrade", uid: card.uid }
-                : { type: "rest" };
+              action = card ? { type: "upgrade", uid: card.uid } : { type: "rest" };
             }
             if (action.type === "rest") rests++;
             if (action.type === "upgrade") upgrades++;
@@ -411,8 +383,7 @@ export function adventures() {
           run = step(run, action);
           if (
             before.scene.kind === "combat" &&
-            (run.scene.kind !== "combat" ||
-              run.scene.turn !== before.scene.turn)
+            (run.scene.kind !== "combat" || run.scene.turn !== before.scene.turn)
           )
             turns++;
         }
@@ -420,12 +391,7 @@ export function adventures() {
           seed,
           hp,
           camp,
-          outcome:
-            run.scene.kind === "ending"
-              ? run.scene.won
-                ? "win"
-                : "loss"
-              : "timeout",
+          outcome: run.scene.kind === "ending" ? (run.scene.won ? "win" : "loss") : "timeout",
           finalHp: run.hp,
           battles: run.stats.battles,
           turns,
@@ -438,6 +404,4 @@ export function adventures() {
 }
 
 if (import.meta.main)
-  console.log(
-    JSON.stringify({ short: study(), adventures: adventures() }, null, 2),
-  );
+  console.log(JSON.stringify({ short: study(), adventures: adventures() }, null, 2));

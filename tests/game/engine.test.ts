@@ -10,15 +10,11 @@ import { newRun } from "../../src/game/engine/run";
 import { reachable } from "../../src/game/selectors/route";
 import { resolve } from "../../src/game/engine/resolve";
 import type { Action, Combat, Run } from "../../src/game/model";
-import {
-  defaultSettings,
-  settingsSchema,
-} from "../../src/platform/browser/settings";
+import { defaultSettings, settingsSchema } from "../../src/platform/browser/settings";
 import { parseSave } from "../../src/game/validation/save";
 
 function combat(run: Run): Combat {
-  if (run.scene.kind !== "combat")
-    throw new Error(`Expected combat, got ${run.scene.kind}`);
+  if (run.scene.kind !== "combat") throw new Error(`Expected combat, got ${run.scene.kind}`);
   return run.scene;
 }
 function setup(cards: string[] = ["strike"]) {
@@ -72,9 +68,7 @@ describe("Dread has an end-turn contract", () => {
     combat(run).dread = dread;
     const next = act(run, { type: "end" });
     expect(combat(next).fired).toEqual(fired);
-    expect(first(next).strength).toBe(
-      fired.length === 2 ? 5 : fired.length === 1 ? 2 : 0,
-    );
+    expect(first(next).strength).toBe(fired.length === 2 ? 5 : fired.length === 1 ? 2 : 0);
   });
   test("crossing then lowering prevents activation; meter clamps both ends", () => {
     let run = setup(["flame", "unseen"]);
@@ -144,9 +138,7 @@ describe("Dread has an end-turn contract", () => {
     expect(result.run.scene.kind).toBe("reward");
     expect(result.run.stats.thresholds).toBe(0);
     expect(
-      result.frames.some(
-        (f) => f.run.scene.kind === "combat" && f.run.scene.dread === 10,
-      ),
+      result.frames.some((f) => f.run.scene.kind === "combat" && f.run.scene.dread === 10),
     ).toBe(true);
   });
   test("ward block is not erased during its arrival phase", () => {
@@ -230,10 +222,9 @@ describe("combat arithmetic and ordered presentation", () => {
       expect(result.run).toEqual(run);
     }
     combat(run).energy = 3;
-    expect(
-      resolve(run, { type: "play", uid: run.deck[0]?.uid ?? -1, target: null })
-        .run,
-    ).toEqual(run);
+    expect(resolve(run, { type: "play", uid: run.deck[0]?.uid ?? -1, target: null }).run).toEqual(
+      run,
+    );
   });
   test("final guardian victory has no reward or fourth act", () => {
     const run = setup(["strike"]);
@@ -259,9 +250,7 @@ describe("cards and zones", () => {
     draw(run, c, 3);
     expect(c.draw).toEqual(before);
     expect(
-      [...c.hand, ...c.draw, ...c.discard, ...c.exhaust]
-        .map((c) => c.uid)
-        .sort((a, b) => a - b),
+      [...c.hand, ...c.draw, ...c.discard, ...c.exhaust].map((c) => c.uid).sort((a, b) => a - b),
     ).toEqual(ids);
   });
   test("unresolved draw card cannot redraw itself", () => {
@@ -279,9 +268,7 @@ describe("cards and zones", () => {
     expect(combat(run).hand.some((c) => c.uid === retained)).toBe(true);
     expect(combat(run).hand.some((c) => c.def === "scout")).toBe(false);
     startCombat(run, "battle");
-    expect(
-      [...combat(run).draw, ...combat(run).hand].some((c) => c.def === "scout"),
-    ).toBe(true);
+    expect([...combat(run).draw, ...combat(run).hand].some((c) => c.def === "scout")).toBe(true);
   });
   const cases: [string, number, number, number, number][] = [
     ["strike", 7, 0, 0, 0],
@@ -374,25 +361,18 @@ describe("card differentiation", () => {
       const seen = new Map<string, string>();
       for (const def of CARDS) {
         const effects = def.effects.map(
-          (effect) =>
-            `${effect.kind}:${effect.amount + (upgraded ? effect.upgrade : 0)}`,
+          (effect) => `${effect.kind}:${effect.amount + (upgraded ? effect.upgrade : 0)}`,
         );
         // These effects commute in the current engine. Do not normalize hits,
         // draw, or conditional scaling: their ordering/multiplicity can matter.
         if (
-          new Set(def.effects.map((effect) => effect.kind)).size ===
-            effects.length &&
-          def.effects.every((effect) =>
-            ["block", "dread", "energy"].includes(effect.kind),
-          )
+          new Set(def.effects.map((effect) => effect.kind)).size === effects.length &&
+          def.effects.every((effect) => ["block", "dread", "energy"].includes(effect.kind))
         )
           effects.sort();
         const key = JSON.stringify([def.cost, effects]);
         const other = seen.get(key);
-        if (other)
-          duplicates.push(
-            `${upgraded ? "improved" : "base"}: ${other}/${def.id}`,
-          );
+        if (other) duplicates.push(`${upgraded ? "improved" : "base"}: ${other}/${def.id}`);
         seen.set(key, def.id);
       }
     }
@@ -422,14 +402,10 @@ describe("card differentiation", () => {
       run = play(run, "needle");
       expect(first(run).hp).toBe(10); // 24 - 14, with precision enabled by Trail.
       run = act(run, { type: "end" });
-      expect(combat(run).hand.some((card) => card.uid === trail.uid)).toBe(
-        false,
-      );
+      expect(combat(run).hand.some((card) => card.uid === trail.uid)).toBe(false);
       startCombat(run, "battle");
       expect(
-        [...combat(run).hand, ...combat(run).draw].some(
-          (card) => card.uid === trail.uid,
-        ),
+        [...combat(run).hand, ...combat(run).draw].some((card) => card.uid === trail.uid),
       ).toBe(true);
     },
   );
@@ -468,9 +444,7 @@ describe("card differentiation", () => {
       const next = play(run, id);
       expect(combat(next).energy).toBe(energy);
       expect(combat(next).dread).toBe(dread);
-      expect(
-        thresholds(next, combat(next)).some((threshold) => threshold.pending),
-      ).toBe(pending);
+      expect(thresholds(next, combat(next)).some((threshold) => threshold.pending)).toBe(pending);
       expect(combat(next).fired).toEqual([]);
       expect(combat(next).exhaust.map((card) => card.uid)).toEqual([card.uid]);
       expect(parseSave(JSON.stringify(next)).kind).toBe("valid");
@@ -482,15 +456,11 @@ describe("the road, purchases, and saves", () => {
     for (let i = 0; i < 50; i++) {
       const run = newRun(`route-${i}`);
       expect(run.route).toHaveLength(18);
-      expect(
-        run.route.filter((n) => n.row === 2).every((n) => n.kind === "camp"),
-      ).toBe(true);
+      expect(run.route.filter((n) => n.row === 2).every((n) => n.kind === "camp")).toBe(true);
       for (const node of run.route.filter((n) => n.row < 5)) {
         expect(node.links.length).toBeGreaterThan(0);
         expect(
-          node.links.every((id) =>
-            run.route.some((n) => n.id === id && n.row === node.row + 1),
-          ),
+          node.links.every((id) => run.route.some((n) => n.id === id && n.row === node.row + 1)),
         ).toBe(true);
       }
       const node = run.route.find((n) => n.row === 1);
@@ -514,9 +484,7 @@ describe("the road, purchases, and saves", () => {
     expect(next.act).toBe(1);
     expect(next.hp).toBe(54);
     expect(next.row).toBe(-1);
-    expect(
-      resolve(next, { type: "reward", card: "flame" }).error,
-    ).not.toBeNull();
+    expect(resolve(next, { type: "reward", card: "flame" }).error).not.toBeNull();
   });
   test("purchases are atomic, sold items stay sold, removal affects one instance", () => {
     let run = newRun("shop");
@@ -531,12 +499,8 @@ describe("the road, purchases, and saves", () => {
     run = act(run, { type: "buy", item: "card", index: 0 });
     expect(run.gold).toBe(60);
     expect(run.deck).toHaveLength(13);
-    expect(resolve(run, { type: "buy", item: "card", index: 0 }).run).toEqual(
-      run,
-    );
-    expect(resolve(run, { type: "buy", item: "relic", index: 0 }).run).toEqual(
-      run,
-    );
+    expect(resolve(run, { type: "buy", item: "card", index: 0 }).run).toEqual(run);
+    expect(resolve(run, { type: "buy", item: "relic", index: 0 }).run).toEqual(run);
     const uid = run.deck.find((c) => c.def === "strike")?.uid ?? -1;
     run = act(run, { type: "buy", item: "remove", index: uid });
     expect(run.gold).toBe(15);
@@ -564,9 +528,7 @@ describe("the road, purchases, and saves", () => {
         const next = act(run, { type: "choice", index: ci });
         expect(next.gold).toBe(100 + choice.gold);
         expect(next.hp).toBe(40 + choice.hp);
-        expect(
-          resolve(next, { type: "choice", index: ci }).error,
-        ).not.toBeNull();
+        expect(resolve(next, { type: "choice", index: ci }).error).not.toBeNull();
       }),
     );
     const run = newRun("poor");
@@ -608,16 +570,10 @@ describe("the road, purchases, and saves", () => {
     }
     const saved = parseSave(JSON.stringify(run));
     if (saved.kind !== "valid") throw new Error("invalid");
-    expect(resolve(saved.run, { type: "end" })).toEqual(
-      resolve(run, { type: "end" }),
-    );
+    expect(resolve(saved.run, { type: "end" })).toEqual(resolve(run, { type: "end" }));
   });
   test("rejects corrupt, unsupported, unknown cards, duplicate zones; settings independent", () => {
-    for (const text of [
-      "{broken",
-      "null",
-      JSON.stringify({ ...newRun("bad"), version: 9 }),
-    ])
+    for (const text of ["{broken", "null", JSON.stringify({ ...newRun("bad"), version: 9 })])
       expect(parseSave(text).kind).toBe("error");
     const run = setup();
     combat(run).hand.push({
@@ -629,9 +585,7 @@ describe("the road, purchases, and saves", () => {
     if (card) card.def = "missing";
     expect(parseSave(JSON.stringify(other)).kind).toBe("error");
     expect(settingsSchema.parse(defaultSettings)).toEqual(defaultSettings);
-    expect(
-      settingsSchema.safeParse({ ...defaultSettings, music: 2 }).success,
-    ).toBe(false);
+    expect(settingsSchema.safeParse({ ...defaultSettings, music: 2 }).success).toBe(false);
   });
   test("import rejects unwinnable combat, colliding enemy IDs and route dead ends", () => {
     const edits: ((run: Run) => void)[] = [

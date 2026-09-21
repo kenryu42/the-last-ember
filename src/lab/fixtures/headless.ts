@@ -4,12 +4,7 @@ import type { Run } from "../../game/model";
 import type { HeadlessConfig } from "../headless-config";
 export function createHeadlessRun(
   config: Pick<HeadlessConfig, "fixture" | "seed" | "encounterId"> &
-    Partial<
-      Pick<
-        HeadlessConfig,
-        "rules" | "objectiveTarget" | "ember" | "startingRelic"
-      >
-    >,
+    Partial<Pick<HeadlessConfig, "rules" | "objectiveTarget" | "ember" | "startingRelic">>,
 ): Run {
   const fixture =
     config.fixture.variant === "diagnostic-mixed"
@@ -33,10 +28,7 @@ export function createHeadlessRun(
     run.scene.dreadResponse = "fury";
     delete run.scene.fired;
   }
-  if (
-    config.fixture.variant === "diagnostic-mixed" &&
-    run.scene.kind === "combat"
-  ) {
+  if (config.fixture.variant === "diagnostic-mixed" && run.scene.kind === "combat") {
     // Slot-preserving substitution commutes with shuffle/draw. No RNG consumed.
     for (const card of [...run.deck, ...run.scene.hand, ...run.scene.draw]) {
       if (card.def === "guard") card.def = "unseen";

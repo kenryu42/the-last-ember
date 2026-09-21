@@ -1,11 +1,7 @@
 import { dreadResponse, thresholds } from "./intentions";
 import type { RulesMode } from "../engine/rules";
 import type { Combat, Run } from "../model";
-export function thresholdState(
-  run: Run,
-  c: Combat,
-  mode: Exclude<RulesMode, "adventure">,
-) {
+export function thresholdState(run: Run, c: Combat, mode: Exclude<RulesMode, "adventure">) {
   if (mode === "recurring") {
     const band = dreadResponse(c).band;
     return [

@@ -1,3 +1,4 @@
+import { resolveCombat } from "../support/combat";
 import { expect, test } from "bun:test";
 import { FADING_STRIKE, cardDef } from "../../src/game/content/cards";
 import { makeCard, rewardPool } from "../../src/game/engine/rewards";
@@ -49,26 +50,18 @@ test.each([
   "Fading strike orders recovery before precision: %s/%s/%s",
   (dread, eryn, upgraded, after, hp, energy) => {
     const { run, card, enemy } = setup(dread, eryn, upgraded);
-    const result = resolve(run, {
-      type: "play",
-      uid: card.uid,
-      target: enemy.uid,
-    });
-    expect(result.error).toBeNull();
-    if (result.run.scene.kind !== "combat") throw new Error("Missing combat");
-    expect(result.run.scene.dread).toBe(after);
-    expect(result.run.scene.enemies[0]?.hp).toBe(hp);
-    expect(result.run.scene.energy).toBe(energy);
-    expect(result.run.scene.relicTurn?.coalUsed).toBe(energy === 2);
-    expect(result.run.scene.discard).toContainEqual(card);
+    const { combat } = resolveCombat(run, { type: "play", uid: card.uid, target: enemy.uid });
+    expect(combat.dread).toBe(after);
+    expect(combat.enemies[0]?.hp).toBe(hp);
+    expect(combat.energy).toBe(energy);
+    expect(combat.relicTurn?.coalUsed).toBe(energy === 2);
+    expect(combat.discard).toContainEqual(card);
   },
 );
 
 test("Work and invalid targeting do not lower Dread; Eryn and Coal cannot retrigger", () => {
   const { run, card, enemy } = setup(7, true);
-  expect(
-    resolve(run, { type: "play", uid: card.uid, target: null }).error,
-  ).not.toBeNull();
+  expect(resolve(run, { type: "play", uid: card.uid, target: null }).error).not.toBeNull();
   if (run.scene.kind !== "combat") throw new Error("Missing combat");
   run.scene.objective = { kind: "escape", target: 4, progress: 0, worked: 0 };
   const work = resolve(run, { type: "work", uid: card.uid }).run;
@@ -113,9 +106,7 @@ test("new pool is opt-in and save round trips preserve its cards", () => {
   delete old.prototype.concealment;
   expect(rewardPool(old)).toHaveLength(31);
   expect(rewardPool(run)).toHaveLength(32);
-  expect(rewardPool(run).filter((c) => c.id !== FADING_STRIKE.id)).toEqual(
-    rewardPool(old),
-  );
+  expect(rewardPool(run).filter((c) => c.id !== FADING_STRIKE.id)).toEqual(rewardPool(old));
   expect(new Set(rewardPool(run).map((c) => c.id)).size).toBe(32);
   expect(parseSave(JSON.stringify(run)).kind).toBe("valid");
 });
@@ -170,14 +161,9 @@ test("sampled rewards include skip and ignore hidden RNG and offer ordering", ()
     expect(score.trials).toHaveLength(4);
     expect(score.trials.every((t) => !t.timeout)).toBe(true);
     expect(score.utility).toBe(
-      score.trials.reduce(
-        (sum, t) => sum + (t.won ? 10000 : -10000) + 3 * t.hp - t.turns,
-        0,
-      ),
+      score.trials.reduce((sum, t) => sum + (t.won ? 10000 : -10000) + 3 * t.hp - t.turns, 0),
     );
-    expect(score.trials.map((t) => t.formation)).toEqual(
-      skip.trials.map((t) => t.formation),
-    );
+    expect(score.trials.map((t) => t.formation)).toEqual(skip.trials.map((t) => t.formation));
   }
   expect(() => simulateJourney("wrong-rules", "search", 96, "sampled")).toThrow(
     "requires recurring",

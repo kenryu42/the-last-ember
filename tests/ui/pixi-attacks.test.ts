@@ -10,12 +10,7 @@ test.each(["blade", "arrow", "spell", "wolf", "sentinel"] as const)(
       const body = new Container();
       const travel = 360 / speed;
       const impact = 420 / speed;
-      const { timeline, motion } = createAttackTimeline(
-        kind,
-        body,
-        "anticipate",
-        travel,
-      );
+      const { timeline, motion } = createAttackTimeline(kind, body, "anticipate", travel);
       timeline.time((travel / 1000) * 0.99);
       expect(motion.strike).toBeLessThan(1);
       timeline.time(travel / 1000);

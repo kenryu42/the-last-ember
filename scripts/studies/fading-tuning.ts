@@ -12,9 +12,7 @@ const rowSchema = z.object({
   rewardEvaluations: z.array(
     z.object({
       index: z.number().int(),
-      alternatives: z.array(
-        z.object({ card: z.string().nullable(), utility: z.number() }),
-      ),
+      alternatives: z.array(z.object({ card: z.string().nullable(), utility: z.number() })),
     }),
   ),
 });
@@ -27,17 +25,12 @@ try {
   for (const prefix of ["concealment-v1", fresh]) {
     for (const relic of ["shieldfire", "hushed-coal", "black-lantern"]) {
       const file = `experiments/identity/concealment-${relic}-sampled-${prefix}.jsonl.gz`;
-      for (const line of gunzipSync(readFileSync(file))
-        .toString()
-        .trim()
-        .split("\n")) {
+      for (const line of gunzipSync(readFileSync(file)).toString().trim().split("\n")) {
         const row = rowSchema.parse(JSON.parse(line));
         for (const decision of row.rewardEvaluations) {
-          if (!decision.alternatives.some((a) => a.card === FADING_STRIKE.id))
-            continue;
+          if (!decision.alternatives.some((a) => a.card === FADING_STRIKE.id)) continue;
           const context = row.history[decision.index]?.before;
-          if (context?.scene.kind !== "reward")
-            throw new Error("Missing reward context");
+          if (context?.scene.kind !== "reward") throw new Error("Missing reward context");
           const variants = [];
           for (const base of [4, 5, 6]) {
             // Isolated single-process balance probe. Restore content before exit.
@@ -45,9 +38,7 @@ try {
             const alternatives = evaluateRewards(context, context.scene.cards);
             if (
               base === 4 &&
-              alternatives.some(
-                (a, i) => a.utility !== decision.alternatives[i]?.utility,
-              )
+              alternatives.some((a, i) => a.utility !== decision.alternatives[i]?.utility)
             )
               throw new Error("Baseline evaluator drift");
             variants.push({ base, alternatives });
@@ -79,15 +70,13 @@ for (const base of [4, 5, 6]) {
     timeouts = 0;
   for (const row of results) {
     const variant = row.variants.find((v) => v.base === base);
-    const candidate = variant?.alternatives.find(
-      (a) => a.card === FADING_STRIKE.id,
-    );
+    const candidate = variant?.alternatives.find((a) => a.card === FADING_STRIKE.id);
     const skip = variant?.alternatives.find((a) => a.card === null);
     if (!variant || !candidate || !skip) throw new Error("Missing variant");
     beatsSkip += Number(candidate.utility > skip.utility);
     best += Number(
-      variant.alternatives.reduce((a, b) => (b.utility > a.utility ? b : a))
-        .card === FADING_STRIKE.id,
+      variant.alternatives.reduce((a, b) => (b.utility > a.utility ? b : a)).card ===
+        FADING_STRIKE.id,
     );
     for (const option of variant.alternatives) {
       trials += option.trials.length;

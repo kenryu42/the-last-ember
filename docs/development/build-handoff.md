@@ -97,12 +97,12 @@ Use concise, literal rules text and optional separate flavor text. State target,
 
 These examples establish intent, not immutable balance:
 
-| Card | Initial effect |
-| --- | --- |
-| Ancient flame | Cost 2. Deal 14 damage to one enemy. Gain 3 Dread. |
-| Walk unseen | Cost 1. Gain 5 block. Lose 2 Dread. |
-| Defiance | Cost 1. Deal 6 damage, or 12 if Dread is at least 6 when this effect resolves. |
-| Hold the pass | Cost 1. Gain 10 block. Gain 1 Dread. |
+| Card          | Initial effect                                                                 |
+| ------------- | ------------------------------------------------------------------------------ |
+| Ancient flame | Cost 2. Deal 14 damage to one enemy. Gain 3 Dread.                             |
+| Walk unseen   | Cost 1. Gain 5 block. Lose 2 Dread.                                            |
+| Defiance      | Cost 1. Deal 6 damage, or 12 if Dread is at least 6 when this effect resolves. |
+| Hold the pass | Cost 1. Gain 10 block. Gain 1 Dread.                                           |
 
 Target at least 30 distinct obtainable cards total, including starter cards, distributed across the three companions and a few neutral journey cards. Every card must have an implemented, tested effect and a meaningful role. Each has one upgrade, with a clearly previewed difference. Avoid filler cards that differ only by a name.
 

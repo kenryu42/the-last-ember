@@ -33,10 +33,7 @@ export function recordEnding(run: Run) {
       cards: run.stats.cards,
       time: new Date().toISOString(),
     });
-    localStorage.setItem(
-      "last-ember.history",
-      JSON.stringify(history.slice(0, 20)),
-    );
+    localStorage.setItem("last-ember.history", JSON.stringify(history.slice(0, 20)));
   } catch {
     /* History must not interrupt the ending. */
   }

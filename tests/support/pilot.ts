@@ -23,9 +23,7 @@ export function combatAction(run: Run): Action {
   for (const card of s.hand) {
     const def = cardDef(card.def);
     if (def.cost > s.energy) continue;
-    const targets = needsTarget(def)
-      ? s.enemies.filter((e) => e.hp > 0).map((e) => e.uid)
-      : [null];
+    const targets = needsTarget(def) ? s.enemies.filter((e) => e.hp > 0).map((e) => e.uid) : [null];
     for (const target of targets) {
       const action: Action = { type: "play", uid: card.uid, target },
         next = resolve(run, action).run,
@@ -39,8 +37,7 @@ export function combatAction(run: Run): Action {
           const i = intention(e, ns);
           return sum + (["attack", "drain"].includes(i.kind) ? i.amount : 0);
         }, 0);
-      const prevented =
-        Math.max(0, incoming - s.block) - Math.max(0, nextIncoming - ns.block);
+      const prevented = Math.max(0, incoming - s.block) - Math.max(0, nextIncoming - ns.block);
       const draws = def.effects
         .filter((e) => e.kind === "draw")
         .reduce((n, e) => n + e.amount + (card.upgraded ? e.upgrade : 0), 0);
@@ -120,8 +117,7 @@ export function journeyAction(run: Run): Action {
         .filter((n) => reachable(run, n))
         .sort(
           (a, b) =>
-            priorities[b.kind] - priorities[a.kind] ||
-            Math.abs(a.lane - 1) - Math.abs(b.lane - 1),
+            priorities[b.kind] - priorities[a.kind] || Math.abs(a.lane - 1) - Math.abs(b.lane - 1),
         )[0];
       if (!node) throw new Error("Dead end");
       return { type: "travel", node: node.id };
@@ -159,14 +155,12 @@ export function journeyAction(run: Run): Action {
     case "shop": {
       if (run.hp < run.maxHp - 16 && !s.healed && run.gold >= 30)
         return { type: "buy", item: "heal", index: 0 };
-      if (s.relic && run.gold >= 85)
-        return { type: "buy", item: "relic", index: 0 };
+      if (s.relic && run.gold >= 85) return { type: "buy", item: "relic", index: 0 };
       const offer = s.cards
         .map((id, index) => ({ id, index }))
         .filter((x) => x.id && cardRating(x.id) >= 11)
         .sort((a, b) => cardRating(b.id ?? "") - cardRating(a.id ?? ""))[0];
-      if (offer && run.gold >= 40)
-        return { type: "buy", item: "card", index: offer.index };
+      if (offer && run.gold >= 40) return { type: "buy", item: "card", index: offer.index };
       const remove = run.deck.find((c) => c.def === "strike" && !c.upgraded);
       if (remove && !s.removed && run.deck.length > 9 && run.gold >= 45)
         return { type: "buy", item: "remove", index: remove.uid };

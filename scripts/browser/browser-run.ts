@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { browserSession } from "./agent-browser";
 import { cardDef, needsTarget } from "../../src/game/content/cards";
 import { resolve } from "../../src/game/engine/resolve";
 import type { Action, Run } from "../../src/game/model";
@@ -9,29 +9,9 @@ import { journeyAction } from "../../tests/support/pilot";
 // named browser session first. Reads only this game's local save for assertions.
 const session = process.argv[2] ?? "ember",
   max = Number(process.argv[3] ?? 1000);
-const responseSchema = z.object({
-  success: z.boolean(),
-  data: z.object({ result: z.unknown().optional() }).passthrough().optional(),
-  error: z.unknown().optional(),
-});
-async function browser(...args: string[]) {
-  const proc = Bun.spawn(
-    ["agent-browser", "--session", session, "--restore", ...args, "--json"],
-    { stdout: "pipe", stderr: "pipe" },
-  );
-  const output = await new Response(proc.stdout).text(),
-    error = await new Response(proc.stderr).text();
-  if ((await proc.exited) !== 0)
-    throw new Error(`${args.join(" ")}: ${error} ${output}`);
-  const result = responseSchema.parse(JSON.parse(output));
-  if (!result.success) throw new Error(JSON.stringify(result.error));
-  return result.data?.result;
-}
+const browser = browserSession(session);
 async function state(): Promise<Run> {
-  const text = await browser(
-    "eval",
-    'localStorage.getItem("last-ember.run.v1")',
-  );
+  const text = await browser("eval", 'localStorage.getItem("last-ember.run.v1")');
   const parsed = parseSave(typeof text === "string" ? text : null);
   if (parsed.kind !== "valid") throw new Error("No valid browser run");
   return parsed.run;
@@ -41,11 +21,7 @@ async function click(selector: string) {
   // The engine result is committed before presentation, so a save alone is not
   // proof that the next control has reached its final position.
   await browser("scrollintoview", selector);
-  await browser(
-    "wait",
-    "--fn",
-    'document.getAnimations().every(a=>a.playState!=="running")',
-  );
+  await browser("wait", "--fn", 'document.getAnimations().every(a=>a.playState!=="running")');
   await browser("click", selector);
 }
 async function textClick(text: string) {
@@ -101,14 +77,10 @@ async function ui(action: Action, run: Run) {
       await textClick("Confirm improvement");
       break;
     case "buy":
-      if (action.item === "card")
-        await click(`.shop-card [data-card="${action.index}"]`);
+      if (action.item === "card") await click(`.shop-card [data-card="${action.index}"]`);
       else if (action.item === "heal") await textClick("A warming tonic");
       else if (action.item === "relic")
-        await browser(
-          "eval",
-          `document.querySelector('.shop-services button').click()`,
-        );
+        await browser("eval", `document.querySelector('.shop-services button').click()`);
       else {
         await textClick("Travel lighter");
         await click(`dialog [data-card="${action.index}"]`);
@@ -126,9 +98,7 @@ while (run.scene.kind !== "ending" && count < max) {
   const scene = `${run.act + 1}:${run.row + 1}:${run.scene.kind}`;
   if (!seen.has(scene)) {
     seen.add(scene);
-    console.log(
-      `${scene} hp=${run.hp} deck=${run.deck.length} gold=${run.gold}`,
-    );
+    console.log(`${scene} hp=${run.hp} deck=${run.deck.length} gold=${run.gold}`);
   }
   const action = journeyAction(run),
     expected = resolve(run, action);
@@ -139,9 +109,7 @@ while (run.scene.kind !== "ending" && count < max) {
   if (JSON.stringify(run) !== JSON.stringify(expected.run))
     throw new Error(`Browser/engine mismatch after ${JSON.stringify(action)}`);
   if (count % 25 === 0)
-    console.log(
-      `Verified ${count} actions; ${Math.round((Date.now() - start) / 1000)}s elapsed`,
-    );
+    console.log(`Verified ${count} actions; ${Math.round((Date.now() - start) / 1000)}s elapsed`);
 }
 console.log(
   JSON.stringify({

@@ -6,17 +6,17 @@ locations, not game rules, balance, save formats, or dependencies.
 
 ## Ownership
 
-| Directory | Responsibility |
-| --- | --- |
-| `src/app/` | Screen composition, settings, canonical game session, input lock and autosave |
-| `src/game/content/` | Cards, enemies, relics, world and event definitions |
-| `src/game/engine/` | Seeded RNG, run creation, combat and journey actions |
-| `src/game/selectors/` | Shared calculations for UI and laboratory consumers |
-| `src/game/validation/` | Pure parsing and consistency checks for current saves |
-| `src/lab/` | Restricted observations, legal actions, policies, recording and simulations |
-| `src/platform/browser/` | Browser saves, settings, sound preference and result history |
-| `src/ui/` | Cards, combat, journey, stops, shared components and audio |
-| `src/ui/devtools/` | Development-only, lazily loaded playtest interface |
+| Directory               | Responsibility                                                                |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `src/app/`              | Screen composition, settings, canonical game session, input lock and autosave |
+| `src/game/content/`     | Cards, enemies, relics, world and event definitions                           |
+| `src/game/engine/`      | Seeded RNG, run creation, combat and journey actions                          |
+| `src/game/selectors/`   | Shared calculations for UI and laboratory consumers                           |
+| `src/game/validation/`  | Pure parsing and consistency checks for current saves                         |
+| `src/lab/`              | Restricted observations, legal actions, policies, recording and simulations   |
+| `src/platform/browser/` | Browser saves, settings, sound preference and result history                  |
+| `src/ui/`               | Cards, combat, journey, stops, shared components and audio                    |
+| `src/ui/devtools/`      | Development-only, lazily loaded playtest interface                            |
 
 The game imports only game modules and Zod. The laboratory imports the game and
 its own modules. Browser persistence imports game validation. Application code

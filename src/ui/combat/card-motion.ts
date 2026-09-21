@@ -7,10 +7,7 @@ export function discardedHand(combat: Combat): Combat {
     ...combat,
     energy: 0,
     hand: combat.hand.filter((card) => cardDef(card.def).retain),
-    discard: [
-      ...combat.discard,
-      ...combat.hand.filter((card) => !cardDef(card.def).retain),
-    ],
+    discard: [...combat.discard, ...combat.hand.filter((card) => !cardDef(card.def).retain)],
   };
 }
 
@@ -85,12 +82,7 @@ async function pileFlight(
   source.style.visibility = "hidden";
   const duration = (kind === "shuffle" ? 340 : 260) / speed;
   const flip = back?.animate(
-    [
-      { opacity: 0 },
-      { opacity: 0, offset: 0.4 },
-      { opacity: 1, offset: 0.65 },
-      { opacity: 1 },
-    ],
+    [{ opacity: 0 }, { opacity: 0, offset: 0.4 }, { opacity: 1, offset: 0.65 }, { opacity: 1 }],
     { duration, fill: "both" },
   );
   const animation = ghost.animate(
@@ -108,12 +100,9 @@ async function pileFlight(
       easing: "ease-in-out",
     },
   );
-  const cancel = () => animation.cancel();
-  window.addEventListener("resize", cancel, { once: true });
   try {
-    await animation.finished.catch(() => {});
+    await finishFlight(animation);
   } finally {
-    window.removeEventListener("resize", cancel);
     flip?.cancel();
     source.style.visibility = visibility;
     ghost.remove();
@@ -127,43 +116,30 @@ export async function animateDiscard(cards: Card[], speed: number) {
     ?.getBoundingClientRect();
   if (!destination) return;
   await Promise.all(
-    cards.map((card, index) => {
-      const source = document.querySelector<HTMLElement>(
-        `.hand [data-card="${card.uid}"]`,
-      );
-      return source
-        ? pileFlight(source, destination, "discard", speed, index * 30)
-        : undefined;
+    cards.map(async (card, index) => {
+      const source = document.querySelector<HTMLElement>(`.hand [data-card="${card.uid}"]`);
+      return source ? pileFlight(source, destination, "discard", speed, index * 30) : undefined;
     }),
   );
 }
 
 export async function animateShuffle(speed: number) {
   if (reducedMotion()) return;
-  const source = document.querySelector<HTMLElement>(
-    '[data-pile="discard"] .pile-stack',
-  );
+  const source = document.querySelector<HTMLElement>('[data-pile="discard"] .pile-stack');
   const destination = document
     .querySelector('[data-pile="draw"] .pile-stack')
     ?.getBoundingClientRect();
-  if (source && destination)
-    await pileFlight(source, destination, "shuffle", speed);
+  if (source && destination) await pileFlight(source, destination, "shuffle", speed);
 }
 
 export async function animateDeal(cards: Card[], speed: number) {
-  await Promise.all(
-    cards.map((card, index) => animateDraw(card, speed, index * 80)),
-  );
+  await Promise.all(cards.map((card, index) => animateDraw(card, speed, index * 80)));
 }
 
 async function animateDraw(card: Card, speed: number, delay: number) {
   if (reducedMotion()) return;
-  const target = document.querySelector<HTMLElement>(
-    `.hand [data-card="${card.uid}"]`,
-  );
-  const source = document
-    .querySelector('[data-pile="draw"] .pile-stack')
-    ?.getBoundingClientRect();
+  const target = document.querySelector<HTMLElement>(`.hand [data-card="${card.uid}"]`);
+  const source = document.querySelector('[data-pile="draw"] .pile-stack')?.getBoundingClientRect();
   const slot = target?.parentElement?.getBoundingClientRect();
   if (!target || !source || !slot) return;
   // This flight replaces the generic entrance for this mounted card. Restoring
@@ -200,14 +176,21 @@ async function animateDraw(card: Card, speed: number, delay: number) {
     ],
     { duration, delay: delay / speed, fill: "both" },
   );
+  try {
+    await finishFlight(animation);
+  } finally {
+    reveal.cancel();
+    back.remove();
+    delete target.dataset.motion;
+  }
+}
+
+async function finishFlight(animation: Animation) {
   const cancel = () => animation.cancel();
   window.addEventListener("resize", cancel, { once: true });
   try {
     await animation.finished.catch(() => {});
   } finally {
     window.removeEventListener("resize", cancel);
-    reveal.cancel();
-    back.remove();
-    delete target.dataset.motion;
   }
 }

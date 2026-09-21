@@ -14,8 +14,7 @@ export class HeadlessFight {
   private trace: CombatAction[] = [];
   private readonly policyVersion: string;
   constructor(readonly config: HeadlessConfig) {
-    this.policyVersion =
-      config.policy === "planner-v2" ? PLANNER_V2_VERSION : POLICY_VERSION;
+    this.policyVersion = config.policy === "planner-v2" ? PLANNER_V2_VERSION : POLICY_VERSION;
     this.run = createHeadlessRun(config);
     this.record = beginRecord(
       {
@@ -23,10 +22,7 @@ export class HeadlessFight {
         ...config.fixture,
         // Telemetry arithmetic only uses rules. Export the actual diagnostic
         // variant via result.config without extending the UI's variant schema.
-        variant:
-          config.fixture.variant === "diagnostic-mixed"
-            ? "base"
-            : config.fixture.variant,
+        variant: config.fixture.variant === "diagnostic-mixed" ? "base" : config.fixture.variant,
         player: `${config.policy}/${this.policyVersion}`,
       },
       this.run,
@@ -35,12 +31,10 @@ export class HeadlessFight {
     this.record.startedAt = "automated";
   }
   outcome(): "win" | "loss" | "timeout" | "running" {
-    if (this.run.scene.kind === "ending")
-      return this.run.scene.won ? "win" : "loss";
+    if (this.run.scene.kind === "ending") return this.run.scene.won ? "win" : "loss";
     if (
       this.trace.length >= this.config.maxActions ||
-      (this.run.scene.kind === "combat" &&
-        this.run.scene.turn > this.config.maxTurns)
+      (this.run.scene.kind === "combat" && this.run.scene.turn > this.config.maxTurns)
     )
       return "timeout";
     return "running";
@@ -50,14 +44,12 @@ export class HeadlessFight {
     return {
       outcome: this.outcome(),
       observation,
-      legalActions:
-        this.outcome() === "running" ? legalActions(observation) : [],
+      legalActions: this.outcome() === "running" ? legalActions(observation) : [],
     };
   }
   step(input: unknown) {
     const action = combatActionSchema.parse(input);
-    if (this.outcome() !== "running")
-      throw new Error("Fight is terminal or budget exhausted");
+    if (this.outcome() !== "running") throw new Error("Fight is terminal or budget exhausted");
     if (
       !legalActions(observe(this.run, this.config.rules)).some(
         (a) => JSON.stringify(a) === JSON.stringify(action),
@@ -90,10 +82,7 @@ export class HeadlessFight {
       policyVersion: this.policyVersion,
       outcome: this.outcome(),
       finalHealth: this.run.hp,
-      playerTurns:
-        this.record.result?.playerTurns ??
-        this.record.actions.at(-1)?.turn ??
-        1,
+      playerTurns: this.record.result?.playerTurns ?? this.record.actions.at(-1)?.turn ?? 1,
       actionCount: this.trace.length,
       metrics,
       dreadEvents: this.record.actions.flatMap((a) => a.thresholdEvents),

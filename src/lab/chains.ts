@@ -49,9 +49,7 @@ export function probeChain(
   for (const def of CARDS)
     if (
       !def.exhaust &&
-      def.effects.some(
-        (e) => e.kind === "energy" || (def.cost === 0 && e.kind === "draw"),
-      )
+      def.effects.some((e) => e.kind === "energy" || (def.cost === 0 && e.kind === "draw"))
     )
       throw new Error(`Termination bound needs review for ${def.id}`);
   const energyBound =
@@ -68,18 +66,13 @@ export function probeChain(
     );
   const maxDraw = Math.max(
     ...CARDS.map((def) =>
-      def.effects.reduce(
-        (n, e) => n + (e.kind === "draw" ? value(e, upgraded) : 0),
-        0,
-      ),
+      def.effects.reduce((n, e) => n + (e.kind === "draw" ? value(e, upgraded) : 0), 0),
     ),
   );
   // Paid plays <= energyBound. Free exhaust plays <= deck size. Every free
   // non-exhaust occurrence must start in hand or be drawn by one of those plays.
   const actionBound =
-    (energyBound + run.deck.length) * (1 + maxDraw) +
-    run.scene.hand.length +
-    6 * (turnLimit - 1); // Five automatic draws and one end action per transition.
+    (energyBound + run.deck.length) * (1 + maxDraw) + run.scene.hand.length + 6 * (turnLimit - 1); // Five automatic draws and one end action per transition.
   const trace: ReturnType<typeof legalActions> = [];
   let generated = 0,
     spent = 0,
@@ -92,27 +85,14 @@ export function probeChain(
     if (!plays.length && o.turn >= turnLimit) break;
     const priority = (kind: "energy" | "draw") =>
       plays.find((a) =>
-        o.hand.some(
-          (c) =>
-            c.uid === a.uid &&
-            cardDef(c.def).effects.some((e) => e.kind === kind),
-        ),
+        o.hand.some((c) => c.uid === a.uid && cardDef(c.def).effects.some((e) => e.kind === kind)),
       );
     const action = !plays.length
       ? { type: "end" as const }
       : (priority("energy") ??
         priority("draw") ??
-        selectAction(
-          o,
-          plays,
-          "random",
-          `chain-policy:${seed}:${trace.length}`,
-          1,
-        ));
-    const card =
-      action.type === "play"
-        ? o.hand.find((c) => c.uid === action.uid)
-        : undefined;
+        selectAction(o, plays, "random", `chain-policy:${seed}:${trace.length}`, 1));
+    const card = action.type === "play" ? o.hand.find((c) => c.uid === action.uid) : undefined;
     if (action.type === "play") {
       if (!card) throw new Error("Chain policy did not select a playable card");
       const def = cardDef(card.def);
@@ -128,8 +108,7 @@ export function probeChain(
     run = result.run;
     assertInvariants(run);
     trace.push(action);
-    if (run.scene.kind === "combat")
-      peakEnergy = Math.max(peakEnergy, run.scene.energy);
+    if (run.scene.kind === "combat") peakEnergy = Math.max(peakEnergy, run.scene.energy);
     if (trace.length > actionBound || spent > energyBound)
       throw new Error(`Chain bound violated: ${seed}`);
   }
@@ -180,8 +159,7 @@ export function probeStall(seed: string, withPayoff: boolean) {
     const o = observe(run, "control");
     if (o.kind !== "combat") throw new Error("Missing observation");
     const legal = legalActions(o);
-    const isPayoff = (uid: number) =>
-      o.hand.some((c) => c.uid === uid && c.def === "shield");
+    const isPayoff = (uid: number) => o.hand.some((c) => c.uid === uid && c.def === "shield");
     const payoff = legal.find((a) => a.type === "play" && isPayoff(a.uid));
     const action = (o.energy === 1 ? payoff : undefined) ??
       legal.find((a) => a.type === "play" && !isPayoff(a.uid)) ??

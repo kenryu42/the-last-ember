@@ -9,19 +9,12 @@ import type { Settings } from "../platform/browser/settings";
 
 export function useGameSession(options: {
   settings: Settings;
-  present: (
-    before: Run,
-    action: Action,
-    result: Resolution,
-    settings: Settings,
-  ) => Promise<void>;
+  present: (before: Run, action: Action, result: Resolution, settings: Settings) => Promise<void>;
   onActionStart: () => void;
   onActionComplete: (action: Action) => void;
 }) {
   const [loaded] = useState(loadRun);
-  const [run, setRun] = useState<Run | null>(
-    loaded.kind === "valid" ? loaded.run : null,
-  );
+  const [run, setRun] = useState<Run | null>(loaded.kind === "valid" ? loaded.run : null);
   const current = useRef(run);
   const settings = useRef(options.settings);
   useEffect(() => {
@@ -29,13 +22,9 @@ export function useGameSession(options: {
   }, [options.settings]);
   const locked = useRef(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(
-    loaded.kind === "error" ? loaded.message : "",
-  );
+  const [error, setError] = useState(loaded.kind === "error" ? loaded.message : "");
   const [saved, setSaved] = useState(true);
-  const [arrival, setArrival] = useState<{ from: Run; node: RouteNode } | null>(
-    null,
-  );
+  const [arrival, setArrival] = useState<{ from: Run; node: RouteNode } | null>(null);
   const completeArrival = useCallback(() => {
     setArrival(null);
     locked.current = false;
@@ -50,11 +39,7 @@ export function useGameSession(options: {
   };
   const dispatch = async (action: Action): Promise<void> => {
     const before = current.current;
-    if (
-      !before ||
-      locked.current ||
-      (before.scene.kind === "combat" && before.scene.introPending)
-    )
+    if (!before || locked.current || (before.scene.kind === "combat" && before.scene.introPending))
       return;
     const result = resolve(before, action);
     if (result.error) {
@@ -95,12 +80,7 @@ export function useGameSession(options: {
   };
   const enterEncounter = () => {
     const active = current.current;
-    if (
-      locked.current ||
-      active?.scene.kind !== "combat" ||
-      !active.scene.introPending
-    )
-      return;
+    if (locked.current || active?.scene.kind !== "combat" || !active.scene.introPending) return;
     const scene = { ...active.scene };
     delete scene.introPending;
     commit({ ...active, scene });

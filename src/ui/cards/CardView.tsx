@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cardDef, effectText } from "../../game/content/cards";
 import type { Card } from "../../game/model";
-import {
-  loadVideoSound,
-  saveVideoSound,
-} from "../../platform/browser/video-sound";
+import { loadVideoSound, saveVideoSound } from "../../platform/browser/video-sound";
 import { Icon } from "../shared/Icon";
 function cardArtStyle(card: Card) {
   const def = cardDef(card.def);
@@ -36,11 +33,7 @@ export function CardPile({
       onClick={onClick}
       aria-label={`${label} pile, ${cards.length} cards${kind === "draw" ? ", order hidden" : ""}`}
     >
-      <span
-        className="pile-stack"
-        aria-hidden="true"
-        data-empty={!cards.length}
-      >
+      <span className="pile-stack" aria-hidden="true" data-empty={!cards.length}>
         {Array.from({ length: layers }, (_, index) => (
           <span
             key={index}
@@ -149,11 +142,9 @@ export function CardView({
       document.removeEventListener("visibilitychange", cancelOpening);
     };
   }, [allowArtPreview]);
+  if (!allowArtPreview && showArt) setShowArt(false);
   useEffect(() => {
-    if (!allowArtPreview) {
-      setShowArt(false);
-      return;
-    }
+    if (!allowArtPreview) return;
     const panel = artwork.current;
     const anchor = button.current;
     if (!showArt || !panel || !anchor) return;
@@ -230,8 +221,7 @@ export function CardView({
           if (event.currentTarget.matches(":focus-visible")) keepArt();
         }}
         onBlur={(event) => {
-          if (!artwork.current?.contains(event.relatedTarget))
-            setShowArt(false);
+          if (!artwork.current?.contains(event.relatedTarget)) setShowArt(false);
         }}
         onClick={() => {
           cancelOpening();
@@ -267,8 +257,7 @@ export function CardView({
           <span className="art-image card-pair" style={artStyle} />
         </span>
         <span className="card-owner">
-          {def.owner}{" "}
-          <span>· {needsLabel(def.effects.map((e) => e.kind))}</span>
+          {def.owner} <span>· {needsLabel(def.effects.map((e) => e.kind))}</span>
         </span>
         <span className="card-rules">
           {def.effects.map((effect, index) => (
@@ -294,10 +283,10 @@ export function CardView({
         onPointerEnter={keepArt}
         onPointerLeave={leaveArt}
         onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget))
-            setShowArt(false);
+          if (!event.currentTarget.contains(event.relatedTarget)) setShowArt(false);
         }}
       >
+        {/* oxlint-disable jsx-a11y/prefer-tag-over-role -- Cropped sprite artwork includes an optional video layer and cannot be rendered by an img. */}
         <span
           className="full-card-art"
           role="img"
@@ -305,6 +294,7 @@ export function CardView({
           style={artStyle}
         >
           {showVideo && (
+            // oxlint-disable-next-line jsx-a11y/media-has-caption -- Decorative artwork animation with ambient sound, no dialogue or informational audio.
             <video
               className="card-art-video"
               src="/assets/ancient-flame.mp4"
@@ -316,6 +306,7 @@ export function CardView({
             />
           )}
         </span>
+        {/* oxlint-enable jsx-a11y/prefer-tag-over-role */}
         <span className="art-caption">
           {def.name}
           {card.upgraded ? " · Improved" : ""}
@@ -367,14 +358,7 @@ export function CardView({
 }
 function needsLabel(kinds: string[]) {
   return kinds.some((k) =>
-    [
-      "hit",
-      "all",
-      "defiance",
-      "precision",
-      "shieldStrike",
-      "spendBlock",
-    ].includes(k),
+    ["hit", "all", "defiance", "precision", "shieldStrike", "spendBlock"].includes(k),
   )
     ? "Attack"
     : kinds.includes("block") || kinds.includes("resolve")

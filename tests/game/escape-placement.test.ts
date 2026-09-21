@@ -62,11 +62,7 @@ test("full later-Escape journey has prior rewards and replays valid saves", () =
     expect(next.error).toBeNull();
     run = next.run;
     if (action.type === "reward") rewards++;
-    if (
-      action.type === "travel" &&
-      run.scene.kind === "combat" &&
-      run.scene.objective
-    ) {
+    if (action.type === "travel" && run.scene.kind === "combat" && run.scene.objective) {
       escapes++;
       expect(rewards).toBeGreaterThan(0);
       expect(run.act).toBe(1);

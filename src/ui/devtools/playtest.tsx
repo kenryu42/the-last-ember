@@ -1,13 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEscapeDismiss } from "../shared/useEscapeDismiss";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { cardDef, needsTarget } from "../../game/content/cards";
 import { enemyDef } from "../../game/content/enemies";
 import { resolve } from "../../game/engine/resolve";
 import type { Action, Card, Run } from "../../game/model";
-import {
-  PLAYTEST_DECKS,
-  PLAYTEST_ENCOUNTERS,
-  createPlaytestRun,
-} from "../../lab/fixtures/combat";
+import { PLAYTEST_DECKS, PLAYTEST_ENCOUNTERS, createPlaytestRun } from "../../lab/fixtures/combat";
 import {
   DecisionClock,
   beginRecord,
@@ -70,8 +67,7 @@ export function Playtest({ close }: { close: () => void }) {
   const clock = useRef(new DecisionClock());
   const eligible = session?.run.scene.kind === "combat" && !paused && !confirm;
   useLayoutEffect(() => {
-    const sync = () =>
-      clock.current.set(eligible && !document.hidden, performance.now());
+    const sync = () => clock.current.set(eligible && !document.hidden, performance.now());
     sync();
     document.addEventListener("visibilitychange", sync);
     return () => {
@@ -79,13 +75,7 @@ export function Playtest({ close }: { close: () => void }) {
       document.removeEventListener("visibilitychange", sync);
     };
   }, [eligible, session]);
-  useEffect(() => {
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelected(null);
-    };
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  }, []);
+  useEscapeDismiss(() => setSelected(null));
   const projection = useMemo(
     () =>
       session?.run.scene.kind === "combat"
@@ -152,10 +142,7 @@ export function Playtest({ close }: { close: () => void }) {
     setError("");
   };
   return (
-    <main
-      className="app playtest"
-      style={{ backgroundImage: "url(/assets/forest.webp)" }}
-    >
+    <main className="app playtest" style={{ backgroundImage: "url(/assets/forest.webp)" }}>
       <header className="topbar">
         <b>The Last Ember · v0.2 benchmark</b>
         <button onClick={() => (session ? setConfirm("exit") : close())}>
@@ -169,9 +156,8 @@ export function Playtest({ close }: { close: () => void }) {
             : "Isolated structural experiment"}
         </strong>
         <p>
-          No adventure saves or history are changed. No rewards or travel.
-          Export before resetting or leaving; benchmark data stays only in this
-          tab.
+          No adventure saves or history are changed. No rewards or travel. Export before resetting
+          or leaving; benchmark data stays only in this tab.
         </p>
         {session && (
           <div className="dialog-actions">
@@ -189,27 +175,19 @@ export function Playtest({ close }: { close: () => void }) {
       {!session ? (
         <section className="benchmark-setup">
           <h1>Compare the same fight.</h1>
-          <p>
-            70 health · 3 energy · 12 base cards · 5 opening cards · Act II · no
-            relics
-          </p>
+          <p>70 health · 3 energy · 12 base cards · 5 opening cards · Act II · no relics</p>
           <div className="benchmark-fields">
             <label>
               Rules
               <select
                 value={rules}
                 onChange={(e) => {
-                  if (
-                    e.target.value === "control" ||
-                    e.target.value === "candidate"
-                  )
+                  if (e.target.value === "control" || e.target.value === "candidate")
                     setRules(e.target.value);
                 }}
               >
                 <option value="control">Current rules · control</option>
-                <option value="candidate">
-                  Conditional strength · candidate
-                </option>
+                <option value="candidate">Conditional strength · candidate</option>
               </select>
             </label>
             <label>
@@ -217,9 +195,7 @@ export function Playtest({ close }: { close: () => void }) {
               <select
                 value={fixture.deckId}
                 onChange={(e) => {
-                  const deck = PLAYTEST_DECKS.find(
-                    (d) => d.id === e.target.value,
-                  );
+                  const deck = PLAYTEST_DECKS.find((d) => d.id === e.target.value);
                   if (deck)
                     setFixture({
                       ...fixture,
@@ -228,11 +204,7 @@ export function Playtest({ close }: { close: () => void }) {
                     });
                 }}
               >
-                {PLAYTEST_DECKS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
+                {PLAYTEST_DECKS.map(fixtureOption)}
               </select>
             </label>
             <label>
@@ -240,18 +212,11 @@ export function Playtest({ close }: { close: () => void }) {
               <select
                 value={fixture.encounterId}
                 onChange={(e) => {
-                  const encounter = PLAYTEST_ENCOUNTERS.find(
-                    (d) => d.id === e.target.value,
-                  );
-                  if (encounter)
-                    setFixture({ ...fixture, encounterId: encounter.id });
+                  const encounter = PLAYTEST_ENCOUNTERS.find((d) => d.id === e.target.value);
+                  if (encounter) setFixture({ ...fixture, encounterId: encounter.id });
                 }}
               >
-                {PLAYTEST_ENCOUNTERS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
+                {PLAYTEST_ENCOUNTERS.map(fixtureOption)}
               </select>
             </label>
             <label>
@@ -259,8 +224,7 @@ export function Playtest({ close }: { close: () => void }) {
               <select
                 value={fixture.variant ?? "base"}
                 onChange={(e) => {
-                  if (e.target.value === "base")
-                    setFixture({ ...fixture, variant: "base" });
+                  if (e.target.value === "base") setFixture({ ...fixture, variant: "base" });
                   else if (fixture.deckId !== "quiet")
                     setFixture({
                       ...fixture,
@@ -273,9 +237,7 @@ export function Playtest({ close }: { close: () => void }) {
                 {fixture.deckId !== "quiet" && (
                   <option value="ablation">
                     Diagnostic only ·{" "}
-                    {fixture.deckId === "exposed"
-                      ? "Spark + Sacrifice"
-                      : "2 × Iron answer"}{" "}
+                    {fixture.deckId === "exposed" ? "Spark + Sacrifice" : "2 × Iron answer"}{" "}
                     replaced by Strike
                   </option>
                 )}
@@ -286,9 +248,7 @@ export function Playtest({ close }: { close: () => void }) {
               <input
                 maxLength={80}
                 value={fixture.seed}
-                onChange={(e) =>
-                  setFixture({ ...fixture, seed: e.target.value })
-                }
+                onChange={(e) => setFixture({ ...fixture, seed: e.target.value })}
               />
             </label>
             <label>
@@ -302,14 +262,14 @@ export function Playtest({ close }: { close: () => void }) {
             </label>
           </div>
           <p>
-            Thresholds unlock once at player turn end. Candidate strength
-            switches off below its threshold and back on above it. Summons and
-            granted block are not undone. Control retains permanent strength.
+            Thresholds unlock once at player turn end. Candidate strength switches off below its
+            threshold and back on above it. Summons and granted block are not undone. Control
+            retains permanent strength.
           </p>
           <p className="muted">
-            Use the same deck, encounter and seed in both rules. Results resolve
-            immediately in both modes. Pause for interruptions; visible idle
-            time otherwise counts as active decision time.
+            Use the same deck, encounter and seed in both rules. Results resolve immediately in both
+            modes. Pause for interruptions; visible idle time otherwise counts as active decision
+            time.
           </p>
           <button className="primary" onClick={start}>
             Start benchmark fight
@@ -318,20 +278,20 @@ export function Playtest({ close }: { close: () => void }) {
       ) : session.run.scene.kind === "combat" ? (
         <>
           {paused && (
-            <p className="benchmark-banner" role="status">
+            <output className="benchmark-banner" style={{ display: "block" }}>
               Paused. Active decision time is stopped.
-            </p>
+            </output>
           )}
           {projection && (
             <details className="phase-projection" open>
               <summary>
-                Exact end-turn projection · {session.run.hp - projection.run.hp}{" "}
-                health lost · {projection.run.hp} health remaining
+                Exact end-turn projection · {session.run.hp - projection.run.hp} health lost ·{" "}
+                {projection.run.hp} health remaining
               </summary>
               <p>
-                In order, including pending thresholds, Weak, boss conditions
-                and earlier Howl. New summons wait this phase. Newly reached
-                locked thresholds during Howl wait for the next player end.
+                In order, including pending thresholds, Weak, boss conditions and earlier Howl. New
+                summons wait this phase. Newly reached locked thresholds during Howl wait for the
+                next player end.
               </p>
               <ol>
                 {projection.frames
@@ -350,10 +310,7 @@ export function Playtest({ close }: { close: () => void }) {
                   Enemy outcome:{" "}
                   {projection.run.scene.enemies
                     .filter((e) => e.hp > 0)
-                    .map(
-                      (e) =>
-                        `${enemyDef(e.def).name} ${e.hp} HP / ${e.block} block`,
-                    )
+                    .map((e) => `${enemyDef(e.def).name} ${e.hp} HP / ${e.block} block`)
                     .join("; ")}
                 </p>
               )}
@@ -376,25 +333,19 @@ export function Playtest({ close }: { close: () => void }) {
       ) : (
         session.record.result && (
           <section className="benchmark-results">
-            <h1>
-              Benchmark{" "}
-              {session.record.result.outcome === "win" ? "victory" : "defeat"}
-            </h1>
+            <h1>Benchmark {session.record.result.outcome === "win" ? "victory" : "defeat"}</h1>
             <p>
-              {session.record.result.finalHealth} health ·{" "}
-              {session.record.result.playerTurns} player turns ·{" "}
-              {summarize(session.record).played} cards played ·{" "}
+              {session.record.result.finalHealth} health · {session.record.result.playerTurns}{" "}
+              player turns · {summarize(session.record).played} cards played ·{" "}
               {summarize(session.record).drawn} drawn
             </p>
             <p>
-              Duration {(session.record.result.durationMs / 1000).toFixed(1)}s ·
-              active decision{" "}
+              Duration {(session.record.result.durationMs / 1000).toFixed(1)}s · active decision{" "}
               {(summarize(session.record).activeDecisionMs / 1000).toFixed(1)}s
             </p>
             <p>
-              Suppressed pre-block attack damage:{" "}
-              {summarize(session.record).suppressedAttackDamage}. This is not
-              health saved.
+              Suppressed pre-block attack damage: {summarize(session.record).suppressedAttackDamage}
+              . This is not health saved.
             </p>
             <h2>Short observer notes</h2>
             <div className="benchmark-fields">
@@ -404,9 +355,7 @@ export function Playtest({ close }: { close: () => void }) {
                   <textarea
                     rows={2}
                     value={notes[question] ?? ""}
-                    onChange={(e) =>
-                      setNotes({ ...notes, [question]: e.target.value })
-                    }
+                    onChange={(e) => setNotes({ ...notes, [question]: e.target.value })}
                   />
                 </label>
               ))}
@@ -414,15 +363,11 @@ export function Playtest({ close }: { close: () => void }) {
             <div className="dialog-actions">
               <button
                 className="primary"
-                onClick={() =>
-                  download(exportFight(session.record, notes), "json")
-                }
+                onClick={() => download(exportFight(session.record, notes), "json")}
               >
                 Export fight JSON + notes
               </button>
-              <button
-                onClick={() => download(exportFightCsv(session.record), "csv")}
-              >
+              <button onClick={() => download(exportFightCsv(session.record), "csv")}>
                 Export summary CSV
               </button>
             </div>
@@ -442,11 +387,7 @@ export function Playtest({ close }: { close: () => void }) {
       {error && <p role="alert">{error}</p>}
       {confirm && (
         <Modal
-          title={
-            session?.record.result
-              ? "Clear benchmark data?"
-              : "Abandon this benchmark?"
-          }
+          title={session?.record.result ? "Clear benchmark data?" : "Abandon this benchmark?"}
           close={() => setConfirm(null)}
         >
           <p>
@@ -479,5 +420,13 @@ export function Playtest({ close }: { close: () => void }) {
         </Modal>
       )}
     </main>
+  );
+}
+
+function fixtureOption(fixture: { id: string; name: string }) {
+  return (
+    <option key={fixture.id} value={fixture.id}>
+      {fixture.name}
+    </option>
   );
 }

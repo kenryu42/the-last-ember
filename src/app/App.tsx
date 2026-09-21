@@ -1,3 +1,4 @@
+import { useEscapeDismiss } from "../ui/shared/useEscapeDismiss";
 import { SettingsPanel } from "./SettingsPanel";
 import { CardInspection } from "../ui/cards/CardInspection";
 import { useGameSession } from "./useGameSession";
@@ -12,11 +13,7 @@ import type { Card } from "../game/model";
 import { loadHistory } from "../platform/browser/history";
 import type { Settings } from "../platform/browser/settings";
 import { setSoundscape, wakeAudio } from "../ui/audio/audio";
-import {
-  CombatEffects,
-  attackTiming,
-  powerfulCard,
-} from "../ui/combat/combat-effects";
+import { CombatEffects, attackTiming, powerfulCard } from "../ui/combat/combat-effects";
 import { Art } from "../ui/shared/Art";
 import { Icon } from "../ui/shared/Icon";
 import { Modal } from "../ui/shared/Modal";
@@ -82,26 +79,16 @@ export function App() {
   useEffect(() => {
     setSoundscape(shown, title);
   }, [shown, title]);
-  useEffect(() => {
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelected(null);
-    };
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  }, []);
+  useEscapeDismiss(() => setSelected(null));
   const updateSettings = (next: Settings) => {
-    if (!persistSettings(next))
-      setError("Settings could not be saved in this browser.");
+    if (!persistSettings(next)) setError("Settings could not be saved in this browser.");
   };
   const select = (card: Card) => {
     wakeAudio();
     if (locked.current) return;
     if (needsTarget(cardDef(card.def))) {
       const scene = current.current?.scene;
-      const living =
-        scene?.kind === "combat"
-          ? scene.enemies.filter((enemy) => enemy.hp > 0)
-          : [];
+      const living = scene?.kind === "combat" ? scene.enemies.filter((enemy) => enemy.hp > 0) : [];
       if (living.length === 1 && living[0])
         void dispatch({ type: "play", uid: card.uid, target: living[0].uid });
       else setSelected(selected === card.uid ? null : card.uid);
@@ -121,15 +108,11 @@ export function App() {
   };
   if (benchmark && Playtest)
     return (
-      <Suspense fallback={<p role="status">Loading benchmark…</p>}>
+      <Suspense fallback={<output style={{ display: "block" }}>Loading benchmark…</output>}>
         <Playtest close={() => setBenchmark(false)} />
       </Suspense>
     );
-  const timing = attackTiming(
-    feedback?.cue ?? "draw",
-    powerfulCard(actingCard),
-    animationSpeed,
-  );
+  const timing = attackTiming(feedback?.cue ?? "draw", powerfulCard(actingCard), animationSpeed);
   const presentationStyle: CSSProperties & {
     "--combat-travel": string;
     "--combat-impact": string;
@@ -141,6 +124,7 @@ export function App() {
     "--hand-settle": `${200 / animationSpeed}ms`,
   };
   return (
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Delegated user gestures unlock browser audio; main is not itself a control.
     <main
       className={`app ${title ? "title-screen" : ""} ${shown?.scene.kind === "combat" && !shown.scene.introPending && !arrival && !title ? "in-combat" : ""}`}
       style={presentationStyle}
@@ -183,11 +167,7 @@ export function App() {
               <b>{shown.gold}</b>
               <small>gold</small>
             </span>
-            <button
-              onClick={() =>
-                inspect({ title: "Your permanent deck", cards: shown.deck })
-              }
-            >
+            <button onClick={() => inspect({ title: "Your permanent deck", cards: shown.deck })}>
               <Icon name="deck" size={18} />
               {shown.deck.length}
               <span className="nav-label"> cards</span>
@@ -243,9 +223,7 @@ export function App() {
               </button>
             )}
             <button
-              className={
-                run && run.scene.kind !== "ending" ? "secondary" : "primary"
-              }
+              className={run && run.scene.kind !== "ending" ? "secondary" : "primary"}
               onClick={begin}
             >
               Begin a new journey <Icon name="arrow" size={18} />
@@ -255,19 +233,13 @@ export function App() {
             </button>
             {Playtest &&
               typeof window !== "undefined" &&
-              new URLSearchParams(window.location.search).get("benchmark") ===
-                "1" && (
-                <button
-                  className="text-button"
-                  onClick={() => setBenchmark(true)}
-                >
+              new URLSearchParams(window.location.search).get("benchmark") === "1" && (
+                <button className="text-button" onClick={() => setBenchmark(true)}>
                   v0.2 benchmark · isolated test mode
                 </button>
               )}
           </div>
-          <p className="title-footnote">
-            Turn-based · Saved locally · Made for a quiet evening
-          </p>
+          <p className="title-footnote">Turn-based · Saved locally · Made for a quiet evening</p>
         </section>
       ) : arrival && shown ? (
         <ArrivalTransition
@@ -290,11 +262,7 @@ export function App() {
               />
             )}
             {shown.scene.kind === "combat" && shown.scene.introPending && (
-              <EncounterIntro
-                run={shown}
-                combat={shown.scene}
-                enter={enterEncounter}
-              />
+              <EncounterIntro run={shown} combat={shown.scene} enter={enterEncounter} />
             )}
             {shown.scene.kind === "combat" && !shown.scene.introPending && (
               <CombatBoard
@@ -322,15 +290,9 @@ export function App() {
               <section className="ending scene-enter">
                 <Icon name="flame" size={60} />
                 <p className="eyebrow">
-                  {shown.scene.won
-                    ? "The beacon is lit"
-                    : "The road falls silent"}
+                  {shown.scene.won ? "The beacon is lit" : "The road falls silent"}
                 </p>
-                <h1>
-                  {shown.scene.won
-                    ? "And morning came."
-                    : "Even a small light mattered."}
-                </h1>
+                <h1>{shown.scene.won ? "And morning came." : "Even a small light mattered."}</h1>
                 <p className="story-copy">
                   {shown.scene.won
                     ? "Far below, a window opens. Then another. Mara lays down her shield. Eryn watches the valleys fill with gold. Aldren warms his empty hands. The light no longer belongs to them alone."
@@ -351,8 +313,7 @@ export function App() {
                   </span>
                 </div>
                 <p className="muted">
-                  Seed {shown.seed} · Act {shown.act + 1} · {shown.stats.turns}{" "}
-                  turns ended
+                  Seed {shown.seed} · Act {shown.act + 1} · {shown.stats.turns} turns ended
                 </p>
                 <div className="dialog-actions">
                   <button className="primary" onClick={begin}>
@@ -397,16 +358,13 @@ export function App() {
         !title &&
         !arrival &&
         !(shown?.scene.kind === "combat" && shown.scene.introPending) && (
-          <aside className="tutorial" role="region" aria-label="Introduction">
+          <section className="tutorial" aria-label="Introduction">
             <div className="eyebrow">A first journey · {tutorial + 1} / 4</div>
             <h3>
               {
-                [
-                  "Stay together",
-                  "Power has a price",
-                  "Make your first move",
-                  "Let them answer",
-                ][tutorial]
+                ["Stay together", "Power has a price", "Make your first move", "Let them answer"][
+                  tutorial
+                ]
               }
             </h3>
             <p>
@@ -421,10 +379,7 @@ export function App() {
             </p>
             <div className="dialog-actions">
               {tutorial < 2 && (
-                <button
-                  className="primary"
-                  onClick={() => setTutorial(tutorial + 1)}
-                >
+                <button className="primary" onClick={() => setTutorial(tutorial + 1)}>
                   Next
                 </button>
               )}
@@ -432,7 +387,7 @@ export function App() {
                 {tutorial < 2 ? "Skip introduction" : "Got it"}
               </button>
             </div>
-          </aside>
+          </section>
         )}
       {panel === "rules" && (
         <Modal title="How to carry the light" close={() => setPanel(null)}>
@@ -475,11 +430,7 @@ export function App() {
                 <li key={`${h.time}-${i}`}>
                   <Icon name={h.won ? "flame" : "camp"} />
                   <span>
-                    <b>
-                      {h.won
-                        ? "The beacon was lit"
-                        : `Lost in act ${h.act + 1}`}
-                    </b>
+                    <b>{h.won ? "The beacon was lit" : `Lost in act ${h.act + 1}`}</b>
                     <small>
                       {h.seed} · {h.turns} turns · {h.cards} cards played
                     </small>
@@ -510,16 +461,11 @@ export function App() {
               })}
             </div>
           ) : (
-            <p>
-              No relics yet. Elites, guardians, events, and merchants may offer
-              one.
-            </p>
+            <p>No relics yet. Elites, guardians, events, and merchants may offer one.</p>
           )}
         </Modal>
       )}
-      {inspection && (
-        <CardInspection inspection={inspection} close={() => inspect(null)} />
-      )}
+      {inspection && <CardInspection inspection={inspection} close={() => inspect(null)} />}
     </main>
   );
 }
