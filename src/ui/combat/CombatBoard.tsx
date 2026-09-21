@@ -1,3 +1,4 @@
+import { cardName } from "../../game/selectors/cards";
 import { useLayoutEffect, useRef, useState } from "react";
 import { ACTS } from "../../game/content/world";
 import { cardDef, needsTarget } from "../../game/content/cards";
@@ -53,6 +54,7 @@ export function CombatBoard({
     sceneHeading.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, [choosingBearer]);
+  const selectedCard = combat.hand.find((card) => card.uid === selected);
   const enemy = combat.enemies.find((e) => e.uid === enemyInfo);
   const bonus = mode === "candidate" ? thresholdStrength(run, combat) : 0;
   const response =
@@ -107,7 +109,7 @@ export function CombatBoard({
               </option>
               {combat.hand.map((card) => (
                 <option key={card.uid} value={card.uid}>
-                  {cardDef(card.def).name}
+                  {cardName(card)}
                 </option>
               ))}
             </select>
@@ -403,7 +405,7 @@ export function CombatBoard({
                               })
                             }
                           >
-                            {def.name} → {enemyDef(enemy.def).name} · +5 to one hit
+                            {cardName(card)} → {enemyDef(enemy.def).name} · +5 to one hit
                           </button>,
                         ]
                       : [];
@@ -421,8 +423,7 @@ export function CombatBoard({
         {selected !== null ? (
           <>
             <span>
-              Choose an enemy for{" "}
-              <b>{cardDef(combat.hand.find((c) => c.uid === selected)?.def ?? "strike").name}</b>
+              Choose an enemy for <b>{selectedCard && cardName(selectedCard)}</b>
             </span>
             <button
               className="text-button"

@@ -84,7 +84,7 @@ async function compareAll(mode: "camp" | "inspection") {
           `Card proportions, seal inset or art coverage failed: ${mode}/${innerWidth}/${id}`,
         );
       }
-      // Read individual text nodes, including the nested upgrade '+'. Fixed parent
+      // Read individual text nodes in the card title. Fixed parent
       // rectangles alone cannot catch text overflowing their assigned height.
       const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
       const lines: DOMRect[] = [];

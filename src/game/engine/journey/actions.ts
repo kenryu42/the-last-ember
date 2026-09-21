@@ -1,6 +1,6 @@
+import { cardName } from "../../selectors/cards";
 import type { ResolutionContext } from "../context";
 import { EVENTS } from "../../content/world";
-import { cardDef } from "../../content/cards";
 import { RELICS } from "../../content/relics";
 import type { Action, Resolution } from "../../model";
 import { random, shuffle, pick } from ".././rng";
@@ -103,9 +103,9 @@ export function resolveUpgrade(
   if (s.kind === "camp") s.used = true;
   if (s.kind === "event") {
     delete s.pendingUpgrade;
-    s.resolved += ` ${cardDef(card.def).name} improved.`;
+    s.resolved += ` ${cardName(card)} improved.`;
   }
-  emit("reward", null, `${cardDef(card.def).name} improved.`);
+  emit("reward", null, `${cardName(card)} improved.`);
   return finish();
 }
 
@@ -143,7 +143,7 @@ export function resolveChoice(
         s.pendingUpgrade = card.uid;
       } else {
         card.upgraded = true;
-        results.push(`${cardDef(card.def).name} improved.`);
+        results.push(`${cardName(card)} improved.`);
       }
     } else {
       run.gold += 20;

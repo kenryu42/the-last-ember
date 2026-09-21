@@ -268,7 +268,7 @@ test("physical piles hide draw order and show the latest discarded card", () => 
   const discard = render("discard");
   expect(discard).toContain('data-top-card="42"');
   expect(discard).not.toContain('data-top-card="41"');
-  expect(discard).toContain("Shelter +");
+  expect(discard).toContain("Bulwark");
   expect(discard).toContain("Gain 10 block.");
   expect(discard).toContain("card-pairs-02.webp");
   expect(discard).toContain("background-position:100% 0%");

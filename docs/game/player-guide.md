@@ -27,7 +27,9 @@ Layered edges suggest thickness, capped at four extra layers while counts stay
 exact. Empty piles show faint outlines rather than cards. Click either stack to
 inspect it; draw order stays hidden. Played-card flights land on the discard stack
 or the separate Exhausted control, with motion disabled in reduced-motion mode.
-Upgraded art and the title's `+` remain distinct. Hand art popovers are suspended during target
+Improved cards have distinct names and artwork, with no `+` suffix. For example,
+Steady blade becomes Decisive stroke and Shelter becomes Bulwark. The artwork
+preview labels improved cards as Improved. Hand art popovers are suspended during target
 selection and action resolution so they cannot cover combat targets. The two
 locally bundled material images total 480,668 bytes; sources are in
 `docs/art/README.md`. No rules, saves or acquisition behavior changed for this design.

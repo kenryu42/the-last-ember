@@ -1,3 +1,4 @@
+import { cardName } from "../../game/selectors/cards";
 import { useEffect, useRef, useState } from "react";
 import { cardDef, effectText } from "../../game/content/cards";
 import type { Card } from "../../game/model";
@@ -48,10 +49,7 @@ export function CardPile({
             <span className="card-back" />
           ) : top && def ? (
             <span className="pile-face" data-top-card={top.uid}>
-              <span className="pile-face-name">
-                {def.name}
-                {top.upgraded ? " +" : ""}
-              </span>
+              <span className="pile-face-name">{cardName(top)}</span>
               <span className="full-card-art" style={cardArtStyle(top)} />
               <span className="pile-face-rules">
                 {def.effects.map((effect, index) => (
@@ -232,16 +230,13 @@ export function CardView({
         aria-disabled={unavailable || undefined}
         aria-label={
           label ??
-          `${def.name}${card.upgraded ? " upgraded" : ""}, ${cost ?? def.cost} energy. ${def.tags?.includes("Spell") ? "Spell. " : ""}${def.effects.map((e) => effectText(e, card.upgraded)).join(" ")}${def.exhaust ? " Exhaust." : ""}${def.retain ? " Retain." : ""}`
+          `${cardName(card)}${card.upgraded ? " upgraded" : ""}, ${cost ?? def.cost} energy. ${def.tags?.includes("Spell") ? "Spell. " : ""}${def.effects.map((e) => effectText(e, card.upgraded)).join(" ")}${def.exhaust ? " Exhaust." : ""}${def.retain ? " Retain." : ""}`
         }
         aria-pressed={selected}
       >
         <span className="card-heading">
           <span className="cost">{cost ?? def.cost}</span>
-          <span>
-            {def.name}
-            {card.upgraded && <b className="upgrade-mark"> +</b>}
-          </span>
+          <span>{cardName(card)}</span>
         </span>
         <span
           aria-hidden="true"
@@ -290,7 +285,7 @@ export function CardView({
         <span
           className="full-card-art"
           role="img"
-          aria-label={`${def.name}${card.upgraded ? " upgraded" : ""} artwork`}
+          aria-label={`${cardName(card)}${card.upgraded ? " upgraded" : ""} artwork`}
           style={artStyle}
         >
           {showVideo && (
@@ -308,7 +303,7 @@ export function CardView({
         </span>
         {/* oxlint-enable jsx-a11y/prefer-tag-over-role */}
         <span className="art-caption">
-          {def.name}
+          {cardName(card)}
           {card.upgraded ? " · Improved" : ""}
         </span>
         {showVideo && (

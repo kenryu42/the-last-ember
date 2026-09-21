@@ -1,3 +1,4 @@
+import { cardName } from "../../selectors/cards";
 import type { ResolutionContext } from "../context";
 import { cardDef, needsTarget, value } from "../../content/cards";
 import { enemyDef } from "../../content/enemies";
@@ -31,7 +32,7 @@ export function resolveWork(
   emit(
     "draw",
     null,
-    `Work: discarded ${cardDef(card.def).name}. Progress ${c.objective.progress}/${c.objective.target}.`,
+    `Work: discarded ${cardName(card)}. Progress ${c.objective.progress}/${c.objective.target}.`,
   );
   win(c);
   return finish();
@@ -96,7 +97,7 @@ export function resolvePlay(
     emit(
       def.owner === "Aldren" ? "spell" : def.owner === "Eryn" ? "arrow" : "blade",
       enemy.uid,
-      `${def.name}: ${lost} damage${absorbed ? ` · ${absorbed} blocked` : ""}${empowered ? " · Aldren +5 base damage" : ""}`,
+      `${cardName(card)}: ${lost} damage${absorbed ? ` · ${absorbed} blocked` : ""}${empowered ? " · Aldren +5 base damage" : ""}`,
     );
     if (enemy.hp === 0) {
       run.stats.kills++;

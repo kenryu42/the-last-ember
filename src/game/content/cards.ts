@@ -13,6 +13,7 @@ export type Effect =
 export interface CardDef {
   id: string;
   name: string;
+  improvedName: string;
   owner: Owner;
   cost: number;
   // Paired artwork: two cards per sheet, base/upgrade in adjacent columns.
@@ -31,6 +32,7 @@ export const CARDS: CardDef[] = [
   {
     id: "strike",
     name: "Steady blade",
+    improvedName: "Decisive stroke",
     owner: "Mara",
     cost: 1,
     art: 0,
@@ -39,6 +41,7 @@ export const CARDS: CardDef[] = [
   {
     id: "guard",
     name: "Shelter",
+    improvedName: "Bulwark",
     owner: "Mara",
     cost: 1,
     art: 2,
@@ -47,6 +50,7 @@ export const CARDS: CardDef[] = [
   {
     id: "arrow",
     name: "True shot",
+    improvedName: "Heartseeker",
     owner: "Eryn",
     cost: 1,
     art: 3,
@@ -55,6 +59,7 @@ export const CARDS: CardDef[] = [
   {
     id: "unseen",
     name: "Walk unseen",
+    improvedName: "Vanish",
     owner: "Eryn",
     cost: 1,
     art: 4,
@@ -63,6 +68,7 @@ export const CARDS: CardDef[] = [
   {
     id: "flame",
     name: "Ancient flame",
+    improvedName: "Elderfire",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
@@ -72,6 +78,7 @@ export const CARDS: CardDef[] = [
   {
     id: "defiance",
     name: "Defiance",
+    improvedName: "Unbowed",
     owner: "Mara",
     cost: 1,
     art: 5,
@@ -80,6 +87,7 @@ export const CARDS: CardDef[] = [
   {
     id: "pass",
     name: "Hold the pass",
+    improvedName: "None shall pass",
     owner: "Mara",
     cost: 1,
     art: 6,
@@ -88,6 +96,7 @@ export const CARDS: CardDef[] = [
   {
     id: "bash",
     name: "Shield-bearer",
+    improvedName: "Vanguard",
     owner: "Mara",
     cost: 1,
     art: 7,
@@ -96,6 +105,7 @@ export const CARDS: CardDef[] = [
   {
     id: "shield",
     name: "Iron answer",
+    improvedName: "Reprisal",
     owner: "Mara",
     cost: 1,
     art: 8,
@@ -104,6 +114,7 @@ export const CARDS: CardDef[] = [
   {
     id: "stand",
     name: "Last stand",
+    improvedName: "Against all odds",
     owner: "Mara",
     cost: 2,
     art: 9,
@@ -112,6 +123,7 @@ export const CARDS: CardDef[] = [
   {
     id: "challenge",
     name: "Challenge",
+    improvedName: "Staredown",
     owner: "Mara",
     cost: 0,
     art: 10,
@@ -120,6 +132,7 @@ export const CARDS: CardDef[] = [
   {
     id: "oath",
     name: "An unbroken oath",
+    improvedName: "Oathkeeper",
     owner: "Mara",
     cost: 1,
     art: 11,
@@ -129,6 +142,7 @@ export const CARDS: CardDef[] = [
   {
     id: "rally",
     name: "Rally together",
+    improvedName: "To arms",
     owner: "Mara",
     cost: 0,
     art: 12,
@@ -138,6 +152,7 @@ export const CARDS: CardDef[] = [
   {
     id: "needle",
     name: "Through the leaves",
+    improvedName: "Thread the needle",
     owner: "Eryn",
     cost: 1,
     art: 13,
@@ -146,6 +161,7 @@ export const CARDS: CardDef[] = [
   {
     id: "volley",
     name: "Rain of arrows",
+    improvedName: "Blacken the sky",
     owner: "Eryn",
     cost: 2,
     art: 14,
@@ -154,6 +170,7 @@ export const CARDS: CardDef[] = [
   {
     id: "scout",
     name: "Higher ground",
+    improvedName: "Eagle’s watch",
     owner: "Eryn",
     cost: 0,
     art: 15,
@@ -163,6 +180,7 @@ export const CARDS: CardDef[] = [
   {
     id: "feint",
     name: "A small opening",
+    improvedName: "Exposed flank",
     owner: "Eryn",
     cost: 0,
     art: 16,
@@ -171,6 +189,7 @@ export const CARDS: CardDef[] = [
   {
     id: "silence",
     name: "Quiet as snowfall",
+    improvedName: "Winter’s hush",
     owner: "Eryn",
     cost: 1,
     art: 17,
@@ -179,6 +198,7 @@ export const CARDS: CardDef[] = [
   {
     id: "double",
     name: "Twin arrows",
+    improvedName: "Crossfire",
     owner: "Eryn",
     cost: 1,
     art: 18,
@@ -187,6 +207,7 @@ export const CARDS: CardDef[] = [
   {
     id: "trail",
     name: "Hidden trail",
+    improvedName: "Leave no trace",
     owner: "Eryn",
     cost: 0,
     art: 19,
@@ -196,6 +217,7 @@ export const CARDS: CardDef[] = [
   {
     id: "spark",
     name: "Borrowed fire",
+    improvedName: "Stoke the embers",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 0,
@@ -206,6 +228,7 @@ export const CARDS: CardDef[] = [
   {
     id: "inferno",
     name: "Light the dark",
+    improvedName: "Daybreak",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
@@ -215,6 +238,7 @@ export const CARDS: CardDef[] = [
   {
     id: "cinder",
     name: "Cinder lance",
+    improvedName: "Starfall",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 1,
@@ -224,6 +248,7 @@ export const CARDS: CardDef[] = [
   {
     id: "resolve",
     name: "Face the darkness",
+    improvedName: "Fearless",
     owner: "Aldren",
     cost: 1,
     art: 23,
@@ -232,6 +257,7 @@ export const CARDS: CardDef[] = [
   {
     id: "ward",
     name: "Ember ward",
+    improvedName: "Ring of fire",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 1,
@@ -241,6 +267,7 @@ export const CARDS: CardDef[] = [
   {
     id: "remember",
     name: "Old knowledge",
+    improvedName: "Revelation",
     owner: "Aldren",
     cost: 1,
     art: 25,
@@ -249,6 +276,7 @@ export const CARDS: CardDef[] = [
   {
     id: "sunrise",
     name: "One more dawn",
+    improvedName: "Rekindle",
     tags: ["Spell"],
     owner: "Aldren",
     cost: 2,
@@ -259,6 +287,7 @@ export const CARDS: CardDef[] = [
   {
     id: "bread",
     name: "Shared bread",
+    improvedName: "A place at the table",
     owner: "Fellowship",
     cost: 1,
     art: 27,
@@ -268,6 +297,7 @@ export const CARDS: CardDef[] = [
   {
     id: "courage",
     name: "Small courage",
+    improvedName: "A heart undaunted",
     owner: "Fellowship",
     cost: 0,
     art: 28,
@@ -277,6 +307,7 @@ export const CARDS: CardDef[] = [
   {
     id: "lantern",
     name: "Keep the lantern",
+    improvedName: "Guiding light",
     owner: "Fellowship",
     cost: 1,
     art: 29,
@@ -285,6 +316,7 @@ export const CARDS: CardDef[] = [
   {
     id: "sacrifice",
     name: "Shoulder the burden",
+    improvedName: "For the fellowship",
     owner: "Fellowship",
     cost: 0,
     art: 30,
@@ -294,6 +326,7 @@ export const CARDS: CardDef[] = [
   {
     id: "home",
     name: "A promise of home",
+    improvedName: "Hearthbound",
     owner: "Fellowship",
     cost: 2,
     art: 31,
@@ -305,6 +338,7 @@ export const CARDS: CardDef[] = [
 export const BREAK_FORMATION: CardDef = {
   id: "break-formation",
   name: "Break formation",
+  improvedName: "Breach",
   owner: "Mara",
   cost: 0,
   art: 8,
@@ -314,6 +348,7 @@ export const BREAK_FORMATION: CardDef = {
 export const FADING_STRIKE: CardDef = {
   id: "fading-strike",
   name: "Fading strike",
+  improvedName: "Ghost arrow",
   owner: "Eryn",
   cost: 1,
   art: 13,
@@ -324,6 +359,7 @@ export const FLAME_UPGRADES: CardDef[] = [
   {
     id: "veiled-flame",
     name: "Veiled Flame",
+    improvedName: "Veiled Flame",
     owner: "Aldren",
     cost: 2,
     art: 1,
@@ -333,6 +369,7 @@ export const FLAME_UPGRADES: CardDef[] = [
   {
     id: "wildfire",
     name: "Wildfire",
+    improvedName: "Wildfire",
     owner: "Aldren",
     cost: 2,
     art: 1,

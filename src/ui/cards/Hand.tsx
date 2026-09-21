@@ -1,3 +1,4 @@
+import { cardName } from "../../game/selectors/cards";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { cardDef, needsTarget } from "../../game/content/cards";
@@ -150,7 +151,7 @@ export function Hand({
       {/* oxlint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/prefer-tag-over-role */}
       {inspection && !busy && (
         <div className="hand-touch-action">
-          <span>{cardDef(inspection.def).name}</span>
+          <span>{cardName(inspection)}</span>
           <button
             className="primary"
             disabled={cost(inspection) > energy}
